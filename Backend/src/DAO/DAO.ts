@@ -1,14 +1,13 @@
 /*
-CLASS DAO
+Interface DAO
 
 */
 
-export abstract class DAO {
-    protected username: String
-    protected password: String
-
-    abstract getConnection(): boolean;
-
-    abstract disconnect(): boolean;
+export interface DAO {
+    getAll: () => unknown;
+    getObject: (object: unknown) => unknown;
+    create: (object: unknown) => Boolean;
+    update: (object: unknown) => Boolean;
+    delete: (object: unknown) => Boolean;
 }
 
