@@ -1,4 +1,4 @@
-import DAO from './DAO';
+import {DAO} from './DAO';
 
 class DAOFirebase extends DAO{
     private connectionString: String;

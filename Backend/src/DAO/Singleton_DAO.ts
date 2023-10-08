@@ -2,7 +2,7 @@
 Class Singleton_DAO
 
 */
-import DAO from './DAO';
+import {DAO} from './DAO';
 
 class Singleton_DAO{
     private static instance: Singleton_DAO;
@@ -10,6 +10,7 @@ class Singleton_DAO{
 
     //-------------------------------
     private Singleton_DAO( instance: Singleton_DAO, accessDAO: DAO ){
+        //this.accessDAO = accessDAO;
         //
     }
 
