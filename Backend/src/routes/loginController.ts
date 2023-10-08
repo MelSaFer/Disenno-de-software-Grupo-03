@@ -1,9 +1,17 @@
-import { RequestHandler } from "express";
+import { Response, Request, NextFunction } from "express";
 
-export const register: RequestHandler = (req, res) => {
+export const register = async ( 
+    req: Request<unknown>,
+    res: Response,
+    next: NextFunction
+    ) => {
     res.status(200).json({ message: 'Hello World' })
 }
 
-export const forgotPassword: RequestHandler = (req, res) => {
+export const forgotPassword= async ( 
+    req: Request<unknown>,
+    res: Response,
+    next: NextFunction
+    ) => {
     res.status(200).json({ message: 'Hello World' })
 }

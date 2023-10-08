@@ -3,9 +3,9 @@ const router = Router();
 
 import * as loginController from "./loginController"
 
-router.post('/register', (req: any, res: any) => loginController.register)
+router.post('/register', loginController.register)
 
-router.post('/forgotPassword', (req: any, res: any) => loginController.forgotPassword)
+router.post('/forgotPassword', loginController.forgotPassword)
 
 
 export default router;
