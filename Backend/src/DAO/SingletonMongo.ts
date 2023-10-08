@@ -1,4 +1,4 @@
-import {Singleton} from './Singleton';
+import {ISingleton} from './ISingleton';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import {MONGODB_URI} from './config';
@@ -6,35 +6,39 @@ import { connect, Connection } from 'mongoose';
 
 dotenv.config(); //reading env var
 
-export class SingletonMongo extends Singleton{
+export class SingletonMongo implements ISingleton{
+    protected static instance: SingletonMongo | undefined;
     private connection ?: Connection;
-    //private connectionString: String = "";
-    //private username: String = "";
-    //private password: String = "";
 
-    //private SingletonMongo(username: String, password: String, connectionString: String, Singleton: Singleton){
-        //super(Singleton);
-        //this.username = username;
-        //this.password = password;
-        //this.connectionString = connectionString;
-    private async SingletonMongo(){
-        const url = MONGODB_URI;
-        //const options = { useNewUrlParser: true, useUnifiedTopology: true };
-        const connection = await connect(url);
-        this.connection = connection.connection;
+    private constructor(){
+        this.makeConn();
+        console.log("aja:" + this.connection?.name);
     }
 
-    public getConnection(){
-        //mongoose.connect(MONGODB_URI)
-        //const url = MONGODB_URI;
-        //const options = { useNewUrlParser: true, useUnifiedTopology: true };
-        //const connection = await connect(url);
-        //this.connection = connection.connection;
+    public getInstance(): SingletonMongo{
         if (!SingletonMongo.instance){
-            SingletonMongo.instance = new Singleton();
+            SingletonMongo.instance = new SingletonMongo();
         }
         return SingletonMongo.instance;
-        //return true;
+    }
+
+    //metodo con static porque no pude resolver lo de la interfaz
+    public static getInstanceS(){
+        if (!SingletonMongo.instance){
+            SingletonMongo.instance = new SingletonMongo();
+        }
+        return SingletonMongo.instance;
+    }
+
+    public getConn(): Connection | undefined{
+        return this.connection;
+    }
+
+    public async makeConn(){
+        const url = MONGODB_URI;
+        const connection = await mongoose.connect(url);
+        console.log("aja2:" + connection.connection.name);
+        this.connection = connection.connection;
     }
 
     public disconnect(){
