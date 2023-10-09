@@ -2,9 +2,8 @@
 Class Content
 
 */
-import { Image_ } from "./Image";
+import { Image_ } from "./Image_";
 import { Category } from "./Category";
-import { Tag } from "./Tag";
 
 export class Content{
     private id: number = 0;
@@ -13,10 +12,10 @@ export class Content{
     private date: Date = new Date();
     private image: Image_| undefined;
     private category: Category | undefined;
-    private tags: Tag[] = [];
+    private tags: string[] = [];
 
     //-------------------------------
-    public constructor( id: number, name: string, description: string, date: Date, image: Image_, category: Category, tags: Tag[]){
+    public constructor( id: number, name: string, description: string, date: Date, image: Image_, category: Category, tags: string[]){
         this.id = id;
         this.name = name;
         this.description = description;
@@ -59,7 +58,7 @@ export class Content{
     }
 
     //-------------------------------
-    public getImage(): Image_{
+    public getImage() : Image_ | undefined{
         return this.image;
     }
     public setImage( image: Image_): void{
@@ -67,7 +66,7 @@ export class Content{
     }
 
     //-------------------------------
-    public getCategory(): Category{
+    public getCategory() : Category | undefined{
         return this.category;
     }
     public setCategory( category: Category): void{
@@ -75,10 +74,10 @@ export class Content{
     }
 
     //-------------------------------
-    public getTags(): Tag[]{
+    public getTags(): string[]{
         return this.tags;
     }
-    public setTags( tags: Tag[]): void{
+    public setTags( tags: string[]): void{
         this.tags = tags;
     }
 

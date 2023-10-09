@@ -34,7 +34,7 @@ export class CartItem{
     }
 
     //-------------------------------
-    public getProduct(): Product{
+    public getProduct() : Product | undefined{
         return this.product;
     }
     public setProduct( product: Product): void{

@@ -1,6 +1,6 @@
 import {Purchase} from "./Purchase"
 
-class PurchaseHistory{
+export class PurchaseHistory{
     private history: Purchase[] = [];
 
     public constructor(history: Purchase[]) {      

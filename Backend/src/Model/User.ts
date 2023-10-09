@@ -13,7 +13,7 @@ export class User {
     private email: string = "";
     private password: string = "";
     private roleType: RoleType = 0;
-    private purchaseHistory: PurchaseHistory = PurchaseHistory | undefined;
+    private purchaseHistory: PurchaseHistory | undefined;
     private cart: Cart | undefined;
 
     //-------------------------------
@@ -69,7 +69,7 @@ export class User {
     }
 
     //-------------------------------
-    public getPurchaseHistory(): PurchaseHistory{
+    public getPurchaseHistory(): PurchaseHistory | undefined{
         return this.purchaseHistory;
     }
     public setPurchaseHistory( purchaseHistory: PurchaseHistory): void{
@@ -77,7 +77,7 @@ export class User {
     }
 
     //-------------------------------
-    public getCart(): Cart{
+    public getCart(): Cart | undefined{
         return this.cart;
     }
     public setCart( cart: Cart): void{

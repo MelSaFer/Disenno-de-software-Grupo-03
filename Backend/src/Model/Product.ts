@@ -46,7 +46,7 @@ export class Product{
     }
 
     //-------------------------------
-    public getImage(): Image_{
+    public getImage(): Image_ | undefined{
         return this.image;
     }
     public setImage( image: Image_): void{
