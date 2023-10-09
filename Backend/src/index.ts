@@ -1,36 +1,28 @@
 import app from "./app"
 //import { connectDB } from "./mongoConn";
 import { PORT } from "./config";
-import { SingletonMongo } from "./DAO/SingletonMongo";
+//import { SingletonMongoO } from "./DAO/SingletonMongo";
 import { SingletonFirebase } from "./DAO/SingletonFirebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { stringify } from "querystring";
 //import { getClass } from "@typegoose/typegoose";
+import { SingletonMongo } from "./DAO/SingletonMongo";
+import {DATABASE_NAME, PRODUCT_COLLECTION} from './DAO/config';
 
 require('dotenv').config();
 
 async function main() {
     //await connectDB();
     //await connectDB();
-    const singletonMongo = SingletonMongo.getInstance();
+    SingletonMongo.getInstance().connect();
+	const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+	const collection = db.collection(PRODUCT_COLLECTION);
+	const doc = { name: "Bing", type: "search engine" };
+	collection.insertOne(doc);
+    //const singletonMongo = SingletonMongo.getInstance();
     const singletonFirebase = SingletonFirebase.getInstance();
     //const connection = await SingletonMongo;
 
-    if (singletonMongo instanceof SingletonMongo) {
-      if (singletonMongo){
-        //const client = singletonMongo.getConn();
-        //if (!client) {
-        //  console.log("1- no se pudo conectar a mongo")
-        //}
-        //else{
-        //  console.log("se pudo conectar a mongo")
-        //  console.log(client.getClient())
-        //}
-        
-      } else{
-        console.log("2")
-      }
-    } 
 	
 
     if (singletonFirebase instanceof SingletonFirebase) {

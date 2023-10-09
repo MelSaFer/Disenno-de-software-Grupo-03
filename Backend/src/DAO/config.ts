@@ -5,7 +5,9 @@ export const PORT = 5000;
 
 //MONGO DB
 export const MONGODB_URI = "mongodb+srv://fiozelaya:eVNknldK3z3UwYLB@tiendaduende.aorp2bb.mongodb.net/?retryWrites=true&w=majority";
-export const DB_NAME= "publicaciones"
+export const DATABASE_NAME = "TiendaDuende";
+export const PRODUCT_COLLECTION = "Product";
+//export const DB_NAME= "publicaciones"
 //Firebase
 export const FIREBASE_CONFIG = {
     apiKey: "AIzaSyAUMTRo2R_g7Z1Vkhx4bjOqnqPQD7UZMDg",
