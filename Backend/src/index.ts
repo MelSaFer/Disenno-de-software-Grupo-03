@@ -5,31 +5,33 @@ import { SingletonMongo } from "./DAO/SingletonMongo";
 import { SingletonFirebase } from "./DAO/SingletonFirebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { stringify } from "querystring";
-import { getClass } from "@typegoose/typegoose";
+//import { getClass } from "@typegoose/typegoose";
 
 require('dotenv').config();
 
 async function main() {
     //await connectDB();
     //await connectDB();
-    const singletonMongo = SingletonMongo.getInstanceS();
+    const singletonMongo = SingletonMongo.getInstance();
     const singletonFirebase = SingletonFirebase.getInstance();
     //const connection = await SingletonMongo;
 
     if (singletonMongo instanceof SingletonMongo) {
       if (singletonMongo){
-        const client = singletonMongo.getConn();
-        if (!client) {
-          console.log("no se pudo conectar a mongo")
-        }
-        else{
-          console.log(client.getClient())
-        }
+        //const client = singletonMongo.getConn();
+        //if (!client) {
+        //  console.log("1- no se pudo conectar a mongo")
+        //}
+        //else{
+        //  console.log("se pudo conectar a mongo")
+        //  console.log(client.getClient())
+        //}
         
       } else{
         console.log("2")
       }
-    }
+    } 
+	
 
     if (singletonFirebase instanceof SingletonFirebase) {
       if (singletonFirebase){

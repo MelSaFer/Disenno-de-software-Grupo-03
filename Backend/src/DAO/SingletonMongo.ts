@@ -1,48 +1,56 @@
-import {ISingleton} from './ISingleton';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import {MONGODB_URI} from './config';
 import { connect, Connection } from 'mongoose';
+//import { async } from '@firebase/util';
 
 dotenv.config(); //reading env var
 
-export class SingletonMongo implements ISingleton{
+export class SingletonMongo{
     protected static instance: SingletonMongo | undefined;
     private connection ?: Connection;
 
     private constructor(){
         this.makeConn();
-        console.log("aja:" + this.connection?.name);
+        console.log("constructor:" + this.connection?.name);
     }
 
-    public getInstance(): SingletonMongo{
+    private setConn(connection:Connection){
+        this.connection = connection;
+    }
+
+    //Get instance method
+    public static getInstance(){
         if (!SingletonMongo.instance){
+            console.log("Creando la instancia")
             SingletonMongo.instance = new SingletonMongo();
         }
         return SingletonMongo.instance;
     }
 
-    //metodo con static porque no pude resolver lo de la interfaz
-    public static getInstanceS(){
-        if (!SingletonMongo.instance){
-            SingletonMongo.instance = new SingletonMongo();
-        }
-        return SingletonMongo.instance;
-    }
-
+    //Get Connection
     public getConn(): Connection | undefined{
         return this.connection;
     }
 
+    //Make connection
     public async makeConn(){
         const url = MONGODB_URI;
-        const connection = await mongoose.connect(url);
-        console.log("aja2:" + connection.connection.name);
-        this.connection = connection.connection;
+        console.log(MONGODB_URI);
+        try {
+            const connection = await mongoose.connect(url);
+            console.log('Conexión exitosa a la base de datos:', connection.connections[0].name);
+            this.setConn(connection.connection);
+          } catch (error) {
+            console.error('Error al conectar a la base de datos:', error);
+          }
     }
 
-    public disconnect(){
-        //código disconect
+    public async disconnect(){
+        if (this.connection) {
+            await this.connection.close();
+            console.log('Conexión cerrada');
+        }
         return true;
     }
 

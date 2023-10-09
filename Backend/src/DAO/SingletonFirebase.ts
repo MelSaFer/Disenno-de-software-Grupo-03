@@ -3,7 +3,7 @@ import { FirebaseApp, initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import dotenv from 'dotenv';
 import {FIREBASE_CONFIG} from './config';
-import { app } from 'firebase-admin';
+//import { app } from 'firebase-admin';
 
 export class SingletonFirebase{
     protected static instance: SingletonFirebase | undefined;
