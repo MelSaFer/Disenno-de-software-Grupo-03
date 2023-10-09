@@ -1,13 +1,8 @@
 import app from "./app"
-//import { connectDB } from "./mongoConn";
-import { PORT } from "./config";
-//import { SingletonMongoO } from "./DAO/SingletonMongo";
-import { SingletonFirebase } from "./DAO/SingletonFirebase";
+import { SingletonFirebase } from "./Controler/Singleton/SingletonFirebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { stringify } from "querystring";
-//import { getClass } from "@typegoose/typegoose";
-import { SingletonMongo } from "./DAO/SingletonMongo";
-import {DATABASE_NAME, PRODUCT_COLLECTION} from './DAO/config';
+import { SingletonMongo } from "./Controler/Singleton/SingletonMongo";
+import {DATABASE_NAME, PRODUCT_COLLECTION, PORT} from './Controler/Singleton/config';
 
 require('dotenv').config();
 
