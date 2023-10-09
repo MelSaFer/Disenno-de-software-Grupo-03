@@ -14,10 +14,11 @@ export class User {
     private password: string = "";
     private roleType: RoleType = 0;
     private purchaseHistory: PurchaseHistory = PurchaseHistory | undefined;
-    private cart: Cart =  Cart | undefined;
+    private cart: Cart | undefined;
 
     //-------------------------------
-    public constructor( id: number, name: string, email: string, password: string, roleType: RoleType, purchaseHistory: PurchaseHistory, cart: Cart){
+    public constructor( id: number, name: string, email: string, password: 
+        string, roleType: RoleType, purchaseHistory: PurchaseHistory, cart: Cart){
         this.id = id;
         this.name = name;
         this.email = email;

@@ -8,7 +8,7 @@ import { Product } from "./Product";
 export class CartItem{
     private id: number = 0;
     private cuantity: number = 0;
-    private product: Product = Product | undefined;
+    private product: Product | undefined;
 
     //-------------------------------
     public constructor( id: number, cuantity: number, product: Product){

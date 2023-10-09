@@ -11,8 +11,8 @@ export class Content{
     private name: string = "";
     private description: string = "";
     private date: Date = new Date();
-    private image: Image_ = Image_ | undefined;
-    private category: Category = Category | undefined;
+    private image: Image_| undefined;
+    private category: Category | undefined;
     private tags: Tag[] = [];
 
     //-------------------------------

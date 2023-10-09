@@ -3,13 +3,13 @@ Class Product
 
 */
 
-import { Image_ } from "./Image";
+import { Image_ } from "./Image_";
 
 export class Product{
     private code: string = "";
     private description: string = "";
     private cuantityAvailable: number = 0;
-    private image: Image_ = Image_ | undefined;
+    private image: Image_ | undefined;
     private price: number = 0;
 
     //-------------------------------
