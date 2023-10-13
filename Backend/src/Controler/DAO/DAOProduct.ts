@@ -1,6 +1,6 @@
 import {DAO} from "./DAO"
 
-class ProductDAO implements DAO{
+class DAOProduct implements DAO{
 
     getAll(){
 
