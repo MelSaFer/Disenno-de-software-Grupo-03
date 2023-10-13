@@ -8,6 +8,7 @@ export const MONGODB_URI = "mongodb+srv://fiozelaya:eVNknldK3z3UwYLB@tiendaduend
 export const DATABASE_NAME = "TiendaDuende";
 export const PRODUCT_COLLECTION = "Product";
 //export const DB_NAME= "publicaciones"
+
 //Firebase
 export const FIREBASE_CONFIG = {
     apiKey: "AIzaSyAUMTRo2R_g7Z1Vkhx4bjOqnqPQD7UZMDg",
