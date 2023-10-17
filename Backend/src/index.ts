@@ -5,8 +5,20 @@ import { SingletonMongo } from "./Controler/Singleton/SingletonMongo";
 import {
   DATABASE_NAME,
   PRODUCT_COLLECTION,
+  USER_COLLECTION,
+  SHIPPINGADRESS_COLLECTION,
+  PURCHASE_COLLECTION,
+  PURCHASEHISTORY_COLLECTION,
+  IMAGETYPE_COLLECTION,
+  IMAGE_COLLECTION,
+  CATEGORY_COLLECTION,
+  SUBCATEGORY_COLLECTION,
+  CART_COLLECTION,
+  CONTENT_COLLECTION,
+  ROLETYPE_COLLECTION,
+  CARTITEM_COLLECTION,
   PORT,
-} from "./Controler/Singleton/config";
+} from "./Controler/config";
 
 require("dotenv").config();
 

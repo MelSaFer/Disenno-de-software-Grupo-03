@@ -1,3 +1,8 @@
+/*
+Class Purchase
+
+*/
+
 import {Product} from "./Product"
 import {Image_} from "./Image_"
 import {ShippingAddress} from "./ShippingAdress"

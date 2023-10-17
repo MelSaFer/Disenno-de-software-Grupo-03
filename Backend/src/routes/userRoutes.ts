@@ -3,7 +3,7 @@
 import { Router } from "express";
 const router = Router();
 
-import * as userController from "./controller/userController"
+import * as userController from "./controller/UserController"
 
 router.get('/profile', userController.getInfo)
 
