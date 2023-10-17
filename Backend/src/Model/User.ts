@@ -9,9 +9,7 @@ import { Cart } from "./Cart";
 
 export class User {
     private id: number = 0;
-    private name: string = "";
     private email: string = "";
-    private password: string = "";
     private roleType: RoleType = 0;
     private purchaseHistory: PurchaseHistory | undefined;
     private cart: Cart | undefined;
@@ -20,9 +18,7 @@ export class User {
     public constructor( id: number, name: string, email: string, password: 
         string, roleType: RoleType, purchaseHistory: PurchaseHistory, cart: Cart){
         this.id = id;
-        this.name = name;
         this.email = email;
-        this.password = password;
         this.roleType = roleType;
         this.purchaseHistory = purchaseHistory;
         this.cart = cart;
@@ -37,27 +33,11 @@ export class User {
     }
 
     //-------------------------------
-    public getName(): string{
-        return this.name;
-    }
-    public setName( name: string): void{
-        this.name = name;
-    }
-
-    //-------------------------------
     public getEmail(): string{
         return this.email;
     }
     public setEmail( email: string): void{
         this.email = email;
-    }
-
-    //-------------------------------
-    public getPassword(): string{
-        return this.password;
-    }
-    public setPassword( password: string): void{
-        this.password = password;
     }
 
     //-------------------------------

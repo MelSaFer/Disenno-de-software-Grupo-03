@@ -1,4 +1,6 @@
 import {DAO} from "./DAO"
+import {CartSchema} from "./schemas/Schemas"
+import mongoose from "mongoose";
 
 class DAOCart implements DAO{
 
@@ -16,8 +18,14 @@ class DAOCart implements DAO{
         return true;
     };
 
-    update(object: unknown){
+    update(object: any){
         //Si voy a agregar algo al carrito, me pego a mongo y lo agrego
+        try{
+            const cart = mongoose.model('Cart', CartSchema);
+            cart.updateOne(object);
+        }catch(err){
+            console.log(err);
+        }
         return true;
     };
 

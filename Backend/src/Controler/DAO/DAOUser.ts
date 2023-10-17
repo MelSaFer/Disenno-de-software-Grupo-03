@@ -1,6 +1,8 @@
 import {DAO} from "./DAO"
+import mongoose from "mongoose";
+import {UserSchema} from "./schemas/Schemas"
 
-class DAOUser implements DAO{
+export class DAOUser implements DAO{
 
     getAll(){
 
@@ -9,8 +11,22 @@ class DAOUser implements DAO{
         return true;
     };
 
-    create(object: unknown) {
-        return true;
+    create(object: any){
+        try{
+            const User = mongoose.model('User', UserSchema);
+            let newUser = new User({
+                id: object.id,
+                email: object.email,
+                roleType: object.roleType,
+                purchaseHistory: object.purchaseHistory,
+                cart: object.cart
+            });
+            newUser.save();
+            return true;
+        } catch(err){
+            console.log(err);
+        }
+        return false;
     };
 
     update(object: unknown){

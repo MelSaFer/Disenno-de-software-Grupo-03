@@ -20,6 +20,9 @@ import {
   PORT,
 } from "./Controler/config";
 
+import {DAOUser} from "./Controler/DAO/DAOUser";
+import {DTOUser} from "./Controler/DTO/DTOUser";
+
 require("dotenv").config();
 
 async function main() {
@@ -56,6 +59,10 @@ async function main() {
 
   app.listen(PORT);
   console.log("Server on port ", PORT);
+
+  const daoUser = new DTOUser(1, "hola@gmail.com", 0, [], []);
+  const dao = new DAOUser();
+  console.log(dao.create(daoUser));
 }
 
 main();
