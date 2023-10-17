@@ -4,6 +4,8 @@ import {UserSchema} from "./schemas/Schemas"
 
 export class DAOUser implements DAO{
 
+    constructor(){};
+
     getAll(){
 
     };
@@ -11,7 +13,7 @@ export class DAOUser implements DAO{
         return true;
     };
 
-    create(object: any){
+    async create(object: any){
         try{
             const User = mongoose.model('User', UserSchema);
             let newUser = new User({
@@ -21,7 +23,7 @@ export class DAOUser implements DAO{
                 purchaseHistory: object.purchaseHistory,
                 cart: object.cart
             });
-            newUser.save();
+            await newUser.save();
             return true;
         } catch(err){
             console.log(err);

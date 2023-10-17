@@ -62,7 +62,8 @@ async function main() {
 
   const daoUser = new DTOUser(1, "hola@gmail.com", 0, [], []);
   const dao = new DAOUser();
-  console.log(dao.create(daoUser));
+  dao.create(daoUser);
+  //console.log(dao.create(daoUser));
 }
 
 main();
