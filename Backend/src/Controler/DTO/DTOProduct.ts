@@ -3,7 +3,7 @@ Class Product
 
 */
 
-export class Product{
+export class DTOProduct{
     private code: string = "";
     private description: string = "";
     private cuantityAvailable: number = 0;

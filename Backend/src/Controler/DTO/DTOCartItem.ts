@@ -3,7 +3,7 @@ Class DTOCartItem
 
 */
 
-export class CartItem{
+export class DTOCartItem{
     private id = 0;
     private cuantity = 0;
     private product = null;
