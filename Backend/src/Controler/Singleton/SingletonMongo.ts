@@ -1,6 +1,6 @@
 // Importa el paquete mongodb
 import { MongoClient } from "mongodb";
-import {MONGODB_URI} from './config';
+import {MONGODB_URI} from '../config';
 
 
 export class SingletonMongo {

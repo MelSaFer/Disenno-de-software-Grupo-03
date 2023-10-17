@@ -1,3 +1,8 @@
+/*
+Class PurchaseHistory
+
+*/
+
 import {Purchase} from "./Purchase"
 
 export class PurchaseHistory{

@@ -18,7 +18,7 @@ import {
   ROLETYPE_COLLECTION,
   CARTITEM_COLLECTION,
   PORT,
-} from "./Controler/Singleton/config";
+} from "./Controler/config";
 
 require("dotenv").config();
 
