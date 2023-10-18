@@ -4,7 +4,17 @@ import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, PURCHASEHISTORY_COLLECTION} from "../config";
 
-
+/*-----------------------------------------------------------------------
+DAO PURCHASE HISTORY
+ Class for managing the connection to the database and the queries related
+ to the purchase history
+ METHODS:
+    - getAll()
+    - getObject(code_: unknown)
+    - create(object: any)
+    - update(object: any)
+    - delete(object: unknown)
+-----------------------------------------------------------------------*/
 export class DAOPurchaseHistory implements DAO{
 
     constructor(){};

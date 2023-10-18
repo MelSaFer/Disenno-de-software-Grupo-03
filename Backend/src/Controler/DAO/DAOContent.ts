@@ -4,6 +4,17 @@ import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CONTENT_COLLECTION} from "../config";
 
+/*-----------------------------------------------------------------------
+ DAO CONTENT
+ Class for managing the connection to the database and the queries related
+  to the content
+ METHODS:
+    - getAll()
+    - getObject(code_: unknown)
+    - create(object: any)
+    - update(object: any)
+    - delete(object: unknown)
+-----------------------------------------------------------------------*/
 export class DAOContent implements DAO{
 
     constructor(){};

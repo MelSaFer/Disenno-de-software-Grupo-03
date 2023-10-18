@@ -4,6 +4,18 @@ import {productSchema} from "./schemas/Schemas"
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, PRODUCT_COLLECTION} from "../config";
 
+
+/*-----------------------------------------------------------------------
+ DAO PRODUCT
+ Class for managing the connection to the database and the queries related
+ to the Product
+ METHODS:
+    - getAll()
+    - getObject(code_: unknown)
+    - create(object: any)
+    - update(object: any)
+    - delete(object: unknown)
+-----------------------------------------------------------------------*/
 export class DAOProduct implements DAO{
 
     constructor(){};
