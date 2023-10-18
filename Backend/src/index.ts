@@ -23,6 +23,9 @@ import {
 import {DAOUser} from "./Controler/DAO/DAOUser";
 import {DTOUser} from "./Controler/DTO/DTOUser";
 
+import {DAOProduct} from "./Controler/DAO/DAOProduct";
+import {DTOProduct} from "./Controler/DTO/DTOProduct";
+
 require("dotenv").config();
 
 async function main() {
@@ -34,9 +37,15 @@ async function main() {
   const doc = { name: "Holaaaaaa", type: "hello" };
   collection.insertOne(doc);
 
+  /*
   const daoUser = new DTOUser(1, "hola@gmail.com", 0, [], []);
   const dao = new DAOUser();
   dao.create(daoUser);
+ */
+  const adoProduct = new DTOProduct("1", "  ", 0, [], 12);
+  const daoP = new DAOProduct();
+  daoP.create(adoProduct);
+
   //const singletonMongo = SingletonMongo.getInstance();
   const singletonFirebase = SingletonFirebase.getInstance();
   //const connection = await SingletonMongo;

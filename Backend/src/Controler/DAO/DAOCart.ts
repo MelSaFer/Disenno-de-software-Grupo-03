@@ -2,7 +2,9 @@ import {DAO} from "./DAO"
 import {CartSchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
 
-class DAOCart implements DAO{
+export class DAOCart implements DAO{
+
+    constructor(){};
 
     getAll(){
 

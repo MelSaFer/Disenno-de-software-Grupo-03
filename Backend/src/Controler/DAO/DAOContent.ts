@@ -1,6 +1,8 @@
 import {DAO} from "./DAO"
 
-class DAOContent implements DAO{
+export class DAOContent implements DAO{
+
+    constructor(){};
 
     getAll(){
 

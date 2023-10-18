@@ -1,6 +1,8 @@
 import {DAO} from "./DAO"
 
-class DAOPurchaseHistory implements DAO{
+export class DAOPurchaseHistory implements DAO{
+
+    constructor(){};
 
     getAll(){
 
