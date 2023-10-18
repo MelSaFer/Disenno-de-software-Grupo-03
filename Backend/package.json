@@ -18,7 +18,8 @@
     "mongodb": "^6.1.0",
     "mongoose": "^7.6.0",
     "mongose": "^0.0.2-security",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "to-json-schema": "^0.2.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.14",

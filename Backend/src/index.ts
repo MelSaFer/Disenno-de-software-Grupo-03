@@ -31,8 +31,12 @@ async function main() {
   SingletonMongo.getInstance().connect();
   const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
   const collection = db.collection(PRODUCT_COLLECTION);
-  const doc = { name: "Bing", type: "search engine" };
+  const doc = { name: "Holaaaaaa", type: "hello" };
   collection.insertOne(doc);
+
+  const daoUser = new DTOUser(1, "hola@gmail.com", 0, [], []);
+  const dao = new DAOUser();
+  dao.create(daoUser);
   //const singletonMongo = SingletonMongo.getInstance();
   const singletonFirebase = SingletonFirebase.getInstance();
   //const connection = await SingletonMongo;
@@ -60,9 +64,7 @@ async function main() {
   app.listen(PORT);
   console.log("Server on port ", PORT);
 
-  const daoUser = new DTOUser(1, "hola@gmail.com", 0, [], []);
-  const dao = new DAOUser();
-  dao.create(daoUser);
+  
   //console.log(dao.create(daoUser));
 }
 

@@ -1,6 +1,8 @@
 import {DAO} from "./DAO"
 import mongoose from "mongoose";
 import {UserSchema} from "./schemas/Schemas"
+import {SingletonMongo} from "../Singleton/SingletonMongo";
+import {DATABASE_NAME} from "../config";
 
 export class DAOUser implements DAO{
 
@@ -15,7 +17,11 @@ export class DAOUser implements DAO{
 
     async create(object: any){
         try{
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection("users");
             const User = mongoose.model('User', UserSchema);
+
             let newUser = new User({
                 id: object.id,
                 email: object.email,
@@ -23,7 +29,13 @@ export class DAOUser implements DAO{
                 purchaseHistory: object.purchaseHistory,
                 cart: object.cart
             });
-            await newUser.save();
+            //const json = { name: "Holaaaaaa", type: "hello" };
+            const json = JSON.stringify(newUser);
+            const parsed = JSON.parse(json);
+            //newUser.toJSON();
+            console.log(json);
+            await collection.insertOne(parsed);
+            //newUser.save();
             return true;
         } catch(err){
             console.log(err);
