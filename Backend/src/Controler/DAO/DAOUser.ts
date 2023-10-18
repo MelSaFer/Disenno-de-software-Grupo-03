@@ -30,6 +30,13 @@ export class DAOUser implements DAO{
                 purchaseHistory: object.purchaseHistory,
                 cart: object.cart
             });
+
+            const user = await collection.findOne({ id: object.id });
+            if (user){
+                console.log("El usuario " +  object.id + " ya existe");
+                return false;
+            }
+            
             const newUserJson = JSON.stringify(newUser);
             const newUserparsed = JSON.parse(newUserJson);
             await collection.insertOne(newUserparsed);

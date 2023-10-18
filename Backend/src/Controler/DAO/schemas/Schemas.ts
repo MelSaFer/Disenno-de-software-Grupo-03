@@ -9,7 +9,7 @@ export const CartSchema = new mongoose.Schema({
 
 //PRODUCT SCHEMA------------------------------------------------------------------------------------------------------------------------------
 export const productSchema = new mongoose.Schema({
-    code: { type: Number, required: true },
+    code: { type: String, required: true },
     description: { type: String, required: true },
     cuantityAvailable: { type: Number, required: true },
     image: { type: String, required: true },

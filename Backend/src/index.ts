@@ -34,18 +34,26 @@ async function main() {
   SingletonMongo.getInstance().connect();
   const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
   const collection = db.collection(PRODUCT_COLLECTION);
-  const doc = { name: "Holaaaaaa", type: "hello" };
-  collection.insertOne(doc);
+  //const doc = { name: "Holaaaaaa", type: "hello" };
+  //collection.insertOne(doc);
+  //console.log("holaaa "+ collection.findOne({name: "1"}));
 
   /*
   const daoUser = new DTOUser(1, "hola@gmail.com", 0, [], []);
   const dao = new DAOUser();
   dao.create(daoUser);
  */
+/*
   const adoProduct = new DTOProduct("1", "  ", 0, [], 12);
   const daoP = new DAOProduct();
   daoP.create(adoProduct);
-
+*/
+  //const daoProduct = new DTOProduct("90", "  ", 0, [], 12);
+  const daoProd = new DAOProduct();
+  const dtoProd = new DTOProduct("abc", "  ", 0, [], 12);
+  daoProd.create(dtoProd);
+  console.log(daoProd.getObject(1));
+  
   //const singletonMongo = SingletonMongo.getInstance();
   const singletonFirebase = SingletonFirebase.getInstance();
   //const connection = await SingletonMongo;
