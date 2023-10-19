@@ -26,6 +26,15 @@ import {DTOUser} from "./Controler/DTO/DTOUser";
 import {DAOProduct} from "./Controler/DAO/DAOProduct";
 import {DTOProduct} from "./Controler/DTO/DTOProduct";
 
+import {DAOCart} from "./Controler/DAO/DAOCart";
+import {DTOCart} from "./Controler/DTO/DTOCart";
+
+import {DAOContent} from "./Controler/DAO/DAOContent";
+import {DTOContent} from "./Controler/DTO/DTOContent";
+
+import {DAOPurchaseHistory} from "./Controler/DAO/DAOPurchaseHistory";
+import {DTOPurchaseHistory} from "./Controler/DTO/DTOPurchaseHistory";
+
 require("dotenv").config();
 
 async function main() {
@@ -48,15 +57,50 @@ async function main() {
   const daoP = new DAOProduct();
   daoP.create(adoProduct);
 */
+
+  /*-------------------------------------------------------------
+   //PRUEBAS PRODUCT
   //const daoProduct = new DTOProduct("90", "  ", 0, [], 12);
   const daoProd = new DAOProduct();
   const dtoProd = new DTOProduct("abc", "  ", 0, [], 12);
   daoProd.create(dtoProd);
-  console.log(daoProd.getObject(1));
-  
+  //console.log(daoProd.getObject(1));
+  const dtoProd2 = new DTOProduct("abc", "  ", 0, [], 89);
+  daoProd.update(dtoProd2);
   //const singletonMongo = SingletonMongo.getInstance();
   const singletonFirebase = SingletonFirebase.getInstance();
   //const connection = await SingletonMongo;
+ -------------------------------------------------------------*/
+  let date: Date = new Date("2019-01-16");  
+  /*-------------------------------------------------------------
+  //PRUEBAS CART
+  const daoCart = new DAOCart();
+  const dtoProd = new DTOCart(2, []);
+  daoCart.create(dtoProd);
+  console.log(daoCart.getObject(2));
+  -------------------------------------------------------------*/
+
+  /*-------------------------------------------------------------
+  //PRUEBAS CART
+  const daoCont = new DAOContent();
+  //const dtoCont = new DTOContent(23, "prueba", "Esto es una prueba", date, 22, 2, []);
+  //daoCont.create(dtoCont);
+  //console.log(daoCont.getObject(23));
+  const dtoCont2 = new DTOContent(23, "pruebaActualizada", "Esto es una prueba actualizada", date, 22, 2, []);
+  daoCont.update(dtoCont2);
+  console.log(daoCont.getObject(23));
+  -----------------------------------------------------------------*/
+
+  ///*-------------------------------------------------------------
+  //Prueba Purchase H.
+  //const daoPurchaseH = new DAOPurchaseHistory();
+  //const dtoPurchaseH = new DTOPurchaseHistory([]);
+  //daoCart.create(dtoProd);
+  //console.log(daoCart.getObject(2));
+  //-------------------------------------------------------------*/
+
+
+  /*
 
   if (singletonFirebase instanceof SingletonFirebase) {
     if (singletonFirebase) {
@@ -77,6 +121,7 @@ async function main() {
       console.log("2");
     }
   }
+  */
 
   app.listen(PORT);
   console.log("Server on port ", PORT);

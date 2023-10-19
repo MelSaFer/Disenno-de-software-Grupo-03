@@ -51,6 +51,7 @@ export class DAOUser implements DAO{
             const newUserJson = JSON.stringify(newUser);
             const newUserparsed = JSON.parse(newUserJson);
             await collection.insertOne(newUserparsed);
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             return true;
         } catch(err){
             console.log(err);
