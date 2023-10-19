@@ -76,19 +76,25 @@ async function main() {
   //PRUEBAS CART
   const daoCart = new DAOCart();
   const dtoProd = new DTOCart(2, []);
-  daoCart.create(dtoProd);
-  console.log(daoCart.getObject(2));
+  const dtoProd2 = new DTOCart(3, []);
+  //daoCart.create(dtoProd);
+  //daoCart.create(dtoProd2);
+  //console.log(daoCart.getObject(2));
+  daoCart.delete(2);
   -------------------------------------------------------------*/
 
   /*-------------------------------------------------------------
-  //PRUEBAS CART
+  //PRUEBAS content
   const daoCont = new DAOContent();
-  //const dtoCont = new DTOContent(23, "prueba", "Esto es una prueba", date, 22, 2, []);
-  //daoCont.create(dtoCont);
+  const dtoCont = new DTOContent(54, "prueba2", "Esto es una prueba2", date, 22, 2, []);
+  daoCont.create(dtoCont);
   //console.log(daoCont.getObject(23));
   const dtoCont2 = new DTOContent(23, "pruebaActualizada", "Esto es una prueba actualizada", date, 22, 2, []);
   daoCont.update(dtoCont2);
   console.log(daoCont.getObject(23));
+  //const dtoCont = daoCont.getObject(23);
+  //daoCont.delete(54);
+
   -----------------------------------------------------------------*/
 
   ///*-------------------------------------------------------------

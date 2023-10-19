@@ -115,7 +115,36 @@ export class DAOCart implements DAO{
         return true;
     };
 
-    delete(object: unknown){
+    async delete(code_: unknown){
+        try{
+            console.log("code: " + code_);
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CART_COLLECTION);
+            //const Cart = mongoose.model('Cart', CartSchema);
+
+            //Verify existence of the cart
+            const cart = await collection.findOne({ id: code_ });
+            if (!cart){
+                console.log("El carrito " +  code_ + " no existe");
+                return false;
+            }
+            //Delete the cart in the database
+            const result = await collection.deleteOne({ id: code_ });
+            
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            //Check if the cart was deleted
+            if (result.deletedCount > 0) {
+                console.log("Carrito eliminado con éxito");
+                return true;
+            } else {
+                console.log("No se encontró el carrito para eliminar");
+                return false;
+            }
+
+        } catch(err){
+            console.log(err);
+        }
         return true;
     };
 }
