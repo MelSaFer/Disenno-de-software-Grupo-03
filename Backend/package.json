@@ -16,7 +16,7 @@
     "express": "^4.18.2",
     "firebase": "^10.4.0",
     "mongodb": "^6.1.0",
-    "mongoose": "^7.6.3",
+    "mongoose": "^7.6.0",
     "mongose": "^0.0.2-security",
     "morgan": "^1.10.0",
     "to-json-schema": "^0.2.5"

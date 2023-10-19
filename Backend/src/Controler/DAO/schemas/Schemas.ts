@@ -25,22 +25,15 @@ export const UserSchema = new mongoose.Schema({
     cart: { type: Array, required: true }
 });
 
-//PURCHASE SCHEMA-------------------------------------------------------------------------------------------------------------------
-export const PurchaseSchema = new mongoose.Schema({
+//PURCHASE HISTORY SCHEMA-------------------------------------------------------------------------------------------------------------------
+export const PurchaseHistorySchema = new mongoose.Schema({
     orderNumber: { type: Number, required: true },
     purchaseDetails: { type: String, required: true },
-    products: { type: Array, require: true},
+    product: { type: String, require: true},
     voucher: { type: String, require: true},
     aproxDeliveryDate: { type: String, require: true},
     shippingAdress: { type: String, require: true},
     shippingPrice: { type: Number, required: true }
-});
-
-
-//PURCHASEHISTORY SCHEMA------------------------------------------------------------------------------------------------------------------------------
-export const PurchaseHistorySchema = new mongoose.Schema({
-    id: { type: Number, required: true },
-    history: { type: String, required: true }
 });
 
 //CONTENT SCHEMA------------------------------------------------------------------------------------------------------------------------------

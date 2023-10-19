@@ -22,30 +22,8 @@ export class DAOUser implements DAO{
     getAll(){
 
     };
-    async getObject(code_: unknown){
-        try{
-            //Get the database instance from the singleton and connect to it
-            SingletonMongo.getInstance().connect();
-            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
-            const collection = db.collection(USER_COLLECTION);
-           
-            //Get the cart from the database, using the code
-            const cart = await collection.findOne({ id: code_ });
-           
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            
-            // If the cart was found, return it, else return false
-            if (cart) {
-                console.log("Se encontró: " + JSON.stringify(cart, null, 2));
-                return cart;
-            } else {
-                console.log("No se encontró el usuario con el código: " + code_);
-                return false; 
-            }
-        } catch(err){
-            console.log(err);
-            return false;
-        }
+    getObject(object: unknown){
+        return true;
     };
 
     async create(object: any){
@@ -81,49 +59,7 @@ export class DAOUser implements DAO{
         return false;
     };
 
-    async update(object: any){
-        try{
-            SingletonMongo.getInstance().connect();
-            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);  
-            const collection = db.collection(USER_COLLECTION);
-            //Get the model from the database with the schema
-            const Cart = mongoose.model('User', UserSchema);
-            //Create a new product with the object received
-            let updatedUser = new Cart({
-                id: object.id,
-                email : object.email,
-                roleType: object.roleType,
-                purchaseHistory: object.purchaseHistory,
-                cart: object.cart
-            });
-            //Create the update object for updating the content
-            const InfoToUpdate = {
-                $set: {
-                    id: updatedUser.id,
-                    email : updatedUser.email,
-                    roleType: updatedUser.roleType,
-                    purchaseHistory: updatedUser.purchaseHistory,
-                    cart: updatedUser.cart
-                    }
-            };
-    
-            //Create list of items to update
-            const newItemsList = [];
-            //...?
-    
-            const result = await collection.updateOne({ id: updatedUser.id }, InfoToUpdate); //Update the product in the database
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            //Check if the product was updated  
-            if (result.modifiedCount > 0) {
-                console.log("Usuario actualizado con éxito " + JSON.stringify(updatedUser, null, 2));
-                return true;
-            } else {
-                console.log("No se encontró el Usuario para actualizar o no se actualizó ningun campo");
-                return false;
-            }
-        } catch(err){
-            console.log(err);
-        } //end try-catch
+    update(object: unknown){
         return true;
     };
 
