@@ -42,7 +42,7 @@ export class DAOPurchaseHistory implements DAO{
             //Get the Purchase History from the database, using the code
             const purchaseHistory = await collection.findOne({ orderNumber: code_ });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the content was found, return it, else return false
+            // If the product history was found, return it, else return false
             if (purchaseHistory) {
                 console.log("Se encontro: " + JSON.stringify(purchaseHistory, null, 2));
                 return purchaseHistory;
@@ -61,7 +61,7 @@ export class DAOPurchaseHistory implements DAO{
     CREATE METHOD
     Create a purchase history in the database
     PARAMS:
-        - object: Content
+        - object: Product History
     RETURNS:
         - true if the purchase history was created
         - false if the purchase history was not created
@@ -106,12 +106,67 @@ export class DAOPurchaseHistory implements DAO{
         return true;
     };
 
-    update(object: unknown){
-        //Creo que se implementa igual que el de carrito(o parecido)
+    /*
+    -----------------------------------------------------------------------
+    UPDATE METHOD
+    Update a purchase history in the database
+    PARAMS:
+        - object: unknown
+    RETURNS:
+        - true if the purchase history was updated
+        - false if the purchase history was not updated
+    */
+    async update(object: any){
+        //Si voy a agregar algo al carrito, me pego a mongo y lo agrego
+        //no lo agrege porque creo que se plantea diferente al resto
+        try{
+            const purchasehistory = mongoose.model('PurchaseHistory', PurchaseHistorySchema);
+            const result = await purchasehistory.updateOne(object);
+        }catch(err){
+            console.log(err);
+        }
         return true;
     };
 
-    delete(object: unknown){
+    /*
+    -----------------------------------------------------------------------
+    DELETE METHOD
+    Delete a purchase history in the database
+    PARAMS:
+        - object: unknown
+    RETURNS:
+        - true if the purchase history was deleted
+        - false if the purchase history was not deleted
+    */
+    async delete(code_: unknown){
+        try{
+            console.log("code: " + code_);
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(PURCHASEHISTORY_COLLECTION);
+
+            //Verify existence of the product history
+            const producthistory = await collection.findOne({ id: code_ });
+            if (!producthistory){
+                console.log("El producthistory " +  code_ + " no existe");
+                return false;
+            }
+            //Delete the producthistory in the database
+            const result = await collection.deleteOne({ id: code_ });
+            
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            //Check if the producthistory was deleted
+            if (result.deletedCount > 0) {
+                console.log("Product History eliminado con éxito");
+                return true;
+            } else {
+                console.log("No se encontró el producthistory para eliminar");
+                return false;
+            }
+
+        } catch(err){
+            console.log(err);
+        }
         return true;
     };
 }

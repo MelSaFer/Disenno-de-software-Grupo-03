@@ -166,7 +166,35 @@ export class DAOProduct implements DAO{
         - true if the product was updated
         - false if the product was not updated
     */
-    delete(object: unknown){
+    async delete(code_: unknown){
+        try{
+            console.log("code: " + code_);
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(PRODUCT_COLLECTION);
+
+            //Verify existence of the product
+            const product = await collection.findOne({ id: code_ });
+            if (!product){
+                console.log("El product " +  code_ + " no existe");
+                return false;
+            }
+            //Delete the product in the database
+            const result = await collection.deleteOne({ id: code_ });
+            
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            //Check if the product was deleted
+            if (result.deletedCount > 0) {
+                console.log("Product eliminado con éxito");
+                return true;
+            } else {
+                console.log("No se encontró el product para eliminar");
+                return false;
+            }
+
+        } catch(err){
+            console.log(err);
+        }
         return true;
     };
 }

@@ -161,7 +161,46 @@ export class DAOContent implements DAO{
             return true;
         };
 
-    delete(object: unknown){
+    /*
+    -----------------------------------------------------------------------
+    DELETE METHOD
+    Delete a product in the database
+    PARAMS:
+        - object: Product
+    RETURNS:
+        - true if the product was deleted
+        - false if the product was not deleted
+    */
+    async delete(code_: unknown){
+        try{
+            console.log("code: " + code_);
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CONTENT_COLLECTION);
+
+            //Verify existence of the content
+            const content = await collection.findOne({ id: code_ });
+            if (!content){
+                console.log("El content " +  code_ + " no existe");
+                return false;
+            }
+            //Delete the content in the database
+            const result = await collection.deleteOne({ id: code_ });
+            
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            //Check if the content was deleted
+            if (result.deletedCount > 0) {
+                console.log("Content eliminado con éxito");
+                return true;
+            } else {
+                console.log("No se encontró el content para eliminar");
+                return false;
+            }
+
+        } catch(err){
+            console.log(err);
+        }
         return true;
     };
+    
 }

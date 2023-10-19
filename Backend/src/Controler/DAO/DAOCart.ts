@@ -103,18 +103,38 @@ export class DAOCart implements DAO{
         return true;
     };
 
-    update(object: any){
+    /*
+    -----------------------------------------------------------------------
+    UPDATE METHOD
+    Update a cart in the database
+    PARAMS:
+        - object: Cart
+    RETURNS:
+        - true if the cart was updated
+        - false if the cart was not updated
+    */
+    async update(object: any){
         //Si voy a agregar algo al carrito, me pego a mongo y lo agrego
         //no lo agrege porque creo que se plantea diferente al resto
         try{
             const cart = mongoose.model('Cart', CartSchema);
-            cart.updateOne(object);
+            const result = await cart.updateOne(object);
         }catch(err){
             console.log(err);
         }
         return true;
     };
 
+    /*
+    -----------------------------------------------------------------------
+    DELETE METHOD
+    Delete a cart in the database
+    PARAMS:
+        - code: unknown
+    RETURNS:    
+        - true if the cart was deleted
+        - false if the cart was not deleted
+    */
     async delete(code_: unknown){
         try{
             console.log("code: " + code_);
