@@ -8,19 +8,13 @@ export const loadCart: RequestHandler = (req, res) => {
 }
 
 export const addProductToCart: RequestHandler = (req, res) => {
-    const dao = new DAOCart();
-    const carrito = dao.create(req.body);
-    res.json(carrito);
+    res.status(200).json({ message: 'Hello World' })
 }
 
 export const deleteProductFromCart: RequestHandler = (req, res) => {
-    const dao = new DAOCart();
-    const carrito = dao.delete(req.body.id);
-    res.json(carrito);
+    res.status(200).json({ message: 'Hello World' })
 }
 
 export const updateProductFromCart: RequestHandler = (req, res) => {
-    const dao = new DAOCart();
-    const carrito = dao.update(req.body);
-    res.json(carrito);
+    res.status(200).json({ message: 'Hello World' })
 }
