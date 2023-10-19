@@ -3,6 +3,7 @@ import {CartSchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CART_COLLECTION} from "../config";
+import { Cart } from "../../Model/Cart";
 
 /*-----------------------------------------------------------------------
  DAO CART
@@ -103,19 +104,91 @@ export class DAOCart implements DAO{
         return true;
     };
 
-    update(object: any){
+    /*
+    -----------------------------------------------------------------------
+    UPDATE METHOD
+    Update a cart in the database
+    PARAMS:
+        - object: Content
+    RETURNS:
+        - true if the cart was updated
+        - false if the cart was not updated
+    */
+    async update(object: any){
         //Si voy a agregar algo al carrito, me pego a mongo y lo agrego
         //no lo agrege porque creo que se plantea diferente al resto
+        //Mongo connection with singleton
+    try{
+        SingletonMongo.getInstance().connect();
+        const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);  
+        const collection = db.collection(CART_COLLECTION);
+        //Get the model from the database with the schema
+        const Cart = mongoose.model('Cart', CartSchema);
+        //Create a new product with the object received
+        let updatedContent = new Cart({
+            id: object.id,
+            items: object.items
+        });
+        //Create the update object for updating the content
+        const InfoToUpdate = {
+            $set: {
+                id: updatedContent.id,
+                items: updatedContent.items
+                }
+        };
+
+        //Create list of items to update
+        const newItemsList = [];
+        //...?
+
+        const result = await collection.updateOne({ id: updatedContent.id }, InfoToUpdate); //Update the product in the database
+        //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+        //Check if the product was updated  
+        if (result.modifiedCount > 0) {
+            console.log("Carrito actualizado con éxito " + JSON.stringify(updatedContent, null, 2));
+            return true;
+        } else {
+            console.log("No se encontró el Carrito para actualizar o no se actualizó ningun campo");
+            return false;
+        }
+    } catch(err){
+        console.log(err);
+    } //end try-catch
+    return true;
+    };
+    
+
+    async delete(object: any){
         try{
-            const cart = mongoose.model('Cart', CartSchema);
-            cart.updateOne(object);
-        }catch(err){
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CART_COLLECTION);
+            const Cart = mongoose.model('Cart', CartSchema);
+
+            //Verify existence of the cart
+            const cart = await collection.findOne({ id: object.id });
+            if (!cart){
+                console.log("El carrito " +  object.id + " no existe");
+                return false;
+            }
+
+            //Delete the cart in the database
+            const result = await collection.deleteOne({ id: object.id });
+            
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            //Check if the cart was deleted
+            if (result.deletedCount > 0) {
+                console.log("Carrito eliminado con éxito");
+                return true;
+            } else {
+                console.log("No se encontró el carrito para eliminar");
+                return false;
+            }
+
+
+        } catch(err){
             console.log(err);
         }
-        return true;
-    };
-
-    delete(object: unknown){
         return true;
     };
 }

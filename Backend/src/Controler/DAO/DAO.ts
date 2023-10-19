@@ -8,6 +8,6 @@ export interface DAO {
     getObject: (code: unknown) => unknown;
     create: (object: unknown) => any;
     update: (object: unknown) => any;
-    delete: (object: unknown) => Boolean;
+    delete: (object: unknown) => any;
 }
 

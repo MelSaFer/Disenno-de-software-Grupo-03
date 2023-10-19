@@ -40,7 +40,7 @@ export class DAOPurchaseHistory implements DAO{
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(PURCHASEHISTORY_COLLECTION);
             //Get the Purchase History from the database, using the code
-            const purchaseHistory = await collection.findOne({ orderNumber: code_ });
+            const purchaseHistory = await collection.findOne({ id: code_ });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the content was found, return it, else return false
             if (purchaseHistory) {
@@ -76,17 +76,12 @@ export class DAOPurchaseHistory implements DAO{
             
             //Create a new purchase history with the object received
             let newPurchaseHistory = new PurchaseHistory({
-                orderNumber: object.orderNumber,
-                purchaseDetails: object.purchaseDetails,
-                products: object.products,
-                voucher : object.voucher,   
-                aproxDeliveryDate: object.aproxDeliveryDate,
-                shippingAdress: object.shippingAdress,
-                shippingPrice: object.shippingPrice
+                id: object.id,
+                history: object.history
             });
 
             //Check if the purchase history already exists
-            const purchaseHistory = await collection.findOne({ orderNumber: object.orderNumber });
+            const purchaseHistory = await collection.findOne({ id: object.id });
             if (purchaseHistory){
                 console.log("El historial " +  object.orderNumber + " ya existe");
                 return false;
@@ -106,8 +101,54 @@ export class DAOPurchaseHistory implements DAO{
         return true;
     };
 
-    update(object: unknown){
+    /*
+    -----------------------------------------------------------------------
+    UPDATE METHOD
+    Update a purchase history in the database
+    PARAMS:
+        - object: Content
+    RETURNS:
+        - true if the purchase history was updated
+        - false if the purchase history was not updated
+    */
+    async update(object: any){
         //Creo que se implementa igual que el de carrito(o parecido)
+        try{
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);  
+            const collection = db.collection(PURCHASEHISTORY_COLLECTION);
+            //Get the model from the database with the schema
+            const PurchaseHistory = mongoose.model('PurchaseHistory', PurchaseHistorySchema);
+            //Create a new product with the object received
+            let updatedContent = new PurchaseHistory({
+                id: object.id,
+                history: object.history
+            });
+            //Create the update object for updating the content
+            const InfoToUpdate = {
+                $set: {
+                    id: updatedContent.id,
+                    history: updatedContent.history
+                    }
+            };
+
+            //Create list of items to update
+            const newHistory = [];
+            //...?
+
+            const result = await collection.updateOne({ id: updatedContent.id }, InfoToUpdate); //Update the product in the database
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            //Check if the product was updated  
+            if (result.modifiedCount > 0) {
+                console.log("Purchase History actualizado con éxito " + JSON.stringify(updatedContent, null, 2));
+                return true;
+            } else {
+                console.log("No se encontró el Purchase History para actualizar o no se actualizó ningun campo");
+                return false;
+            }
+        } catch(err){
+            console.log(err);
+        } //end try-catch
         return true;
     };
 
