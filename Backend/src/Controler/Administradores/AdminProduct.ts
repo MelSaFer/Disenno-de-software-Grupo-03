@@ -1,6 +1,6 @@
 import { API_URL } from '../config';
 
-export class AdminProducts{
+export class AdminProduct{
     catalogue = [];
 
     constructor(){
