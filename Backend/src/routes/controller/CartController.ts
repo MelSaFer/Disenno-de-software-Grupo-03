@@ -1,9 +1,12 @@
 import { RequestHandler } from "express";
 import { DAOCart } from "../../Controler/DAO/DAOCart";
 
-export const loadCart: RequestHandler = (req, res) => {
+export const loadCart: RequestHandler = async (req, res) => {
     const dao = new DAOCart();
-    const carrito = dao.getObject(req.body.id);
+    const carritoPromise = dao.getObject(3);
+    const carrito = await carritoPromise; // Espera a que la promesa se resuelva
+
+    console.log("This is carrito: "+ carrito);
     res.json(carrito);
 }
 

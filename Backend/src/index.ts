@@ -72,7 +72,7 @@ async function main() {
   //const connection = await SingletonMongo;
  -------------------------------------------------------------*/
   let date: Date = new Date("2019-01-16");  
-  /*-------------------------------------------------------------
+  ///*-------------------------------------------------------------
   //PRUEBAS CART
   const daoCart = new DAOCart();
   const dtoProd = new DTOCart(2, []);
@@ -81,7 +81,7 @@ async function main() {
   //daoCart.create(dtoProd2);
   //console.log(daoCart.getObject(2));
   daoCart.delete(2);
-  -------------------------------------------------------------*/
+  //-------------------------------------------------------------*/
 
   /*-------------------------------------------------------------
   //PRUEBAS content

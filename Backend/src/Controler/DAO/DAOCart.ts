@@ -47,8 +47,12 @@ export class DAOCart implements DAO{
             
             // If the cart was found, return it, else return false
             if (cart) {
+                
                 console.log("Se encontró: " + JSON.stringify(cart, null, 2));
-                return cart;
+                //Insert the cart in the database, convert it to JSON and parse it
+                const newCartJson = JSON.stringify(cart);
+                const newCartparsed = JSON.parse(newCartJson);
+                return newCartparsed;
             } else {
                 console.log("No se encontró el carrito con el código: " + code_);
                 return false; 
