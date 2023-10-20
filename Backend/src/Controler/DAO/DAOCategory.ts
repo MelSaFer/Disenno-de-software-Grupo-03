@@ -75,7 +75,7 @@ export class DAOCategory implements DAO{
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CATEGORY_COLLECTION);
             //Get the Category from the database, using the code
-            const Category = await collection.findOne({ id: code_ });
+            const Category = await collection.findOne({ idCategory: code_ });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the category was found, return it, else return false
             if (Category) {
@@ -112,16 +112,16 @@ export class DAOCategory implements DAO{
 
             //Create a new category with the object received
             let newCategory = new Category({
-                id: object.id,
+                idCategory: object.idCategory,
                 name: object.name,
                 subcategories: object.subcategories
             });
 
             //Check if the category already exists
-            const category = await collection.findOne({ id: object.id });
+            const category = await collection.findOne({ idCategory: object.idCategory });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             if (category){
-                console.log("El categoria " +  object.code + " ya existe");
+                console.log("El categoria " +  object.idCategory + " ya existe");
                 return false;
             }
             
@@ -153,23 +153,33 @@ export class DAOCategory implements DAO{
                 SingletonMongo.getInstance().connect();
                 const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);  
                 const collection = db.collection(CATEGORY_COLLECTION);
+                
                 //Get the model from the database with the schema
                 const Category = mongoose.model('Category', categorySchema);
+
                 //Create a new product with the object received
                 let updatedCategory = new Category({
-                    id: object.id,
+                    idCategory: object.idCategory,
                     name: object.name,
                     subcategories: object.subcategories
                 });
+
+                //Verify existence of the category
+                const category = await collection.findOne({ idCategory: updatedCategory.idCategory });
+                if (!category){
+                    console.log("El category " +  updatedCategory.idCategory + " no existe");
+                    return false;
+                }
+
                 //Create the update object for updating the category
                 const InfoToUpdate = {
                     $set: {
-                        id: updatedCategory.id,
+                        idCategory: updatedCategory.idCategory,
                         name: updatedCategory.name,
                         subcategories: updatedCategory.subcategories
                         }
                 };
-                const result = await collection.updateOne({ id: updatedCategory.id }, InfoToUpdate); //Update the product in the database
+                const result = await collection.updateOne({ idCategory: updatedCategory.idCategory }, InfoToUpdate); //Update the product in the database
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 //Check if the product was updated  
                 if (result.modifiedCount > 0) {
@@ -203,13 +213,13 @@ export class DAOCategory implements DAO{
             const collection = db.collection(CATEGORY_COLLECTION);
 
             //Verify existence of the category
-            const category = await collection.findOne({ id: code_ });
+            const category = await collection.findOne({ idCategory: code_ });
             if (!category){
                 console.log("El category " +  code_ + " no existe");
                 return false;
             }
             //Delete the category in the database
-            const result = await collection.deleteOne({ id: code_ });
+            const result = await collection.deleteOne({ idCategory: code_ });
             
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the category was deleted
