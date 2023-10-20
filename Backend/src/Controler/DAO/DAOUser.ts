@@ -68,9 +68,7 @@ export class DAOUser implements DAO{
                
                 //Get the cart from the database, using the code
                 const user = await collection.findOne({ id: code_ });
-               
-                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-                
+                SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 // If the user was found, return it, else return false
                 if (user) {
                     
@@ -164,7 +162,7 @@ export class DAOUser implements DAO{
             //...?
     
             const result = await collection.updateOne({ id: updatedUser.id }, InfoToUpdate); //Update the product in the database
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was updated  
             if (result.modifiedCount > 0) {
                 console.log("Usuario actualizado con éxito " + JSON.stringify(updatedUser, null, 2));
@@ -206,7 +204,7 @@ export class DAOUser implements DAO{
             //Delete the user in the database
             const result = await collection.deleteOne({ id: code_ });
             
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the user was deleted
             if (result.deletedCount > 0) {
                 console.log("User eliminado con éxito");

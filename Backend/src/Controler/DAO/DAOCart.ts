@@ -80,12 +80,9 @@ export class DAOCart implements DAO{
            
             //Get the cart from the database, using the code
             const cart = await collection.findOne({ id: code_ });
-           
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            
             // If the cart was found, return it, else return false
             if (cart) {
-                
                 console.log("Se encontró: " + JSON.stringify(cart, null, 2));
                 //Insert the cart in the database, convert it to JSON and parse it
                 const newCartJson = JSON.stringify(cart);

@@ -62,35 +62,35 @@ async function main() {
    //PRUEBAS PRODUCT
   //const daoProduct = new DTOProduct("90", "  ", 0, [], 12);
   const daoProd = new DAOProduct();
-  const dtoProd = new DTOProduct("abc", "  ", 0, [], 12);
+  const dtoProd = new DTOProduct("567", "  ", 0, [], 12);
   daoProd.create(dtoProd);
   //console.log(daoProd.getObject(1));
-  const dtoProd2 = new DTOProduct("abc", "  ", 0, [], 89);
+  const dtoProd2 = new DTOProduct("ajjc", "  ", 0, [], 54);
   daoProd.update(dtoProd2);
   //const singletonMongo = SingletonMongo.getInstance();
   const singletonFirebase = SingletonFirebase.getInstance();
   //const connection = await SingletonMongo;
  -------------------------------------------------------------*/
   let date: Date = new Date("2019-01-16");  
-  ///*-------------------------------------------------------------
+  /*-------------------------------------------------------------
   //PRUEBAS CART
   const daoCart = new DAOCart();
-  const dtoProd = new DTOCart(2, []);
-  const dtoProd2 = new DTOCart(3, []);
-  daoCart.create(dtoProd);
+  const dtoCart = new DTOCart(2, []);
+  const dtoCart2 = new DTOCart(3, []);
+  daoCart.create(dtoCart);
   //daoCart.create(dtoProd2);
   //console.log(daoCart.getObject(2));
   console.log(await daoCart.getAll());
   //daoCart.delete(2);
-  //-------------------------------------------------------------*/
+  -------------------------------------------------------------*/
 
   /*-------------------------------------------------------------
   //PRUEBAS content
   const daoCont = new DAOContent();
-  const dtoCont = new DTOContent(54, "prueba2", "Esto es una prueba2", date, 22, 2, []);
+  const dtoCont = new DTOContent(94, "prueba92", "Esto es una prueba2", date, 22, 2, []);
   daoCont.create(dtoCont);
   //console.log(daoCont.getObject(23));
-  const dtoCont2 = new DTOContent(23, "pruebaActualizada", "Esto es una prueba actualizada", date, 22, 2, []);
+  const dtoCont2 = new DTOContent(7991, "pruebaActualizada", "Esto es una prueba actualizada", date, 22, 2, []);
   daoCont.update(dtoCont2);
   console.log(daoCont.getObject(23));
   //const dtoCont = daoCont.getObject(23);

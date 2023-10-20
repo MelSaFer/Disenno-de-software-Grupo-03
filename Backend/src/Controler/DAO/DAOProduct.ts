@@ -90,6 +90,7 @@ export class DAOProduct implements DAO{
             const product = await collection.findOne({ code: object.code });
             if (product){
                 console.log("El producto " +  object.code + " ya existe");
+                SingletonMongo.getInstance().disconnect_();
                 return false;
             }
             //Insert the product in the database, convert it to JSON and parse it
@@ -131,6 +132,12 @@ export class DAOProduct implements DAO{
                 image: object.image,
                 price: object.price
             });
+
+            const product_ = await collection.findOne({ code: updatedProduct.code});
+            if (!product_){
+                console.log("El producto " +  updatedProduct.code + " no existe");
+                return false;
+            }
             //Create the update object for updating the product
             const InfoToUpdate = {
                 $set: {
@@ -182,7 +189,7 @@ export class DAOProduct implements DAO{
             //Delete the product in the database
             const result = await collection.deleteOne({ id: code_ });
             
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was deleted
             if (result.deletedCount > 0) {
                 console.log("Product eliminado con éxito");

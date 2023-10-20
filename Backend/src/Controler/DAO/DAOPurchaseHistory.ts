@@ -37,8 +37,7 @@ export class DAOPurchaseHistory implements DAO{
             
                 //Get the purchasehistories from the database, using the code
                 let purchasehistories = await collection.find({}).toArray();
-                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-    
+                SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 if (purchasehistories) {
                     //console.log("Se encontraron los carritos: " + JSON.stringify(purchasehistories, null, 2));
                     return purchasehistories;
@@ -76,7 +75,7 @@ export class DAOPurchaseHistory implements DAO{
             const collection = db.collection(PURCHASEHISTORY_COLLECTION);
             //Get the Purchase History from the database, using the code
             const purchaseHistory = await collection.findOne({ orderNumber: code_ });
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the product history was found, return it, else return false
             if (purchaseHistory) {
                 console.log("Se encontro: " + JSON.stringify(purchaseHistory, null, 2));
@@ -189,7 +188,7 @@ export class DAOPurchaseHistory implements DAO{
             //Delete the producthistory in the database
             const result = await collection.deleteOne({ id: code_ });
             
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the producthistory was deleted
             if (result.deletedCount > 0) {
                 console.log("Product History eliminado con éxito");

@@ -37,8 +37,8 @@ export class DAOContent implements DAO{
             
                 //Get the contents from the database, using the code
                 let contents = await collection.find({}).toArray();
+                
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-    
                 if (contents) {
                     //console.log("Se encontraron los carritos: " + JSON.stringify(contents, null, 2));
                     return contents;
@@ -76,7 +76,7 @@ export class DAOContent implements DAO{
             const collection = db.collection(CONTENT_COLLECTION);
             //Get the Content from the database, using the code
             const Content = await collection.findOne({ id: code_ });
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the content was found, return it, else return false
             if (Content) {
                 console.log("Se encontro: " + JSON.stringify(Content, null, 2));
@@ -123,9 +123,9 @@ export class DAOContent implements DAO{
 
             //Check if the content already exists
             const content = await collection.findOne({ id: object.id });
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             if (content){
-                console.log("El contenido " +  object.code + " ya existe");
+                console.log("El contenido " +  object.id + " ya existe");
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 return false;
             }
             
@@ -134,6 +134,7 @@ export class DAOContent implements DAO{
             const newContentparsed = JSON.parse(newContentJson);
             await collection.insertOne(newContentparsed);
             console.log("Se inserto: " + newContentJson);
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             return true;
         } catch(err){
             console.log(err);
@@ -169,6 +170,12 @@ export class DAOContent implements DAO{
                     category: object.category,
                     tags: object.tags
                 });
+                //Verify existence of the content
+                const content = await collection.findOne({ id: updatedContent.id });
+                if (!content){
+                    console.log("El content " +  updatedContent.id + " no existe");
+                    return false;
+                }
                 //Create the update object for updating the content
                 const InfoToUpdate = {
                     $set: {
@@ -222,7 +229,7 @@ export class DAOContent implements DAO{
             //Delete the content in the database
             const result = await collection.deleteOne({ id: code_ });
             
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the content was deleted
             if (result.deletedCount > 0) {
                 console.log("Content eliminado con éxito");
