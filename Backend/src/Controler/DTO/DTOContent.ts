@@ -3,7 +3,7 @@ Class Content
 
 */
 
-export class Content{
+export class DTOContent{
     private id: number = 0;
     private name: string = "";
     private description: string = "";

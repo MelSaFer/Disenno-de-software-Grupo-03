@@ -5,9 +5,9 @@ Interface DAO
 
 export interface DAO {
     getAll: () => unknown;
-    getObject: (object: unknown) => unknown;
-    create: (object: unknown) => Boolean;
-    update: (object: unknown) => Boolean;
-    delete: (object: unknown) => Boolean;
+    getObject: (code: unknown) => unknown;
+    create: (object: unknown) => any;
+    update: (object: unknown) => any;
+    delete: (code: unknown) => any;
 }
 

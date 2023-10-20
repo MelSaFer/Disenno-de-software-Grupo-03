@@ -40,6 +40,7 @@ export class SingletonMongo {
   public async disconnect_() {
     if(this.client) {
       await this.client.close();
+      console.log("Disconnected from MongoDB Atlas");
     }
   }
 

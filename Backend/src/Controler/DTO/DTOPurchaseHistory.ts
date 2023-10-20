@@ -3,7 +3,7 @@ Class PurchaseHistory
 
 */
 
-export class PurchaseHistory{
+export class DTOPurchaseHistory{
     private history = [];
 
     public constructor(history: []) {      

@@ -3,7 +3,7 @@ Class Purchase
 
 */
 
-export class Purchase{
+export class DTOPurchase{
     private orderNumber: Number = 0;
     private purchaseDetails: String = "";
     private products  = [];
