@@ -38,10 +38,18 @@ export class SingletonMongo {
   }
 
   public async disconnect_() {
+    try { 
+      await this.client.close();
+      console.log("Disconnected from MongoDB Atlas");
+    } catch (err) {
+      // Maneja los posibles errores
+      console.error("Error disconnecting from MongoDB Atlas: " + err);
+    }
+    /*
     if(this.client) {
       await this.client.close();
       console.log("Disconnected from MongoDB Atlas");
-    }
+    }*/
   }
 
   // Define el método getDatabase que devuelve la base de datos deseada
