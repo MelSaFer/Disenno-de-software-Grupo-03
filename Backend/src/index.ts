@@ -35,6 +35,9 @@ import {DTOContent} from "./Controler/DTO/DTOContent";
 import {DAOPurchaseHistory} from "./Controler/DAO/DAOPurchaseHistory";
 import {DTOPurchaseHistory} from "./Controler/DTO/DTOPurchaseHistory";
 
+import {DAOCategory} from "./Controler/DAO/DAOCategory";
+import {DTOCategory} from "./Controler/DTO/DTOCategory";
+
 require("dotenv").config();
 
 async function main() {
@@ -74,13 +77,13 @@ async function main() {
   let date: Date = new Date("2019-01-16");  
   ///*-------------------------------------------------------------
   //PRUEBAS CART
-  const daoCart = new DAOCart();
-  const dtoProd = new DTOCart(2, []);
-  const dtoProd2 = new DTOCart(3, []);
-  daoCart.create(dtoProd);
+  //const daoCart = new DAOCart();
+  //const dtoProd = new DTOCart(2, []);
+  //const dtoProd2 = new DTOCart(3, []);
+  //daoCart.create(dtoProd);
   //daoCart.create(dtoProd2);
   //console.log(daoCart.getObject(2));
-  console.log(await daoCart.getAll());
+  //console.log(await daoCart.getAll());
   //daoCart.delete(2);
   //-------------------------------------------------------------*/
 
@@ -105,6 +108,28 @@ async function main() {
   //daoCart.create(dtoProd);
   //console.log(daoCart.getObject(2));
   //-------------------------------------------------------------*/
+
+  //-----------------------------------------------------------------*/
+
+  ///*-------------------------------------------------------------
+  //Prueba Category
+  //const daoCategory = new DAOCategory();
+  //const dtoCategory = new DTOCategory(3, "prueba", []);
+
+  //console.log(await daoCategory.getAll());
+
+  //daoCategory.create(dtoCategory);
+
+  //console.log(daoCategory.getObject(2));
+
+  //const dtoCategory2 = new DTOCategory(3, "pruebaUpdate", []);
+  //daoCategory.update(dtoCategory2);
+
+  
+  //daoCategory.delete(1);
+  //daoCategory.delete(2);
+  //-------------------------------------------------------------*/
+
 
 
   /*
