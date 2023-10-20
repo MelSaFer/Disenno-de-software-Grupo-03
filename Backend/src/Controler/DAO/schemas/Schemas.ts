@@ -47,3 +47,10 @@ export const contentSchema = new mongoose.Schema({
     tags: { type: Array, required: true }
 });
 
+//CATEGORY SCHEMA------------------------------------------------------------------------------------------------------------------------------
+export const categorySchema = new mongoose.Schema({
+    idCategory: { type: Number, required: true },
+    name: { type: String, required: true },
+    subcategories: { type: Array, required: true }
+});
+

@@ -77,10 +77,11 @@ async function main() {
   const daoCart = new DAOCart();
   const dtoProd = new DTOCart(2, []);
   const dtoProd2 = new DTOCart(3, []);
-  //daoCart.create(dtoProd);
+  daoCart.create(dtoProd);
   //daoCart.create(dtoProd2);
   //console.log(daoCart.getObject(2));
-  daoCart.delete(2);
+  console.log(await daoCart.getAll());
+  //daoCart.delete(2);
   //-------------------------------------------------------------*/
 
   /*-------------------------------------------------------------

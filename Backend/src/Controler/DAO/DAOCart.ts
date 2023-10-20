@@ -19,9 +19,47 @@ export class DAOCart implements DAO{
 
     constructor(){};
 
-    getAll(){
+
+    /*
+    -----------------------------------------------------------------------
+    GET ALL METHOD
+    Gets all the carts in the database
+    PARAMS:
+        - none
+    RETURNS:
+        - carts: array of carts
+    */
+    async getAll(){
+        try {
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CART_COLLECTION);
+        
+            //Get the carts from the database, using the code
+            let carts = await collection.find({}).toArray();
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+
+            if (carts) {
+                //console.log("Se encontraron los carritos: " + JSON.stringify(carts, null, 2));
+                return carts;
+            }
+            else{
+                console.log("No se encontraron carritos");
+                return false;
+            }
+            
+            
+
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+        
 
     };
+
+    
 
     /*
     -----------------------------------------------------------------------

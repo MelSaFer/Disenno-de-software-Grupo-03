@@ -19,9 +19,44 @@ export class DAOPurchaseHistory implements DAO{
 
     constructor(){};
 
-    getAll(){
-
-    };
+    /*
+    -----------------------------------------------------------------------
+    GET ALL METHOD
+    Gets all the purchasehistories in the database
+    PARAMS:
+        - none
+    RETURNS:
+        - purchasehistories: array of purchasehistories
+    */
+        async getAll(){
+            try {
+                //Get the database instance from the singleton and connect to it
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const collection = db.collection(PURCHASEHISTORY_COLLECTION);
+            
+                //Get the purchasehistories from the database, using the code
+                let purchasehistories = await collection.find({}).toArray();
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+    
+                if (purchasehistories) {
+                    //console.log("Se encontraron los carritos: " + JSON.stringify(purchasehistories, null, 2));
+                    return purchasehistories;
+                }
+                else{
+                    console.log("No se encontraron carritos");
+                    return false;
+                }
+                
+                
+    
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
+            
+    
+        };
 
     /*
     -----------------------------------------------------------------------

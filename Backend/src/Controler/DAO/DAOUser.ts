@@ -19,12 +19,75 @@ export class DAOUser implements DAO{
 
     constructor(){};
 
-    getAll(){
+    /*
+    -----------------------------------------------------------------------
+    GET ALL METHOD
+    Gets all the users in the database
+    PARAMS:
+        - none
+    RETURNS:
+        - users: array of users
+    */
+        async getAll(){
+            try {
+                //Get the database instance from the singleton and connect to it
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const collection = db.collection(USER_COLLECTION);
+            
+                //Get the users from the database, using the code
+                let users = await collection.find({}).toArray();
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+    
+                if (users) {
+                    //console.log("Se encontraron los carritos: " + JSON.stringify(users, null, 2));
+                    return users;
+                }
+                else{
+                    console.log("No se encontraron carritos");
+                    return false;
+                }
+                
+                
+    
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
+            
+    
+        };
 
-    };
-    getObject(object: unknown){
-        return true;
-    };
+
+        async getObject(code_: unknown){
+            try{
+                //Get the database instance from the singleton and connect to it
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const collection = db.collection(USER_COLLECTION);
+               
+                //Get the cart from the database, using the code
+                const user = await collection.findOne({ id: code_ });
+               
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+                
+                // If the user was found, return it, else return false
+                if (user) {
+                    
+                    console.log("Se encontró: " + JSON.stringify(user, null, 2));
+                    //Insert the user in the database, convert it to JSON and parse it
+                    const newUserJson = JSON.stringify(user);
+                    const newUserparsed = JSON.parse(newUserJson);
+                    return newUserparsed;
+                } else {
+                    console.log("No se encontró el user con el código: " + code_);
+                    return false; 
+                }
+            } catch(err){
+                console.log(err);
+                return false;
+            }
+        };
 
     async create(object: any){
         try{
