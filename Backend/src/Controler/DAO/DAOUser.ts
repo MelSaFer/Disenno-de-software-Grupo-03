@@ -225,7 +225,7 @@ export class DAOUser implements DAO{
         - true if the product was added to the cart
         - false if the product was not added to the cart
     */
-        async updateCart(user: any, productId: string, quantity: number){
+        async updateCart(userId: any, productId: number, quantity_: number){
             try{
                 SingletonMongo.getInstance().connect();
                 const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
@@ -234,6 +234,12 @@ export class DAOUser implements DAO{
 
                 const Product = mongoose.model('Product', ProductSchema);
                 const User = mongoose.model('User', UserSchema);
+
+                const user = await user_collection.findOne({ userId: userId });
+                if (!user){
+                    console.log("El usuario " +  userId + " no existe");
+                    return false;
+                }
     
                 //Verify existence of the product
                 const product = await product_collection.findOne({ productId: productId });
@@ -243,7 +249,7 @@ export class DAOUser implements DAO{
                 }
 
                 //Verify availability of the product
-                if (product.quantity < quantity){
+                if (product.quantity < quantity_){
                     console.log("No hay suficientes productos disponibles");
                     return false;
                 }
@@ -254,7 +260,17 @@ export class DAOUser implements DAO{
                 //Check if the product is already in the cart and update it
                 for (let i = 0; i < cart.length; i++) {
                     if (cart[i].productId == productId){
-                        cart[i].quantity += quantity;
+
+                        console.log(user);
+
+                        //Verify that the quantity is not less than 0
+                        if (cart[i].quantity + quantity_ <= 0){
+                            cart.splice(i, 1);
+                            console.log(user);
+                        }
+                        else{
+                            cart[i].quantity += quantity_;
+                        }
                         const result = await user_collection.updateOne({ userId: user.userId }, { $set: { cart: cart } });
                         return true;
                     }

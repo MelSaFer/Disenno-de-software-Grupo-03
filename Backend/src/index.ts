@@ -25,9 +25,6 @@ import {DTOUser} from "./Controler/DTO/DTOUser";
 import {DAOProduct} from "./Controler/DAO/DAOProduct";
 import {DTOProduct} from "./Controler/DTO/DTOProduct";
 
-import {DAOCart} from "./Controler/DAO/DAOCart";
-import {DTOCart} from "./Controler/DTO/DTOCart";
-
 import {DAOContent} from "./Controler/DAO/DAOContent";
 import {DTOContent} from "./Controler/DTO/DTOContent";
 
@@ -36,6 +33,8 @@ import {DTOPurchaseHistory} from "./Controler/DTO/DTOPurchaseHistory";
 
 import {DAOCategory} from "./Controler/DAO/DAOCategory";
 import {DTOCategory} from "./Controler/DTO/DTOCategory";
+
+import * as data from "./Controler/DAO/schemas/data";
 
 require("dotenv").config();
 
@@ -48,31 +47,54 @@ async function main() {
   //collection.insertOne(doc);
   //console.log("holaaa "+ collection.findOne({name: "1"}));
 
+  /*
+  USER TEST
+  */
+  //const daoUser = new DAOUser();
+  //daoUser.create(data.user1);
+  // daoUser.create(data.user2);
+  // daoUser.create(data.user3);
 
+  //daoUser.update(data.user4);
+
+  //daoUser.delete(3);
+
+  //console.log(await daoUser.getAll());
+
+  //daoUser.getObject(1);
+
+  //daoUser.updateCart(1, 1, 1);
+  //daoUser.updateCart(data.user1, 3, 1);
+
+  /*
+  PRODUCT TEST
+  */
+  const daoProduct = new DAOProduct();
+
+  //daoProduct.create(data.product1);
+  //daoProduct.create(data.product2);
+  //daoProduct.create(data.product3);
 
 
   /*
-
-  if (singletonFirebase instanceof SingletonFirebase) {
-    if (singletonFirebase) {
-      //obtener credenciales solo para ver si funciona esta cosa
-      const auth = getAuth(singletonFirebase.getApp());
-      signInWithEmailAndPassword(auth, "fio@gmail.com", "fio123")
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          console.log(user.email);
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
-    } else {
-      console.log("2");
-    }
-  }
+  CONTENT TEST
   */
+  //const daoContent = new DAOContent();
+
+
+  /*
+  PURCHASE TEST
+  */
+  //const daoPurchase = new DAOPurchaseHistory();
+
+
+  /*
+  CATEGORY TEST
+  */
+  //const daoCategory = new DAOCategory();
+
+
+
 
   app.listen(PORT);
   console.log("Server on port ", PORT);

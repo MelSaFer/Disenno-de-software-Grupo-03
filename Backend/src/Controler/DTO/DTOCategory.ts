@@ -4,12 +4,12 @@ Class DTOCategory
 */
 
 export class DTOCategory{
-    private idCategory = 0;
-    private name = "None";
-    private subcategories = [];
+    private categoryId = 0;
+    private name = "";
+    private subcategories: any[];
 
-    public constructor(idCategory: number, name: string, subcategories: []){
-        this.idCategory = idCategory;
+    public constructor(idCategory: number, name: string, subcategories: any[]){
+        this.categoryId = idCategory;
         this.name = name;
         this.subcategories = subcategories;
     }

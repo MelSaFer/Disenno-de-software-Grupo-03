@@ -87,14 +87,14 @@ export class DAOProduct implements DAO{
 
             //Create a new product with the object received
             let newProduct = new Product({
-                productId: object.idProduct,
+                productId: object.productId,
                 description: object.description,
                 cuantityAvailable: object.cuantityAvailable,
                 image: object.image,
                 price: object.price
             });
             //Check if the product already exists
-            const product = await collection.findOne({ productId: object.productId });
+            const product = await collection.findOne({ productId: newProduct.productId });
             if (product){
                 console.log("El producto " +  object.productId + " ya existe");
                 SingletonMongo.getInstance().disconnect_();

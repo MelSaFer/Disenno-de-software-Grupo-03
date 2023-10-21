@@ -6,11 +6,11 @@ const morgan = require('morgan')
 
 
 
-import loginRoutes from "./routes/LoginRoutes"
-import userRoutes from "./routes/UserRoutes"
+import loginRoutes from "./routes/loginRoutes"
+import userRoutes from "./routes/userRoutes"
 import galeryRoutes from "./routes/GaleryRoutes"
 import categoryRoutes from "./routes/CategoryRoutes"
-import cartRoutes from "./routes/CartRoutes"
+//import cartRoutes from "./routes/CartRoutes"
 import storeRoutes from "./routes/StoreRoutes"
 
 const app = express()
@@ -24,7 +24,7 @@ app.use(loginRoutes)
 app.use(userRoutes)
 app.use(galeryRoutes)
 app.use(categoryRoutes)
-app.use(cartRoutes)
+//app.use(cartRoutes)
 app.use(storeRoutes)
 
 app.use((req: any, res: any, next: any) => {
