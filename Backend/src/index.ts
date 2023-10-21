@@ -8,7 +8,6 @@ import {
   USER_COLLECTION,
   SHIPPINGADRESS_COLLECTION,
   PURCHASE_COLLECTION,
-  PURCHASEHISTORY_COLLECTION,
   IMAGETYPE_COLLECTION,
   IMAGE_COLLECTION,
   CATEGORY_COLLECTION,
@@ -32,7 +31,7 @@ import {DTOCart} from "./Controler/DTO/DTOCart";
 import {DAOContent} from "./Controler/DAO/DAOContent";
 import {DTOContent} from "./Controler/DTO/DTOContent";
 
-import {DAOPurchaseHistory} from "./Controler/DAO/DAOPurchaseHistory";
+import {DAOPurchaseHistory} from "./Controler/DAO/DAOPurchase";
 import {DTOPurchaseHistory} from "./Controler/DTO/DTOPurchaseHistory";
 
 import {DAOCategory} from "./Controler/DAO/DAOCategory";
@@ -41,8 +40,7 @@ import {DTOCategory} from "./Controler/DTO/DTOCategory";
 require("dotenv").config();
 
 async function main() {
-  //await connectDB();
-  //await connectDB();
+
   SingletonMongo.getInstance().connect();
   const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
   const collection = db.collection(PRODUCT_COLLECTION);
@@ -50,94 +48,6 @@ async function main() {
   //collection.insertOne(doc);
   //console.log("holaaa "+ collection.findOne({name: "1"}));
 
-  /*
-  const daoUser = new DTOUser(1, "hola@gmail.com", 0, [], []);
-  const dao = new DAOUser();
-  dao.create(daoUser);
- */
-/*
-  const adoProduct = new DTOProduct("1", "  ", 0, [], 12);
-  const daoP = new DAOProduct();
-  daoP.create(adoProduct);
-*/
-
-  /*-------------------------------------------------------------
-   //PRUEBAS PRODUCT
-  //const daoProduct = new DTOProduct("90", "  ", 0, [], 12);
-  const daoProd = new DAOProduct();
-  const dtoProd = new DTOProduct("567", "  ", 0, [], 12);
-  daoProd.create(dtoProd);
-  //console.log(daoProd.getObject(1));
-  const dtoProd2 = new DTOProduct("ajjc", "  ", 0, [], 54);
-  daoProd.update(dtoProd2);
-  //const singletonMongo = SingletonMongo.getInstance();
-  const singletonFirebase = SingletonFirebase.getInstance();
-  //const connection = await SingletonMongo;
- -------------------------------------------------------------*/
-  let date: Date = new Date("2019-01-16");  
-  ///*-------------------------------------------------------------
-  //PRUEBAS CART
-  const cartitem1 = {cartItemId: 1, productCode: "1", quantity: 2};
-  const cartitem2 = {cartItemId: 2, productCode: "2", quantity: 3};
-  const cartitem3 = {cartItemId: 3, productCode: "3", quantity: 4};
-  const array = [cartitem1, cartitem2];
-
-  const daoCart = new DAOCart();
-  const daoUser = new DAOUser();
-
-  const dtoCart = new DTOCart(2, []);
-  //const dtoCart2 = new DTOCart(3, []);
-  //daoCart.create(dtoCart);
-  console.log(await daoUser.getAll());
-  daoCart.updateCart(1, "1", 1);
-  //daoCart.create(dtoProd2);
-  //console.log(daoCart.getObject(2));
-  //console.log(await daoCart.getAll());
-  //daoCart.delete(2);
-  //-------------------------------------------------------------*/
-
-  /*-------------------------------------------------------------
-  //PRUEBAS content
-  const daoCont = new DAOContent();
-  const dtoCont = new DTOContent(94, "prueba92", "Esto es una prueba2", date, 22, 2, []);
-  daoCont.create(dtoCont);
-  //console.log(daoCont.getObject(23));
-  const dtoCont2 = new DTOContent(7991, "pruebaActualizada", "Esto es una prueba actualizada", date, 22, 2, []);
-  daoCont.update(dtoCont2);
-  console.log(daoCont.getObject(23));
-  //const dtoCont = daoCont.getObject(23);
-  //daoCont.delete(54);
-
-  -----------------------------------------------------------------*/
-
-  ///*-------------------------------------------------------------
-  //Prueba Purchase H.
-  //const daoPurchaseH = new DAOPurchaseHistory();
-  //const dtoPurchaseH = new DTOPurchaseHistory([]);
-  //daoCart.create(dtoProd);
-  //console.log(daoCart.getObject(2));
-  //-------------------------------------------------------------*/
-
-  //-----------------------------------------------------------------*/
-
-  ///*-------------------------------------------------------------
-  //Prueba Category
-  //const daoCategory = new DAOCategory();
-  //const dtoCategory = new DTOCategory(3, "prueba", []);
-
-  //console.log(await daoCategory.getAll());
-
-  //daoCategory.create(dtoCategory);
-
-  //console.log(daoCategory.getObject(2));
-
-  //const dtoCategory2 = new DTOCategory(3, "pruebaUpdate", []);
-  //daoCategory.update(dtoCategory2);
-
-  
-  //daoCategory.delete(1);
-  //daoCategory.delete(2);
-  //-------------------------------------------------------------*/
 
 
 

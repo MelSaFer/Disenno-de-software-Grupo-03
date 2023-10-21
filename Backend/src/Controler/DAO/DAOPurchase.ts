@@ -1,13 +1,25 @@
 import {DAO} from "./DAO"
-import {PurchaseHistorySchema} from "./schemas/Schemas"
+import {PurchaseSchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
-import {DATABASE_NAME, PURCHASEHISTORY_COLLECTION} from "../config";
+import {DATABASE_NAME, PURCHASE_COLLECTION} from "../config";
+import { User } from "../../Model/User";
 
 /*-----------------------------------------------------------------------
-DAO PURCHASE HISTORY
+DAO PURCHASE
  Class for managing the connection to the database and the queries related
- to the purchase history
+ to the purchase
+
+PURCHASE ATTRIBUTES::
+    - purchaseId: number
+    - purchaseDetails: string
+    - products: array
+    - voucherId: string   -> Image id of the voucher
+    - aproxDeliveryDate: date
+    - shippingAdress: string
+    - shippingPrice: number
+    - userId: number
+
  METHODS:
     - getAll()
     - getObject(code_: unknown)
@@ -33,21 +45,19 @@ export class DAOPurchaseHistory implements DAO{
                 //Get the database instance from the singleton and connect to it
                 SingletonMongo.getInstance().connect();
                 const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
-                const collection = db.collection(PURCHASEHISTORY_COLLECTION);
+                const collection = db.collection(PURCHASE_COLLECTION);
             
                 //Get the purchasehistories from the database, using the code
-                let purchasehistories = await collection.find({}).toArray();
+                let purchase = await collection.find({}).toArray();
                 SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-                if (purchasehistories) {
+                if (purchase) {
                     //console.log("Se encontraron los carritos: " + JSON.stringify(purchasehistories, null, 2));
-                    return purchasehistories;
+                    return purchase;
                 }
                 else{
-                    console.log("No se encontraron carritos");
+                    console.log("No se encontraron historiales de compra");
                     return false;
                 }
-                
-                
     
             } catch (error) {
                 console.log(error);
@@ -67,21 +77,21 @@ export class DAOPurchaseHistory implements DAO{
         - purchase history if the purchase history was found
         - false if the purchase history was not found
     */
-    async getObject(code_: unknown){
+    async getObject(purchaseId_: unknown){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
-            const collection = db.collection(PURCHASEHISTORY_COLLECTION);
-            //Get the Purchase History from the database, using the code
-            const purchaseHistory = await collection.findOne({ orderNumber: code_ });
+            const collection = db.collection(PURCHASE_COLLECTION);
+            //Get the Purchase from the database, using the code
+            const purchase = await collection.findOne({ purchaseId: purchaseId_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the product history was found, return it, else return false
-            if (purchaseHistory) {
-                console.log("Se encontro: " + JSON.stringify(purchaseHistory, null, 2));
-                return purchaseHistory;
+            if (purchase) {
+                console.log("Se encontró: " + JSON.stringify(purchase, null, 2));
+                return purchase;
             } else {
-                console.log("No se encontró el historial con el código: " + code_);
+                console.log("No se encontró el historial con el código: " + purchaseId_);
                 return false; 
             }
         } catch(err){
@@ -105,32 +115,33 @@ export class DAOPurchaseHistory implements DAO{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
-            const collection = db.collection(PURCHASEHISTORY_COLLECTION);
-            const PurchaseHistory = mongoose.model('PurchaseHistory', PurchaseHistorySchema);
+            const collection = db.collection(PURCHASE_COLLECTION);
+            const Purchase = mongoose.model('Purchase', PurchaseSchema);
             
             //Create a new purchase history with the object received
-            let newPurchaseHistory = new PurchaseHistory({
-                orderNumber: object.orderNumber,
+            let newPurchase = new Purchase({
+                purchaseId: object.purchaseId,
                 purchaseDetails: object.purchaseDetails,
                 products: object.products,
-                voucher : object.voucher,   
+                voucherId : object.voucherId,   
                 aproxDeliveryDate: object.aproxDeliveryDate,
                 shippingAdress: object.shippingAdress,
-                shippingPrice: object.shippingPrice
+                shippingPrice: object.shippingPrice,
+                userId: object.userId
             });
 
             //Check if the purchase history already exists
-            const purchaseHistory = await collection.findOne({ orderNumber: object.orderNumber });
-            if (purchaseHistory){
-                console.log("El historial " +  object.orderNumber + " ya existe");
+            const purchase = await collection.findOne({ purchaseId: object.purchaseId });
+            if (purchase){
+                console.log("El historial " +  object.purchaseId + " ya existe");
                 return false;
             }
             
-            //Insert the purchase history in the database, convert it to JSON and parse it
-            const newPurchaseHistoryJson = JSON.stringify(newPurchaseHistory);
-            const newPurchaseHistoryparsed = JSON.parse(newPurchaseHistoryJson);
-            await collection.insertOne(newPurchaseHistoryparsed);
-            console.log("Se insertó: " + newPurchaseHistoryJson);
+            //Insert the purchase in the database, convert it to JSON and parse it
+            const newPurchaseJson = JSON.stringify(newPurchase);
+            const newPurchaseParsed = JSON.parse(newPurchaseJson);
+            await collection.insertOne(newPurchaseParsed);
+            console.log("Se insertó: " + newPurchaseJson);
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             return true;
             
@@ -154,8 +165,8 @@ export class DAOPurchaseHistory implements DAO{
         //Si voy a agregar algo al carrito, me pego a mongo y lo agrego
         //no lo agrege porque creo que se plantea diferente al resto
         try{
-            const purchasehistory = mongoose.model('PurchaseHistory', PurchaseHistorySchema);
-            const result = await purchasehistory.updateOne(object);
+            const purchase = mongoose.model('Purchase', PurchaseSchema);
+            const result = await purchase.updateOne(object);
         }catch(err){
             console.log(err);
         }
@@ -172,29 +183,29 @@ export class DAOPurchaseHistory implements DAO{
         - true if the purchase history was deleted
         - false if the purchase history was not deleted
     */
-    async delete(code_: unknown){
+    async delete(purchaseId_: unknown){
         try{
-            console.log("code: " + code_);
+            console.log("code: " + purchaseId_);
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
-            const collection = db.collection(PURCHASEHISTORY_COLLECTION);
+            const collection = db.collection(PURCHASE_COLLECTION);
 
             //Verify existence of the product history
-            const producthistory = await collection.findOne({ id: code_ });
-            if (!producthistory){
-                console.log("El producthistory " +  code_ + " no existe");
+            const product = await collection.findOne({ purchaseId: purchaseId_ });
+            if (!product){
+                console.log("El producto " +  purchaseId_ + " no existe");
                 return false;
             }
-            //Delete the producthistory in the database
-            const result = await collection.deleteOne({ id: code_ });
+            //Delete the product in the database
+            const result = await collection.deleteOne({ purchaseId: purchaseId_ });
             
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            //Check if the producthistory was deleted
+            //Check if the product was deleted
             if (result.deletedCount > 0) {
-                console.log("Product History eliminado con éxito");
+                console.log("La compra se eliminado con éxito");
                 return true;
             } else {
-                console.log("No se encontró el producthistory para eliminar");
+                console.log("No se encontró la compra a eliminar");
                 return false;
             }
 
