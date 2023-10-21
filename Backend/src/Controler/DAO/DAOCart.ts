@@ -1,8 +1,10 @@
 import {DAO} from "./DAO"
 import {CartSchema} from "./schemas/Schemas"
+import {productSchema} from "./schemas/Schemas"
+import {UserSchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
-import {DATABASE_NAME, CART_COLLECTION} from "../config";
+import {DATABASE_NAME, CART_COLLECTION, PRODUCT_COLLECTION, USER_COLLECTION, CARTITEM_COLLECTION} from "../config";
 import { Cart } from "../../Model/Cart";
 
 /*-----------------------------------------------------------------------
@@ -209,24 +211,79 @@ export class DAOCart implements DAO{
 
     /*
     -----------------------------------------------------------------------
-    ADD CART ITEM METHOD
-    Delete a cart in the database
+    UPDATE CART ITEM METHOD
+    ADDS CART ITEM OR INCREASES THE AMOUNT OF AN ITEM 
     PARAMS:
-        - 
+        - idUser: number, id of the user, quantity to be added
     RETURNS:    
         - 
     */
-    async addCartItem(code_: unknown){
+    async updateCart(idUser: number, idProduct: string, quantity: number){
         try{
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+
             const cart_collection = db.collection(CART_COLLECTION);
+            const cartItem_collection = db.collection(CARTITEM_COLLECTION);
+            const product_collection = db.collection(PRODUCT_COLLECTION);
+            const user_collection = db.collection(USER_COLLECTION);
+
             const Cart = mongoose.model('Cart', CartSchema);
-            
+            const Product = mongoose.model('Product', productSchema);
+            const User = mongoose.model('User', UserSchema);
 
+            //Verify existence of the user
+            const user = await user_collection.findOne({ id: idUser });
+            if (!user){
+                console.log("El usuario " +  idUser + " no existe");
+                return false;
+            }
 
+            //Verify existence of the product
+            const product = await product_collection.findOne({ code: idProduct });
+            if (!product){
+                console.log("El producto " +  idProduct + " no existe");
+                return false;
+            }
 
-            
+            //Get cart from user
+            const cart = await cart_collection.findOne({ id: user.cart });
+            if (!cart){
+                console.log("El carrito " +  user.cart + " no existe");
+                return false;
+            }
+
+            const cartitems = cart.items;
+            console.log("cartitems: " + cartitems);
+
+            //Check if the product is already in the cart and update it
+            for (let i = 0; i < cartitems.length; i++) {
+                if (cartitems[i].product == idProduct){
+
+                    //Verify availability of the product
+                    
+
+                    cartitems[i].quantity += quantity;
+                    const result = await cart_collection.updateOne({ id: user.cart }, { $set: { items: cartitems } });
+                    return true;
+                }
+            }
+
+            //If not in the cart, add it
+            cartitems.push({
+                cartItemId: cartitems.length + 1,
+                productCode: idProduct,
+                quantity: 1
+            });
+
+            console.log("se agrego el producto al carrito");
+
+            //Update cart in the database
+            const result = await cart_collection.updateOne({ id: user.cart }, { $set: { items: cartitems } });
+            console.log("se actualizo el carrito");
+
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            return true
 
         } catch(err){
             console.log(err);

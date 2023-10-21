@@ -10,7 +10,7 @@ export const PORT = 5000;
 export const MONGODB_URI = "mongodb+srv://fiozelaya:eVNknldK3z3UwYLB@tiendaduende.aorp2bb.mongodb.net/?retryWrites=true&w=majority";
 export const DATABASE_NAME = "TiendaDuende";
 export const PRODUCT_COLLECTION = "Product";
-export const USER_COLLECTION = "User";
+export const USER_COLLECTION = "users";
 export const CART_COLLECTION = "Cart";
 export const CARTITEM_COLLECTION = "CartItem";
 export const CATEGORY_COLLECTION = "Category";

@@ -75,17 +75,26 @@ async function main() {
   //const connection = await SingletonMongo;
  -------------------------------------------------------------*/
   let date: Date = new Date("2019-01-16");  
-  /*-------------------------------------------------------------
+  ///*-------------------------------------------------------------
   //PRUEBAS CART
+  const cartitem1 = {cartItemId: 1, productCode: "1", quantity: 2};
+  const cartitem2 = {cartItemId: 2, productCode: "2", quantity: 3};
+  const cartitem3 = {cartItemId: 3, productCode: "3", quantity: 4};
+  const array = [cartitem1, cartitem2];
+
   const daoCart = new DAOCart();
+  const daoUser = new DAOUser();
+
   const dtoCart = new DTOCart(2, []);
-  const dtoCart2 = new DTOCart(3, []);
-  daoCart.create(dtoCart);
+  //const dtoCart2 = new DTOCart(3, []);
+  //daoCart.create(dtoCart);
+  console.log(await daoUser.getAll());
+  daoCart.updateCart(1, "1", 1);
   //daoCart.create(dtoProd2);
   //console.log(daoCart.getObject(2));
   //console.log(await daoCart.getAll());
   //daoCart.delete(2);
-  -------------------------------------------------------------*/
+  //-------------------------------------------------------------*/
 
   /*-------------------------------------------------------------
   //PRUEBAS content
