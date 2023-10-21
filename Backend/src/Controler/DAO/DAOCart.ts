@@ -220,9 +220,9 @@ export class DAOCart implements DAO{
         try{
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
-            const collection = db.collection(CART_COLLECTION);
+            const cart_collection = db.collection(CART_COLLECTION);
             const Cart = mongoose.model('Cart', CartSchema);
-
+            
 
 
 
