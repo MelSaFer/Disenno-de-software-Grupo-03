@@ -3,6 +3,7 @@ import {CartSchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CART_COLLECTION} from "../config";
+import { Cart } from "../../Model/Cart";
 
 /*-----------------------------------------------------------------------
  DAO CART
@@ -59,7 +60,6 @@ export class DAOCart implements DAO{
 
     };
 
-    
 
     /*
     -----------------------------------------------------------------------
@@ -200,6 +200,33 @@ export class DAOCart implements DAO{
                 console.log("No se encontró el carrito para eliminar");
                 return false;
             }
+
+        } catch(err){
+            console.log(err);
+        }
+        return true;
+    };
+
+    /*
+    -----------------------------------------------------------------------
+    ADD CART ITEM METHOD
+    Delete a cart in the database
+    PARAMS:
+        - 
+    RETURNS:    
+        - 
+    */
+    async addCartItem(code_: unknown){
+        try{
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CART_COLLECTION);
+            const Cart = mongoose.model('Cart', CartSchema);
+
+
+
+
+            
 
         } catch(err){
             console.log(err);
