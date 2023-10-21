@@ -1,11 +1,10 @@
 import {DAO} from "./DAO"
-import {CartSchema} from "./schemas/Schemas"
-import {productSchema} from "./schemas/Schemas"
-import {UserSchema} from "./schemas/Schemas"
+import {CartSchema, cartItemSchema, productSchema, UserSchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CART_COLLECTION, PRODUCT_COLLECTION, USER_COLLECTION, CARTITEM_COLLECTION} from "../config";
 import { Cart } from "../../Model/Cart";
+import { CartItem } from "../../Model/CartItem";
 
 /*-----------------------------------------------------------------------
  DAO CART
@@ -261,7 +260,6 @@ export class DAOCart implements DAO{
                 if (cartitems[i].product == idProduct){
 
                     //Verify availability of the product
-                    
 
                     cartitems[i].quantity += quantity;
                     const result = await cart_collection.updateOne({ id: user.cart }, { $set: { items: cartitems } });
@@ -269,15 +267,22 @@ export class DAOCart implements DAO{
                 }
             }
 
-            //If not in the cart, add it
-            cartitems.push({
-                cartItemId: cartitems.length + 1,
-                productCode: idProduct,
-                quantity: 1
+
+            //const cartItem =  new CartItem(1, quantity, product);
+            const cartItem = mongoose.model('CartItem', cartItemSchema);
+
+            let newCartItem = new cartItem({
+                id: cartitems.length + 1,
+                quantity: quantity,
+                idProduct: idProduct
             });
 
+            //If not in the cart, add it
+            
+            const newCartItemJSON = JSON.stringify(newCartItem);
+            const newCartItemparsed = JSON.parse(newCartItemJSON);
             console.log("se agrego el producto al carrito");
-
+            cartitems.push(newCartItemparsed);
             //Update cart in the database
             const result = await cart_collection.updateOne({ id: user.cart }, { $set: { items: cartitems } });
             console.log("se actualizo el carrito");
