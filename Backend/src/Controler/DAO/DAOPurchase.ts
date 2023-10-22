@@ -19,6 +19,7 @@ PURCHASE ATTRIBUTES::
     - shippingAdress: string
     - shippingPrice: number
     - userId: number
+    - state: string
 
  METHODS:
     - getAll()
@@ -27,7 +28,7 @@ PURCHASE ATTRIBUTES::
     - update(object: any)
     - delete(object: unknown)
 -----------------------------------------------------------------------*/
-export class DAOPurchaseHistory implements DAO{
+export class DAOPurchase implements DAO{
 
     constructor(){};
 
@@ -127,7 +128,8 @@ export class DAOPurchaseHistory implements DAO{
                 aproxDeliveryDate: object.aproxDeliveryDate,
                 shippingAdress: object.shippingAdress,
                 shippingPrice: object.shippingPrice,
-                userId: object.userId
+                userId: object.userId,
+                state: object.state
             });
 
             //Check if the purchase history already exists
@@ -168,6 +170,47 @@ export class DAOPurchaseHistory implements DAO{
             const purchase = mongoose.model('Purchase', PurchaseSchema);
             const result = await purchase.updateOne(object);
         }catch(err){
+            console.log(err);
+        }
+        return true;
+    };
+
+    /*
+    -----------------------------------------------------------------------
+    UPDATE STATE METHOD
+    Update a purchase  in the database
+    PARAMS:
+        - object: unknown
+    RETURNS:
+        - true if the purchase was updated
+        - false if the purchase was not updated
+    */
+    async updatePurchaseState(userId_: number, purchaseId_: number, state_: string){
+        try{
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(PURCHASE_COLLECTION);
+
+            //Verify existence of the product history
+            const purchase = await collection.findOne({ purchaseId: purchaseId_, userId: userId_ });
+            if (!purchase){
+                console.log("La compra " +  purchaseId_ + " no existe");
+                return false;
+            }
+            //Update the product in the database
+            const result = await collection.updateOne({ purchaseId: purchaseId_ }, { $set: { state: state_ } });
+            
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            //Check if the product was updated
+            if (result.modifiedCount > 0) {
+                console.log("La compra se actualizó con éxito");
+                return true;
+            } else {
+                console.log("No se encontró la compra a actualizar");
+                return false;
+            }
+
+        } catch(err){
             console.log(err);
         }
         return true;

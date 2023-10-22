@@ -2,7 +2,8 @@ import {DAO} from "./DAO"
 import mongoose from "mongoose";
 import {UserSchema, ProductSchema} from "./schemas/Schemas"
 import {SingletonMongo} from "../Singleton/SingletonMongo";
-import {DATABASE_NAME, USER_COLLECTION, PRODUCT_COLLECTION, } from "../config";
+import {DATABASE_NAME, USER_COLLECTION, PRODUCT_COLLECTION, PURCHASE_COLLECTION} from "../config";
+import { DAOProduct } from "./DAOProduct";
 
 /*-----------------------------------------------------------------------
 DAO USER
@@ -86,6 +87,117 @@ export class DAOUser implements DAO{
                 return false;
             }
         };
+
+        /*
+    -----------------------------------------------------------------------
+    GET CART METHOD
+    Gets the cart of a user
+    PARAMS:
+        - userId: number, the id of the user to get the cart
+    RETURNS:
+        - cart: array of products
+    */
+    async getCart(userId: unknown){
+        try{
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(USER_COLLECTION);
+            
+            //Get the cart from the database, using the code
+            const user = await collection.findOne({ userId: userId });
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            // If the user was found, return it, else return false
+            if (user) {
+                
+                console.log("Se encontró: " + JSON.stringify(user, null, 2));
+
+                let newCart = [];
+                for (let i = 0; i < user.cart.length; i++) {
+                    let productId = user.cart[i]["productId"];
+                    let quantity = user.cart[i]["quantity"];
+
+                    let daoProduct = new DAOProduct();
+                    let product = await daoProduct.getObject(productId);
+
+                    if(product){
+                        let doc = {"productDescription": product.description, "quantity": quantity};
+                        newCart.push(doc);
+                    }
+                    else{
+                        console.log("No se encontró el producto con el código: " + productId);
+                        return false;
+                    }
+                }
+
+                return newCart;
+
+            } else {
+                console.log("No se encontró el user con el código: " + userId);
+                return false; 
+            }
+        } catch(err){
+            console.log(err);
+            return false;
+        }
+    };
+
+    /*
+    -----------------------------------------------------------------------
+    GET PURCHASE HISTORY METHOD
+    Gets the purchase history of a user
+    PARAMS:
+        - userId: number, the id of the user to get the purchase history
+    RETURNS:
+        - purchaseHistory: array of products
+    */
+    async getPurchaseHistory(userId: unknown){
+        try{
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const user_collection = db.collection(USER_COLLECTION);
+            const purchasehistory_collection = db.collection(PURCHASE_COLLECTION);
+            
+            //Get the cart from the database, using the code
+            const user = await user_collection.findOne({ userId: userId });
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+
+            // If the user was found, return it, else return false
+            if (user) {
+                //console.log("Se encontró: " + JSON.stringify(user, null, 2));
+
+                //If the roletype is admin get all the purchase history
+                let purchaseHistory = [];
+                if (user.roleType == "ADMINISTRATOR"){
+                    const cursor = await purchasehistory_collection.find();
+                    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+                        purchaseHistory.push(doc);
+                    }
+
+                }
+                else{
+                    const cursor = await purchasehistory_collection.find({ userId: userId });
+                    purchaseHistory.push(await cursor.next());
+                }                
+
+                //If the purchase history was found, return it, else return false
+                if (purchaseHistory){
+                    return purchaseHistory;
+                } else {
+                    console.log("No se encontró el historial de compras del usuario con el código: " + userId);
+                    return false; 
+                }
+
+            } else {
+                console.log("No se encontró el user con el código: " + userId);
+                return false; 
+            }
+        } catch(err){
+            console.log(err);
+            return false;
+        }
+    };
 
     async create(object: any){
         try{

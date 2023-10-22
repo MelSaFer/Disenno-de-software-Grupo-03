@@ -31,15 +31,16 @@ export const PurchaseSchema = new mongoose.Schema({
     purchaseDetails: { type: String, required: true },
     products: { type: Array, require: true},
     voucherId: { type: String, require: true},
-    aproxDeliveryDate: { type: Date, require: true},
+    aproxDeliveryDate: { type: String, require: true},
     shippingAdress: { type: String, require: true},
     shippingPrice: { type: Number, required: true },
-    userId: { type: Number, required: true }
+    userId: { type: Number, required: true },
+    state: { type: String, required: true }
 });
 
 //CONTENT SCHEMA------------------------------------------------------------------------------------------------------------------------------
 export const ContentSchema = new mongoose.Schema({
-    contendId: { type: Number, required: true },
+    contentId: { type: Number, required: true },
     title: { type: String, required: true },
     description : { type: String, required: true },
     date: { type: Date, required: true },

@@ -102,6 +102,42 @@ export class DAOProduct implements DAO{
 
     /*
     -----------------------------------------------------------------------
+    GET NAME METHOD
+    Gets a product name in the database
+    PARAMS:
+        - code: number
+    RETURNS:
+        - Product if the product was found
+        - false if the product was not found
+    */
+
+    async getProductName(idProduct_: unknown){
+        try{
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(PRODUCT_COLLECTION);
+
+            //Get the product from the database, using the code
+            const product = await collection.findOne({ productId: idProduct_ });
+            SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            // If the product was found, return it, else return false
+            if (product) {
+                console.log("Se encontro: " + JSON.stringify(product, null, 2));
+                return product.description;
+            } else {
+                console.log("No se encontró el producto con el código: " + idProduct_);
+                return false; 
+            }
+
+        } catch(err){
+            console.log(err);
+            return false;
+        }
+    };
+
+    /*
+    -----------------------------------------------------------------------
     CREATE METHOD
     Create a product in the database
     PARAMS:

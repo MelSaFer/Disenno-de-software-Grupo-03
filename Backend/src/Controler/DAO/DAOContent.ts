@@ -10,7 +10,7 @@ import {DATABASE_NAME, CONTENT_COLLECTION} from "../config";
   to the content
  METHODS:
     - getAll()
-    - getObject(contendId: unknown)
+    - getObject(contentId: unknown)
     - create(object: any)
     - update(object: any)
     - delete(object: unknown)
@@ -37,6 +37,10 @@ export class DAOContent implements DAO{
             
                 //Get the contents from the database, using the code
                 let contents = await collection.find({}).toArray();
+                // const cursor = await collection.find();
+                // for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+                //     purchaseHistory.push(doc);
+                // }
                 
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 if (contents) {
@@ -68,21 +72,21 @@ export class DAOContent implements DAO{
         - Content if the Content was found
         - false if the Content was not found
     */
-    async getObject(contendId: unknown){
+    async getObject(contentId: unknown){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CONTENT_COLLECTION);
             //Get the Content from the database, using the code
-            const Content = await collection.findOne({ contendId: contendId });
+            const Content = await collection.findOne({ contentId: contentId });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the content was found, return it, else return false
             if (Content) {
                 console.log("Se encontro: " + JSON.stringify(Content, null, 2));
                 return Content;
             } else {
-                console.log("No se encontró el contenido con el código: " + contendId);
+                console.log("No se encontró el contenido con el código: " + contentId);
                 return false; 
             }
 
@@ -104,6 +108,7 @@ export class DAOContent implements DAO{
     */
     async create(object: any){
         try{
+            console.log("123")
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
@@ -112,8 +117,8 @@ export class DAOContent implements DAO{
 
             //Create a new content with the object received
             let newContent = new Content({
-                contendId: object.contendId,
-                name: object.name,
+                contentId: object.contentId,
+                title: object.title,
                 description: object.description,
                 date: object.date,
                 imageId: object.imageId,
@@ -122,9 +127,9 @@ export class DAOContent implements DAO{
             });
 
             //Check if the content already exists
-            const content = await collection.findOne({ contendId: object.contendId });
+            const content = await collection.findOne({ contentId: object.contentId });
             if (content){
-                console.log("El contenido " +  object.contendId + " ya existe");
+                console.log("El contenido " +  object.contentId + " ya existe");
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 return false;
             }
@@ -162,7 +167,7 @@ export class DAOContent implements DAO{
                 const Content = mongoose.model('Content', ContentSchema);
                 //Create a new product with the object received
                 let updatedContent = new Content({
-                    contendId: object.contendId,
+                    contentId: object.contentId,
                     title: object.title,
                     description: object.description,
                     date: object.date,
@@ -171,15 +176,15 @@ export class DAOContent implements DAO{
                     tags: object.tags
                 });
                 //Verify existence of the content
-                const content = await collection.findOne({ contendId: updatedContent.contendId });
+                const content = await collection.findOne({ contentId: updatedContent.contentId });
                 if (!content){
-                    console.log("El content " +  updatedContent.contendId + " no existe");
+                    console.log("El content " +  updatedContent.contentId + " no existe");
                     return false;
                 }
                 //Create the update object for updating the content
                 const InfoToUpdate = {
                     $set: {
-                        contendId: object.contendId,
+                        contentId: object.contentId,
                         title: object.title,
                         description: object.description,
                         date: object.date,
@@ -188,7 +193,7 @@ export class DAOContent implements DAO{
                         tags: object.tags
                         }
                 };
-                const result = await collection.updateOne({ contendId: updatedContent.contendId }, InfoToUpdate); //Update the product in the database
+                const result = await collection.updateOne({ contentId: updatedContent.contentId }, InfoToUpdate); //Update the product in the database
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 //Check if the product was updated  
                 if (result.modifiedCount > 0) {
@@ -214,21 +219,21 @@ export class DAOContent implements DAO{
         - true if the product was deleted
         - false if the product was not deleted
     */
-    async delete(contendId: unknown){
+    async delete(contentId: unknown){
         try{
-            console.log("code: " + contendId);
+            console.log("code: " + contentId);
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CONTENT_COLLECTION);
 
             //Verify existence of the content
-            const content = await collection.findOne({ contendId: contendId });
+            const content = await collection.findOne({ contentId: contentId });
             if (!content){
-                console.log("El content " +  contendId + " no existe");
+                console.log("El content " +  contentId + " no existe");
                 return false;
             }
             //Delete the content in the database
-            const result = await collection.deleteOne({ contendId: contendId });
+            const result = await collection.deleteOne({ contentId: contentId });
             
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the content was deleted

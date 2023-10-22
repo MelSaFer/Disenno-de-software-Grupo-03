@@ -7,7 +7,14 @@ import * as userController from "./controller/UserController"
 
 //router.get('/profile', userController.getInfo)
 router.get('/infoUser', userController.getInfoUser)
+router.get('/getCart', userController.getCart)
+router.get('/getPurchaseHistory', userController.getPurchaseHistory)
+
 router.post('/updateCart', userController.updateCart)
+
+router.put('/updatePurchaseState', userController.updatePurchaseState)
+router.post('/makePurchase', userController.makePurchase)
+
 
 
 export default router;

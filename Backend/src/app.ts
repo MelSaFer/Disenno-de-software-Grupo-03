@@ -6,7 +6,7 @@ const morgan = require('morgan')
 
 
 
-import loginRoutes from "./routes/loginRoutes"
+//import loginRoutes from "./routes/loginRoutes"
 import userRoutes from "./routes/userRoutes"
 import galeryRoutes from "./routes/GaleryRoutes"
 import categoryRoutes from "./routes/CategoryRoutes"
@@ -21,7 +21,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.use(loginRoutes)
+//app.use(loginRoutes)
 app.use(userRoutes)
 app.use(galeryRoutes)
 app.use(categoryRoutes)
