@@ -39,4 +39,27 @@ export class AdminContent{
         }
         
     }
+
+    public async updateContent(contentId: number, title: string, description: string, date: Date, imageId: number, categoryId: number, tags: []){
+        try {
+            const daoContent = new DAOContent();
+            const dtoContent = new DTOContent(contentId, title, description, date, imageId, categoryId, tags)
+            const content = daoContent.update(dtoContent);
+            return content;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
+    }
+
+    public async deleteContent(contentId: number){
+        try {
+            const daoContent = new DAOContent();
+            const content = daoContent.delete(contentId);
+            return content;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
+    }
 }

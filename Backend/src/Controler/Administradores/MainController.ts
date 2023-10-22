@@ -135,4 +135,33 @@ import { API_URL } from '../config';
         }   
     };
 
+    /*
+    METHOD UPDATE CONTENT
+    */
+    public async updateContent(contentId: number, title: string, description: string, date: Date, imageId: number, categoryId: number, tags: []){
+        try{
+            const adminContent = new AdminContent();
+            const result = adminContent.updateContent(contentId, title, description, date, imageId, categoryId, tags);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    };
+
+    /*
+    METHOD DELETE CONTENT
+    */
+    public async deleteContent(contentId: number){
+        try{
+            const adminContent = new AdminContent();
+            const result = adminContent.deleteContent(contentId);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    };
+
+    // -----------------------------
+
+
  }
