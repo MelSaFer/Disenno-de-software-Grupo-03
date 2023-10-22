@@ -1,25 +1,34 @@
 import { RequestHandler } from "express";
+import { MainController } from "../../Controler/Administradores/MainController";
 
-export const loadCatalogue : RequestHandler = (req, res) => {
+export const getCatalogue: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    //const object = req.body;
+    const galeryPromise = mainController.getCatalogue();
+    const galery = await galeryPromise; 
+    res.status(200).json(galery)
+}
+
+export const getProduct: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const object = req.body;
+    const productPromise = mainController.getProduct(object.productId);
+    const product = await productPromise; 
+    res.status(200).json(product)
+}
+
+export const updateProduct: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const object = req.body;
+    const productPromise = mainController.updateProduct(object);
+    const product = await productPromise; 
+    res.status(200).json(product)
+}
+
+
+export const deleteProduct: RequestHandler = (req, res) => {
     res.status(200).json({ message: 'Hello World' })
 }
 
-export const getProductById : RequestHandler = (req, res) => {
-    res.status(200).json({ message: 'Hello World' })
-}
 
-export const addProduct : RequestHandler = (req, res) => {
-    res.status(200).json({ message: 'Hello World' })
-}
 
-export const updateProduct : RequestHandler = (req, res) => {
-    res.status(200).json({ message: 'Hello World' })
-}
-
-export const deleteProduct : RequestHandler = (req, res) => {
-    res.status(200).json({ message: 'Hello World' })
-}
-
-export const getAvailability : RequestHandler = (req, res) => {  
-    res.status(200).json({ message: 'Hello World' })
-}

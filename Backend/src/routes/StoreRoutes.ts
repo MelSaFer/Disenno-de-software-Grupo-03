@@ -1,14 +1,15 @@
 import { Router } from "express";
 const router = Router();
 
-import * as storeController from "./controller/StoreController"
+import * as StoreController from "./controller/StoreController"
 
-
-router.get("/get", storeController.loadCatalogue);
-router.get("/get/:id", storeController.getProductById);
-router.post("/add/:name/:description/:date/:image/:tags", storeController.addProduct);
-router.put("/update/:id/:name/:description/:date/:image/:tags", storeController.updateProduct);
-router.delete("/delete/:id", storeController.deleteProduct);
-router.get("/getAvailability", storeController.getAvailability);
+//Add products to the store
+router.get('/getCatalogue', StoreController.getCatalogue)
+//Update a product from the store
+router.put('/updateProduct', StoreController.updateProduct)
+//Consult a product from the store
+router.get('/getProduct', StoreController.getProduct)
+//Delete a product from the store
+router.delete('/deleteProduct', StoreController.deleteProduct)
 
 export default router;

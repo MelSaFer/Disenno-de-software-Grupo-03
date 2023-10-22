@@ -28,9 +28,42 @@ export class DAOProduct implements DAO{
 
     constructor(){};
 
-    getAll(){
-
-    };
+    /*
+    -----------------------------------------------------------------------
+    GET ALL METHOD
+    Gets all the contents in the database
+    PARAMS:
+        - none
+    RETURNS:
+        - contents: array of contents
+    */
+        async getAll(){
+            try {
+                //Get the database instance from the singleton and connect to it
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const collection = db.collection(PRODUCT_COLLECTION);
+            
+                //Get the contents from the database, using the code
+                let product = await collection.find({}).toArray();
+                
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+                if (product) {
+                    //console.log("Se encontraron los carritos: " + JSON.stringify(contents, null, 2));
+                    return product;
+                }
+                else{
+                    console.log("No se encontraron productos");
+                    return false;
+                }
+            
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
+            
+    
+        };
 
     /*
     -----------------------------------------------------------------------
@@ -131,6 +164,7 @@ export class DAOProduct implements DAO{
             const collection = db.collection(PRODUCT_COLLECTION);
             //Get the model from the database with the schema
             const Product = mongoose.model('Product', ProductSchema);
+            console.log(JSON.stringify(object.productId));
             //Create a new product with the object received
             let updatedProduct = new Product({
                 productId: object.productId,
@@ -140,9 +174,9 @@ export class DAOProduct implements DAO{
                 price: object.price
             });
 
-            const product_ = await collection.findOne({ idProduct: updatedProduct.productId});
+            const product_ = await collection.findOne({productId: object.productId});
             if (!product_){
-                console.log("El producto " +  updatedProduct.productId + " no existe");
+                console.log("El producto " +  JSON.stringify(object.productId) + " no existe");
                 return false;
             }
             //Create the update object for updating the product
