@@ -3,7 +3,7 @@
  */
 
 import { AdminUser } from "./AdminUser";
-import axios from "axios";
+//import axios from "axios";
 import { API_URL } from '../config';
 
 
@@ -16,11 +16,11 @@ import { API_URL } from '../config';
     public async getInfoUser(id: number){
         try{
             //const userId = 2;
-            const url =`${API_URL}/infoUser`
-            const response = await axios.get(url);
-            const data = await response.data;
+            //const url =`${API_URL}/infoUser`
+            //const response = await axios.get(url);
+            //const data = await response.data;
             const adminUser = new AdminUser();
-            const result = adminUser.getInfoUser(data);
+            const result = adminUser.getInfoUser(1);
             return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);

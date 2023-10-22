@@ -11,7 +11,7 @@ export const getInfoUser: RequestHandler = async (req, res) => {
     const userPromise = mainController.getInfoUser(1);
     const user = await userPromise; // Espera a que la promesa se resuelva
 
-    console.log("This is carrito: "+ user);
+    console.log("This is user: "+ user);
     res.status(200).json(user);
 // }
 
