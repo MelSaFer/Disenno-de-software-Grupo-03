@@ -5,21 +5,21 @@ Class Content
 
 export class DTOContent{
     private contentId: number = 0;
-    private name: string = "";
+    private title: string = "";
     private description: string = "";
     private date: Date = new Date();
     private imageId = "";
-    private category = null;
+    private categoryId = null;
     private tags: string[] = [];
 
     //-------------------------------
-    public constructor( contentId: number, name: string, description: string, date: Date, imageId: any, category: any, tags: string[]){
+    public constructor( contentId: number, title: string, description: string, date: Date, imageId: any, categoryId: any, tags: string[]){
         this.contentId = contentId;
-        this.name = name;
+        this.title = title;
         this.description = description;
         this.date = date;
         this.imageId = imageId;
-        this.category = category;
+        this.categoryId = categoryId;
         this.tags = tags;
     }
 
@@ -33,10 +33,10 @@ export class DTOContent{
 
     //-------------------------------
     public getName(): string{
-        return this.name;
+        return this.title;
     }
-    public setName( name: string): void{
-        this.name = name;
+    public setName( title: string): void{
+        this.title = title;
     }
 
     //-------------------------------
@@ -65,10 +65,10 @@ export class DTOContent{
 
     //-------------------------------
     public getCategory(){
-        return this.category;
+        return this.categoryId;
     }
-    public setCategory( category: any): void{
-        this.category = category;
+    public setCategory( categoryId: any): void{
+        this.categoryId = categoryId;
     }
 
     //-------------------------------

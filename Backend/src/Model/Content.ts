@@ -10,18 +10,18 @@ export class Content{
     private name: string = "";
     private description: string = "";
     private date: Date = new Date();
-    private image: Image_| undefined;
-    private category: Category | undefined;
+    private imageId: number| undefined;
+    private categoryId: number | undefined;
     private tags: string[] = [];
 
     //-------------------------------
-    public constructor( id: number, name: string, description: string, date: Date, image: Image_, category: Category, tags: string[]){
+    public constructor( id: number, name: string, description: string, date: Date, image: number, category: number, tags: string[]){
         this.id = id;
         this.name = name;
         this.description = description;
         this.date = date;
-        this.image = image;
-        this.category = category;
+        this.imageId = image;
+        this.categoryId = category;
         this.tags = tags;
     }
 
@@ -58,19 +58,19 @@ export class Content{
     }
 
     //-------------------------------
-    public getImage() : Image_ | undefined{
-        return this.image;
+    public getImage() : number | undefined{
+        return this.imageId;
     }
-    public setImage( image: Image_): void{
-        this.image = image;
+    public setImage( image: number): void{
+        this.imageId = image;
     }
 
     //-------------------------------
-    public getCategory() : Category | undefined{
-        return this.category;
+    public getCategory() : number | undefined{
+        return this.categoryId;
     }
-    public setCategory( category: Category): void{
-        this.category = category;
+    public setCategory( category: number): void{
+        this.categoryId = category;
     }
 
     //-------------------------------

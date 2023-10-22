@@ -1,10 +1,5 @@
 import { RequestHandler } from "express";
-import { AdminUser } from "../../Controler/Administradores/AdminUser";
 import { MainController } from "../../Controler/Administradores/MainController";
-import { API_URL } from '../../Controler/config';
-import axios from "axios";
-import { urlencodedParser, jsonParser } from "../../app"
-import bodyParser from "body-parser";
 
 /*
 METHOD GET INFO USER

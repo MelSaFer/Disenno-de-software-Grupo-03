@@ -40,7 +40,7 @@ export const PurchaseSchema = new mongoose.Schema({
 
 //CONTENT SCHEMA------------------------------------------------------------------------------------------------------------------------------
 export const ContentSchema = new mongoose.Schema({
-    contendId: { type: Number, required: true },
+    contentId: { type: Number, required: true },
     title: { type: String, required: true },
     description : { type: String, required: true },
     date: { type: Date, required: true },

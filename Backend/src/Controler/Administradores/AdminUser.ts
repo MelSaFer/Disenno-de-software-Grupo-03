@@ -12,12 +12,14 @@ export class AdminUser{
     }
 
     getInfoUser(id: number){
-        console.log(id)
-        //const dtoUser = new DTOUser(1,1,[]);
-        //return "esto es una prueba2.0";
-        const daoUser = new DAOUser();
-        const user = daoUser.getObject(id);
-        return user;
+        try {
+            const daoUser = new DAOUser();
+            const user = daoUser.getObject(id);
+            return user;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
 
     }
 
@@ -26,9 +28,14 @@ export class AdminUser{
     PARAMS: userId, productId, quantity
     */
     updateCart(userId: number, productId: number, quantity: number){
-        const daoUser = new DAOUser();
-        const user = daoUser.updateCart(userId, productId, quantity);
-        return user;
+        try {
+            const daoUser = new DAOUser();
+            const user = daoUser.updateCart(userId, productId, quantity);
+            return user;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
     }
 
     /*
@@ -36,9 +43,14 @@ export class AdminUser{
     PARAMS: userId
     */
     getCart(userId: number){
-        const daoUser = new DAOUser();
-        const user = daoUser.getCart(userId);
-        return user;
+        try {
+            const daoUser = new DAOUser();
+            const user = daoUser.getCart(userId);
+            return user;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
     }
 
     /*
@@ -46,9 +58,14 @@ export class AdminUser{
     PARAMS: userId
     */
     getPurchaseHistory(userId: number){
-        const daoUser = new DAOUser();
-        const user = daoUser.getPurchaseHistory(userId);
-        return user;
+        try {
+            const daoUser = new DAOUser();
+            const user = daoUser.getPurchaseHistory(userId);
+            return user;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
     }
 
     /*
@@ -56,9 +73,14 @@ export class AdminUser{
     PARAMS: userId, purchaseId, state
     */
     updatePurchaseState(userId: number, purchaseId: number, state: string){
-        const daoPurchase = new DAOPurchase();
-        const purchase = daoPurchase.updatePurchaseState(userId, purchaseId, state);
-        return purchase;
+        try {
+            const daoPurchase = new DAOPurchase();
+            const purchase = daoPurchase.updatePurchaseState(userId, purchaseId, state);
+            return purchase;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
     }
 
 

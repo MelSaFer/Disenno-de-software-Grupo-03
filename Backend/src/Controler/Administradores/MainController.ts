@@ -3,6 +3,7 @@
  */
 
 import { AdminUser } from "./AdminUser";
+import { AdminContent } from "./AdminContent";
 //import axios from "axios";
 import { API_URL } from '../config';
 
@@ -87,6 +88,47 @@ import { API_URL } from '../config';
 
             const adminUser = new AdminUser();
             const result = adminUser.updatePurchaseState(userId, purchaseId, state);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    };
+
+    // -----------------------------
+
+    /*
+    METHOD ADD CONTENT
+    */
+    public async addContent(contentId: number, title: string, description: string, date: Date, imageId: number, categoryId: number, tags: []){
+        try{
+            const adminContent = new AdminContent();
+            const result = adminContent.addContent(contentId, title, description, date, imageId, categoryId, tags);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    };
+
+    /*
+    METHOD GET ALL CONTENT
+    */
+    public async getAllContent(){
+        try{
+            const adminContent = new AdminContent();
+            const result = adminContent.getAllContent();
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    };
+
+    /*
+    METHOD GET CONTENT BY ID
+    */
+    public async getContent(contentId: number){
+        try{
+            const adminContent = new AdminContent();
+            const result = adminContent.getContent(contentId);
             return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);
