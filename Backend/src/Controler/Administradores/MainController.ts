@@ -4,6 +4,7 @@
 
 import { AdminUser } from "./AdminUser";
 import { AdminProduct } from "./AdminProduct";
+import { AdminCategory } from "./AdminCategory";
 //import axios from "axios";
 import { API_URL } from '../config';
 
@@ -72,6 +73,77 @@ import { API_URL } from '../config';
         try{
             const adminProduct = new AdminProduct();
             const result = await adminProduct.updateProduct(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    }
+
+    public async deleteProduct(id: number){
+        try{
+            const adminProduct = new AdminProduct();
+            const result = await adminProduct.deleteProduct(id);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    }
+
+    public async addProduct(object: any){
+        try{
+            const adminProduct = new AdminProduct();
+            const result = await adminProduct.addProduct(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    }
+
+    //CATEGORY------------------------------------------------------
+    public async addCategory(object: any){
+        try{
+            const adminCategory = new AdminCategory();
+            const result = await adminCategory.addCategory(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    }
+
+    public async getCategories(){
+        try{
+            const adminCategory = new AdminCategory();
+            const result = await adminCategory.getCategories();
+            return result;
+        } catch(err){
+            console.log("Error al cargar las categorias", err);
+        }   
+    }
+
+    public async updateCategory(object: any){
+        try{
+            const adminCategory = new AdminCategory();
+            const result = await adminCategory.updateCategory(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    }
+
+    public async getCategory(categoryId: unknown){
+        try{
+            const adminCategory = new AdminCategory();
+            const result = await adminCategory.getCategory(categoryId);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    }
+
+    public async deleteCategory(categoryId: unknown){
+        try{
+            const adminCategory = new AdminCategory();
+            const result = await adminCategory.deleteCategory(categoryId);
             return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);

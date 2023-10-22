@@ -11,5 +11,7 @@ router.put('/updateProduct', StoreController.updateProduct)
 router.get('/getProduct', StoreController.getProduct)
 //Delete a product from the store
 router.delete('/deleteProduct', StoreController.deleteProduct)
+//Create a new product in the store
+router.post('/addProduct', StoreController.addProduct)
 
 export default router;

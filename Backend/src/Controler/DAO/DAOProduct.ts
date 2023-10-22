@@ -228,7 +228,7 @@ export class DAOProduct implements DAO{
                 return false;
             }
             //Delete the product in the database
-            const result = await collection.deleteOne({ id: productId_ });
+            const result = await collection.deleteOne({ productId: productId_ });
             
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was deleted
