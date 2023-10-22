@@ -74,4 +74,17 @@ export const updatePurchaseState: RequestHandler = async (req, res) => {
     res.status(200).json(user);
 }
 
+/*
+METHOD POST PURCHASE
+*/
+export const makePurchase: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const object = req.body;
+    const userPromise = mainController.makePurchase(object.purchaseId, object.purchaseDetails, object.products, object.voucherId, object.aproxDeliveryDate, object.shippingAdress, object.shippingPrice, object.userId, object.state);
+    const user = await userPromise; // Espera a que la promesa se resuelva
+
+    console.log("This is user: "+ user);
+    res.status(200).json(user);
+}
+
 

@@ -13,6 +13,7 @@ router.get('/getPurchaseHistory', userController.getPurchaseHistory)
 router.post('/updateCart', userController.updateCart)
 
 router.put('/updatePurchaseState', userController.updatePurchaseState)
+router.post('/makePurchase', userController.makePurchase)
 
 
 

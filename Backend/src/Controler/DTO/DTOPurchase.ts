@@ -8,7 +8,7 @@ export class DTOPurchase{
     private purchaseDetails: string = "";
     private products: any[];
     private voucherId = "";
-    private aproxDeliveryDate: Date | undefined;
+    private aproxDeliveryDate: Date | undefined | string;
     private shippingAdress = null;
     private shippingPrice: number = 1;
     private userId = 0;
@@ -16,7 +16,7 @@ export class DTOPurchase{
 
 
     public constructor(purchaseId: number, purchaseDetails: string, 
-        products: any[], voucher: string, aproxDeliveryDate: Date, 
+        products: any[], voucher: string, aproxDeliveryDate: Date | string, 
         shippingAdress: any, shippingPrice: number, userId: number, state: string){        
         this.purchaseId = purchaseId;
         this.purchaseDetails = purchaseDetails;

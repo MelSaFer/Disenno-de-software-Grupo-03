@@ -94,6 +94,26 @@ import { API_URL } from '../config';
         }   
     };
 
+    /*
+    METHOD MAKE PURCHASE
+    PARAMS: userId, purchaseDetails, products, voucher, aproxDeliveryDate, shippingAdress, shippingPrice, state
+    */
+    public async makePurchase(purchaseId: number, purchaseDetails: string, products: any[], voucher: string, aproxDeliveryDate: Date, shippingAdress: any, shippingPrice: number, userId: number, state: string){
+        try{
+            //Verify state is valid
+            if (state != "PENDING" && state != "CHECKED" && state != "DELIVERED" && state != "SEND"){
+                console.log("El estado ingresado no es válido");
+                return false;
+            }
+
+            const adminUser = new AdminUser();
+            const result = adminUser.makePurchase(purchaseId, purchaseDetails, products, voucher, aproxDeliveryDate, shippingAdress, shippingPrice, userId, state);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    };
+
     // -----------------------------
 
     /*
