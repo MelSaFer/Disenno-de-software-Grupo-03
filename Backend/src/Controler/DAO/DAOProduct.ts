@@ -159,7 +159,7 @@ export class DAOProduct implements DAO{
                 productId: object.productId,
                 description: object.description,
                 cuantityAvailable: object.cuantityAvailable,
-                image: object.image,
+                imageId: object.imageId,
                 price: object.price
             });
             //Check if the product already exists
@@ -206,7 +206,7 @@ export class DAOProduct implements DAO{
                 productId: object.productId,
                 description: object.description,
                 cuantityAvailable: object.cuantityAvailable,
-                image: object.image,
+                imageId: object.imageId,
                 price: object.price
             });
 
@@ -220,7 +220,7 @@ export class DAOProduct implements DAO{
                 $set: {
                     description: updatedProduct.description,
                     cuantityAvailable: updatedProduct.cuantityAvailable,
-                    image: updatedProduct.imageId,
+                    imageId: updatedProduct.imageId,
                     price: updatedProduct.price
                     }
             };

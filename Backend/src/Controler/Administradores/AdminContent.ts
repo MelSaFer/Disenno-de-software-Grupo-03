@@ -6,7 +6,7 @@ import { API_URL } from '../config';
 export class AdminContent{
     constructor(){}
 
-    public async addContent(contentId: number, title: string, description: string, date: Date, imageId: number, categoryId: number, tags: []){
+    public async addContent(contentId: number, title: string, description: string, date: Date, imageId: string, categoryId: number, tags: []){
         try {
             const daoUser = new DAOContent();
             const dtoContent = new DTOContent(contentId, title, description, date, imageId, categoryId, tags)
@@ -40,7 +40,7 @@ export class AdminContent{
         
     }
 
-    public async updateContent(contentId: number, title: string, description: string, date: Date, imageId: number, categoryId: number, tags: []){
+    public async updateContent(contentId: number, title: string, description: string, date: Date, imageId: string, categoryId: number, tags: []){
         try {
             const daoContent = new DAOContent();
             const dtoContent = new DTOContent(contentId, title, description, date, imageId, categoryId, tags)

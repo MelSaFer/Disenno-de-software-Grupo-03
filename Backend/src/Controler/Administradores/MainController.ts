@@ -123,7 +123,7 @@ import { API_URL } from '../config';
     /*
     METHOD ADD CONTENT
     */
-    public async addContent(contentId: number, title: string, description: string, date: Date, imageId: number, categoryId: number, tags: []){
+    public async addContent(contentId: number, title: string, description: string, date: Date, imageId: string, categoryId: number, tags: []){
         try{
             const adminContent = new AdminContent();
             const result = adminContent.addContent(contentId, title, description, date, imageId, categoryId, tags);
@@ -162,7 +162,7 @@ import { API_URL } from '../config';
     /*
     METHOD UPDATE CONTENT
     */
-    public async updateContent(contentId: number, title: string, description: string, date: Date, imageId: number, categoryId: number, tags: []){
+    public async updateContent(contentId: number, title: string, description: string, date: Date, imageId: string, categoryId: number, tags: []){
         try{
             const adminContent = new AdminContent();
             const result = adminContent.updateContent(contentId, title, description, date, imageId, categoryId, tags);
