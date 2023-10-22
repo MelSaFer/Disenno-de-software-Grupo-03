@@ -46,8 +46,8 @@ export class AdminUser{
     getCart(userId: number){
         try {
             const daoUser = new DAOUser();
-            const user = daoUser.getCart(userId);
-            return user;
+            const cart = daoUser.getCart(userId);
+            return cart;
         } catch (error) {
             console.log("Error", error);
         }
@@ -61,8 +61,8 @@ export class AdminUser{
     getPurchaseHistory(userId: number){
         try {
             const daoUser = new DAOUser();
-            const user = daoUser.getPurchaseHistory(userId);
-            return user;
+            const purchasehistory = daoUser.getPurchaseHistory(userId);
+            return purchasehistory;
         } catch (error) {
             console.log("Error", error);
         }

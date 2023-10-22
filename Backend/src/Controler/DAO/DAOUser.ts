@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import {UserSchema, ProductSchema} from "./schemas/Schemas"
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, USER_COLLECTION, PRODUCT_COLLECTION, PURCHASE_COLLECTION} from "../config";
+import { DAOProduct } from "./DAOProduct";
 
 /*-----------------------------------------------------------------------
 DAO USER
@@ -110,7 +111,26 @@ export class DAOUser implements DAO{
             if (user) {
                 
                 console.log("Se encontró: " + JSON.stringify(user, null, 2));
-                return user.cart;
+
+                let newCart = [];
+                for (let i = 0; i < user.cart.length; i++) {
+                    let productId = user.cart[i]["productId"];
+                    let quantity = user.cart[i]["quantity"];
+
+                    let daoProduct = new DAOProduct();
+                    let product = await daoProduct.getObject(productId);
+
+                    if(product){
+                        let doc = {"productDescription": product.description, "quantity": quantity};
+                        newCart.push(doc);
+                    }
+                    else{
+                        console.log("No se encontró el producto con el código: " + productId);
+                        return false;
+                    }
+                }
+
+                return newCart;
 
             } else {
                 console.log("No se encontró el user con el código: " + userId);
