@@ -15,12 +15,9 @@ import { API_URL } from '../config';
 
     public async getInfoUser(id: number){
         try{
-            //const userId = 2;
-            //const url =`${API_URL}/infoUser`
-            //const response = await axios.get(url);
-            //const data = await response.data;
+            console.log(id);
             const adminUser = new AdminUser();
-            const result = adminUser.getInfoUser(1);
+            const result = adminUser.getInfoUser(id);
             return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);
@@ -31,6 +28,16 @@ import { API_URL } from '../config';
     public async postInfoUser(id: number){
         try{
             
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    };
+
+    public async updateCart(userId : number, productId: number, quantity: number){
+        try{
+            const adminUser = new AdminUser();
+            const result = adminUser.updateCart(userId , productId, quantity);
+            return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);
         }   

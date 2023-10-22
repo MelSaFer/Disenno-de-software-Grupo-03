@@ -5,7 +5,9 @@ const router = Router();
 
 import * as userController from "./controller/UserController"
 
-router.get('/profile', userController.getInfo)
+//router.get('/profile', userController.getInfo)
 router.get('/infoUser', userController.getInfoUser)
+router.post('/updateCart', userController.updateCart)
+
 
 export default router;

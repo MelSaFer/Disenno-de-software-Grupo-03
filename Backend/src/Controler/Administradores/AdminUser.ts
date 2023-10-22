@@ -10,13 +10,20 @@ export class AdminUser{
 
     }
 
-    getInfoUser(id: any){
+    getInfoUser(id: number){
+        console.log(id)
         //const dtoUser = new DTOUser(1,1,[]);
         //return "esto es una prueba2.0";
         const daoUser = new DAOUser();
-        const user = daoUser.getObject(1);
+        const user = daoUser.getObject(id);
         return user;
 
+    }
+
+    updateCart(userId: number, productId: number, quantity: number){
+        const daoUser = new DAOUser();
+        const user = daoUser.updateCart(userId, productId, quantity);
+        return user;
     }
 
 
