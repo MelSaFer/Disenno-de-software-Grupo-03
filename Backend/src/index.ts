@@ -35,6 +35,7 @@ import {DAOCategory} from "./Controler/DAO/DAOCategory";
 import {DTOCategory} from "./Controler/DTO/DTOCategory";
 
 import * as data from "./Controler/DAO/schemas/data";
+import { MainController } from "./Controler/Administradores/MainController";
 
 require("dotenv").config();
 
@@ -50,21 +51,27 @@ async function main() {
   /*
   USER TEST
   */
-  //const daoUser = new DAOUser();
-  //daoUser.create(data.user1);
-  // daoUser.create(data.user2);
-  // daoUser.create(data.user3);
+ /*
+  const daoUser = new DAOUser();
+  daoUser.create(data.user1);
+  daoUser.create(data.user2);
+  daoUser.create(data.user3);
 
-  //daoUser.update(data.user4);
+  daoUser.update(data.user4);
 
-  //daoUser.delete(3);
+  daoUser.delete(3);
 
-  //console.log(await daoUser.getAll());
+  console.log(await daoUser.getAll());
 
-  //daoUser.getObject(1);
+  daoUser.getObject(1);
 
-  //daoUser.updateCart(1, 1, 1);
-  //daoUser.updateCart(data.user1, 3, 1);
+  daoUser.updateCart(1, 1, 1);
+  daoUser.updateCart(data.user1, 3, 1);
+  */
+
+  const mainController = new MainController();
+
+  //mainController.getInfoUser();
 
   /*
   PRODUCT TEST
