@@ -34,7 +34,8 @@ export const PurchaseSchema = new mongoose.Schema({
     aproxDeliveryDate: { type: Date, require: true},
     shippingAdress: { type: String, require: true},
     shippingPrice: { type: Number, required: true },
-    userId: { type: Number, required: true }
+    userId: { type: Number, required: true },
+    state: { type: String, required: true }
 });
 
 //CONTENT SCHEMA------------------------------------------------------------------------------------------------------------------------------

@@ -28,8 +28,8 @@ import {DTOProduct} from "./Controler/DTO/DTOProduct";
 import {DAOContent} from "./Controler/DAO/DAOContent";
 import {DTOContent} from "./Controler/DTO/DTOContent";
 
-import {DAOPurchaseHistory} from "./Controler/DAO/DAOPurchase";
-import {DTOPurchaseHistory} from "./Controler/DTO/DTOPurchaseHistory";
+import {DAOPurchase} from "./Controler/DAO/DAOPurchase";
+import {DTOPurchase} from "./Controler/DTO/DTOPurchase";
 
 import {DAOCategory} from "./Controler/DAO/DAOCategory";
 import {DTOCategory} from "./Controler/DTO/DTOCategory";
@@ -69,14 +69,14 @@ async function main() {
   daoUser.updateCart(data.user1, 3, 1);
   */
 
-  const mainController = new MainController();
+  //const mainController = new MainController();
 
   //mainController.getInfoUser();
 
   /*
   PRODUCT TEST
   */
-  const daoProduct = new DAOProduct();
+  //const daoProduct = new DAOProduct();
 
   //daoProduct.create(data.product1);
   //daoProduct.create(data.product2);
@@ -86,19 +86,28 @@ async function main() {
   /*
   CONTENT TEST
   */
-  //const daoContent = new DAOContent();
+  // const daoContent = new DAOContent();
+  // daoContent.create(data.content1);
+  // daoContent.create(data.content2);
+  // daoContent.create(data.content3);
 
 
   /*
   PURCHASE TEST
   */
-  //const daoPurchase = new DAOPurchaseHistory();
+  // const daoPurchase = new DAOPurchase();
+  // daoPurchase.create(data.purchase1);
+  // daoPurchase.create(data.purchase2);
+  // daoPurchase.create(data.purchase3);
 
 
   /*
   CATEGORY TEST
   */
-  //const daoCategory = new DAOCategory();
+  // const daoCategory = new DAOCategory();
+  // daoCategory.create(data.category1);
+  // daoCategory.create(data.category2);
+  // daoCategory.create(data.category3);
 
 
 

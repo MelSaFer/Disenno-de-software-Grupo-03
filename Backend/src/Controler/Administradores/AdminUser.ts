@@ -1,6 +1,7 @@
 import { API_URL } from '../config';
 import { DTOUser } from '../DTO/DTOUser';
 import { DAOUser } from '../DAO/DAOUser';
+import { DAOPurchase } from '../DAO/DAOPurchase';
 
 export class AdminUser{
 
@@ -20,10 +21,44 @@ export class AdminUser{
 
     }
 
+    /*
+    METHOD UPDATE CART
+    PARAMS: userId, productId, quantity
+    */
     updateCart(userId: number, productId: number, quantity: number){
         const daoUser = new DAOUser();
         const user = daoUser.updateCart(userId, productId, quantity);
         return user;
+    }
+
+    /*
+    METHOD GET CART
+    PARAMS: userId
+    */
+    getCart(userId: number){
+        const daoUser = new DAOUser();
+        const user = daoUser.getCart(userId);
+        return user;
+    }
+
+    /*
+    METHOD GET PURCHASE HISTORY
+    PARAMS: userId
+    */
+    getPurchaseHistory(userId: number){
+        const daoUser = new DAOUser();
+        const user = daoUser.getPurchaseHistory(userId);
+        return user;
+    }
+
+    /*
+    METHOD UPDATE STATE PURCHASE HISTORY
+    PARAMS: userId, purchaseId, state
+    */
+    updatePurchaseState(userId: number, purchaseId: number, state: string){
+        const daoPurchase = new DAOPurchase();
+        const purchase = daoPurchase.updatePurchaseState(userId, purchaseId, state);
+        return purchase;
     }
 
 
