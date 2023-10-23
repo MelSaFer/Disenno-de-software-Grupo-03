@@ -32,7 +32,7 @@ export const PurchaseSchema = new mongoose.Schema({
     products: { type: Array, require: true},
     voucherId: { type: String, require: true},
     aproxDeliveryDate: { type: String, require: true},
-    shippingAdress: { type: String, require: true},
+    shippingAddress: { type: String, require: true},
     shippingPrice: { type: Number, required: true },
     userId: { type: Number, required: true },
     state: { type: String, required: true }
