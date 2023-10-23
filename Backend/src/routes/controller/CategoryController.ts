@@ -302,17 +302,17 @@ export const updateSubCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategoryId")){
+    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategory")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number" || typeof body.subcategoryId != "number"){
+    if(typeof body.categoryId != "number" || typeof body.subcategory.name != "string" || typeof body.subcategory.subcategoryId != "number"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0 || body.subcategoryId <= 0){
+    if(body.categoryId <= 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }

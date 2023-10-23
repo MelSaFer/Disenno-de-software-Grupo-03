@@ -45,22 +45,22 @@ export const updateProduct: RequestHandler = async (req, res) => {
 
     //Verify if the body is empty
     if(Object.keys(body).length == 0){
-        res.status(400).json({msg: "Bad Request: Body is empty"});
+        res.status(400).json({msg: "1-Bad Request: Body is empty"});
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("productId") || !body.hasOwnProperty("description") || !!body.hasOwnProperty("price") || !body.hasOwnProperty("cuantityAvailable") || !body.hasOwnProperty("imageId")){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+    if(!body.hasOwnProperty("productId") || !body.hasOwnProperty("description") || !body.hasOwnProperty("price") || !body.hasOwnProperty("cuantityAvailable") || !body.hasOwnProperty("imageId")){
+        res.status(400).json({msg: "2-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
     if(typeof body.productId != "number" || typeof body.description != "string" || typeof body.price != "number" || typeof body.cuantityAvailable != "number" || typeof body.imageId != "string"){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "3-Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
     if(body.productId <= 0 || body.price < 0 || body.cuantityAvailable < 0 || body.imageId == ""){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "4-Bad Request: Body is not correct"});
         return;
     }
 
@@ -108,22 +108,22 @@ export const addProduct: RequestHandler = async (req, res) => {
 
     //Verify if the body is empty
     if(Object.keys(body).length == 0){
-        res.status(400).json({msg: "Bad Request: Body is empty"});
+        res.status(400).json({msg: "1-Bad Request: Body is empty"});
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("productId") || !body.hasOwnProperty("description") || !!body.hasOwnProperty("price") || !body.hasOwnProperty("cuantityAvailable") || !body.hasOwnProperty("imageId")){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+    if(!body.hasOwnProperty("productId") || !body.hasOwnProperty("description") || !body.hasOwnProperty("price") || !body.hasOwnProperty("cuantityAvailable") || !body.hasOwnProperty("imageId")){
+        res.status(400).json({msg: "2-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
     if(typeof body.productId != "number" || typeof body.description != "string" || typeof body.price != "number" || typeof body.cuantityAvailable != "number" || typeof body.imageId != "string"){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "3-Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
     if(body.productId <= 0 || body.price < 0 || body.cuantityAvailable < 0 || body.imageId == ""){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "4-Bad Request: Body is not correct"});
         return;
     }
 
