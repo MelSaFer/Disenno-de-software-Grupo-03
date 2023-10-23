@@ -126,7 +126,7 @@ export class DAOPurchase implements DAO{
                 products: object.products,
                 voucherId : object.voucherId,   
                 aproxDeliveryDate: object.aproxDeliveryDate,
-                shippingAdress: object.shippingAdress,
+                shippingAddress: object.shippingAddress,
                 shippingPrice: object.shippingPrice,
                 userId: object.userId,
                 state: object.state
