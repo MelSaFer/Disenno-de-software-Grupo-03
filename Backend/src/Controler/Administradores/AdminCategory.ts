@@ -96,5 +96,15 @@ export class AdminCategory{
         }
     }
 
+    updateSubCategory(categoryId: unknown, object: any){
+        try{
+            const daoCategory = new DAOCategory();
+            const result = daoCategory.updateSubcategory(categoryId, object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la información de la categoría", err);
+        }
+    }
+
    
 }

@@ -332,4 +332,14 @@ import { API_URL } from '../config';
         }   
     }
 
+    public async updateSubCategory(categoryId: unknown, object: any){
+        try{
+            const adminCategory = new AdminCategory();
+            const result = await adminCategory.updateSubCategory(categoryId, object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar las categorias", err);
+        }   
+    }
+
  }
