@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import profilePic from "../../../public/images/ProfilePic.png";
-import Navigation from "../../components/Navbar";
+import Navbar2 from "@/src/components/navbar2";
+import Footer from "@/src/components/footer";
 
 function Page(): JSX.Element {
   const { user, logOut } = useAuthContext() as {
@@ -30,13 +31,15 @@ function Page(): JSX.Element {
     }
   };
   return (
-    <>
-      <Navigation />
-      <main className="flex flex-col items-center">
+    <div className="flex flex-col min-h-screen">
+      <header>
+        <Navbar2 />
+      </header>
+      <main className="flex-grow mt-10">
         <div className="grid w-full grid-cols-6 gap-16 ">
-          <div className="col-span-3 mt-96 mx-32 flex text-4xl flex-col items-start justify-start">
-            <h1 className="text-5xl uppercase text-dark/75">Sobre mi</h1>
-            <p className="font-medium mt-20">
+          <div className="col-span-3 mx-10 flex text-3xl flex-col items-start justify-start bg-[#D8EABA] p-5">
+            <h1 className="text-5xl uppercase text-dark/75 ">Sobre mí</h1>
+            <p className="font-small mt-10 pl-10">
               Soy una joven emprendedora de la zona de Concepción de Tres Ríos
               con un talento excepcional para el arte del maquillaje de
               caracterización. Me dedico a brindar servicios profesionales de
@@ -45,7 +48,7 @@ function Page(): JSX.Element {
           </div>
 
           <div className="mx-600 relative h-max rounded-2x1 border-0 border-solid border-dark bg-light p-8">
-            <div className="absolute top-0 z-10 w-[102%] h-[103%] rounded-[2rem] mt-60 bg-red justify-end">
+            <div className="">
               <Image
                 src={profilePic}
                 alt="Main"
@@ -55,7 +58,10 @@ function Page(): JSX.Element {
           </div>
         </div>
       </main>
-    </>
+      <footer>
+        <Footer />
+      </footer>
+    </div>
   );
 }
 

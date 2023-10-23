@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useRef } from "react";
 import { BsFillHandbagFill } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";

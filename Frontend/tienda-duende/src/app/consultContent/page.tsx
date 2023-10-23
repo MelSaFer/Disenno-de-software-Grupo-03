@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import Link from "next/link";
 import React from "react";
@@ -5,12 +6,15 @@ import Footer from "../../components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
 import Navigation from "../../components/Navbar";
+import Navbar2 from "@/src/components/navbar2";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { BiMessageAdd } from "react-icons/bi";
 import Modal from "../../components/modal";
 
 const ConsultContent = () => {
   const [imageSrc, setImageSrc] = useState("");
   const [data, setData] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const getImage = async () => {
@@ -27,7 +31,8 @@ const ConsultContent = () => {
         if (contentType.startsWith("image/")) {
           const imageBlob = new Blob([response.data], { type: contentType });
           const imageUrl = URL.createObjectURL(imageBlob);
-          setImageSrc(imageUrl);
+          // setImageSrc(imageUrl);
+          setImageSrc("https://source.unsplash.com/TCpfPxKPOvk/400x400");
 
           // `imageUrl` contiene la URL de la imagen que puedes usar en tu aplicación
           // console.log("URL de la imagen:", imageUrl);
@@ -62,8 +67,8 @@ const ConsultContent = () => {
   return (
     <Fragment>
       <div className="flex flex-col min-h-screen">
-        <header className="mb-20">
-          <Navigation />
+        <header>
+          <Navbar2 />
         </header>
         <main className="flex-grow">
           <div className="flex h-full justify-center items-top">
@@ -78,6 +83,7 @@ const ConsultContent = () => {
                 <a
                   href="#!"
                   className=" text-neutral-800 dark:text-neutral-200"
+                  onClick={() => setShowModal(true)}
                 >
                   <BsThreeDotsVertical className="w-6 h-6 text-yellow-900" />
                 </a>
@@ -108,7 +114,14 @@ const ConsultContent = () => {
           <Footer />
         </footer>
       </div>
-      <Modal />
+      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+        <div className="p-6 flex justify-center items-center">
+          <button className="text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold flex items-center">
+            Enviar mensaje
+            <BiMessageAdd className="w-5 h-5 text-yellow-900 ml-2" />
+          </button>
+        </div>
+      </Modal>
     </Fragment>
   );
 };

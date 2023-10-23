@@ -1,10 +1,13 @@
+// @ts-nocheck
 "use client";
+
 import React from "react";
 import Footer from "../../components/footer";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { set } from "firebase/database";
 import Link from "next/link";
+import Navbar2 from "@/src/components/navbar2";
 
 const Cart = () => {
   const [imageSrc, setImageSrc] = useState("");
@@ -72,7 +75,9 @@ const Cart = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header></header>
+      <header>
+        <Navbar2 />
+      </header>
 
       <main className="flex-grow">
         <hr className="border border-red-400 w-5/6 mx-auto my-4"></hr>

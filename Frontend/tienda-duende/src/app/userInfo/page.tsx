@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Footer from "../../components/footer";
 import React, { useState, useEffect } from "react";
+import Navbar2 from "@/src/components/navbar2";
 
 const UserInfo = () => {
   const [nombre, setNombre] = useState("");
@@ -18,12 +19,11 @@ const UserInfo = () => {
 
   return (
     <body className="flex flex-col min-h-screen">
-      <header className="bg-green-200 py-5 mb-6"></header>
+      <header>
+        <Navbar2 />
+      </header>
       <main className="flex-grow">
-        <div className="font-bold text-4xl text-yellow-900 text-center mb-3">
-          DUENDE MAQUILLISTA
-        </div>
-        <div className="flex items-start justify-center text-yellow-900 mb-20">
+        {/* <div className="flex items-start justify-center text-yellow-900 mb-20">
           <button className="bg-white border border-gray-300 hover:bg-gray-200 hover:border-gray-300 px-4 py-2 rounded">
             Tienda
           </button>
@@ -35,7 +35,7 @@ const UserInfo = () => {
               Salir
             </button>
           </Link>
-        </div>
+        </div> */}
         <div className="flex flex-col items-center justify-center text-yellow-900 mb-10">
           <h1 className="font-bold text-2xl">Nombre del usuario: </h1>
           <p>{nombre}</p>

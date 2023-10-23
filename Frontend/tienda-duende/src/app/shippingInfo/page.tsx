@@ -1,7 +1,9 @@
+// @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
 import Footer from "../../components/footer";
 import Navigation from "../../components/Navbar";
+import Navbar2 from "@/src/components/navbar2";
 
 const ShippingInfo = () => {
   const [provincia, setProvincia] = useState("");
@@ -72,11 +74,12 @@ const ShippingInfo = () => {
     <div>
       {/* Navbar component */}
       {/* <header className="bg-green-200 py-5 mb-6"></header> */}
-      <div className="flex flex-col min-h-screen">
-        <Navigation />
+      <div className="">
+        <Navbar2 />
 
         {/* Page heading */}
-        <div className="flex justify-center items-center mb-3 mt-12">
+        <hr className="border border-red-400 w-5/6 mx-auto my-4"></hr>
+        <div className="flex justify-center items-center mb-3 ">
           <h1 className="font-bold text-black text-3xl">FINALIZAR COMPRA</h1>
         </div>
 

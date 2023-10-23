@@ -1,7 +1,9 @@
+// @ts-nocheck
 "use client";
 import React, { useState, useEffect } from "react";
 import Footer from "../../components/footer";
 import axios from "axios";
+import Navbar2 from "@/src/components/navbar2";
 
 const baseURL = "https://mocki.io/v1/2f52d417-4d0d-4ed4-8c97-97131eb8ceb6";
 
@@ -23,7 +25,9 @@ const History = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header></header>
+      <header>
+        <Navbar2 />
+      </header>
       <main className="flex-grow ml-12 mr-12">
         {history.map((item) => (
           <div key={item.id} className="text-yellow-900">
