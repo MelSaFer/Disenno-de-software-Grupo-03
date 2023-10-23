@@ -1,5 +1,5 @@
 import {DAO} from "./DAO"
-import {CategorySchema} from "./schemas/Schemas"
+import {CategorySchema, SubcategorySchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CATEGORY_COLLECTION} from "../config";
@@ -236,4 +236,121 @@ export class DAOCategory implements DAO{
         }
         return true;
     };
+
+    async getSubcategory(categoryId: unknown, subcategoryId: unknown){
+        try{
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CATEGORY_COLLECTION);
+            //Get the Category from the database, using the code
+            const Category = await collection.findOne({ categoryId: categoryId });
+            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+            // If the category was found, return it, else return false
+            if (Category) {
+                let subcategories = Category.subcategories;
+                let subcategory = subcategories.find((subcategory: any) => subcategory.subcategoryId === subcategoryId);
+                if (!subcategory){ 
+                    console.log("No se encontró la subcategoría con el código: " + subcategoryId);
+                    return false; 
+                }
+                return subcategory;
+            } else {
+                console.log("No se encontró el sub categoria con el código: " + subcategoryId);
+                return false; 
+            }
+
+        } catch(err){
+            console.log(err);
+            return false;
+        }
+    };
+
+    async getSubcategories(categoryId: unknown){
+        try{
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CATEGORY_COLLECTION);
+            //Get the Category from the database, using the code
+            const Category = await collection.findOne({ categoryId: categoryId });
+            // If the category was found, return it, else return false
+            if (Category) {
+                let subcategories = Category.subcategories;
+                console.log("Se encontro la subcategoría: " + JSON.stringify(subcategories, null, 2));
+                return subcategories;
+            } else {
+                console.log("No se encontró el subcategoria con el código: " + categoryId);
+                return false; 
+            }
+
+        } catch(err){
+            console.log(err);
+            return false;
+        }
+    };
+
+    async addSubcategory(categoryId: unknown, object: any){
+        try{
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CATEGORY_COLLECTION);
+            //Check if the category already exists
+            const category = await collection.findOne({ categoryId: categoryId});
+            if (category){
+                //Check if the subcategory already exists
+                const subcategory = await this.getSubcategory(categoryId, object.subcategoryId);
+                if(subcategory == false){
+                    let newSubcategories = category.subcategories;
+                    let newSubcategory = { subcategoryId: object.subcategoryId, name: object.name };
+                    newSubcategories.push(newSubcategory);
+                    console.log("La subcategoría " + object.subcategoryId + " se agregó a la categoría " + categoryId);
+                    const result = await collection.updateOne({ categoryId: categoryId}, { $set: { subcategories: newSubcategories } });
+                    return true;
+                }
+                return false;
+            }
+        } catch(err){
+            console.log(err);
+        }
+        return false;
+    };
+
+    async deleteSubcategory(categoryId: unknown, subcategoryId: unknown){
+        try{
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CATEGORY_COLLECTION);
+
+            //Check if the category already exists
+            const category = await collection.findOne({ categoryId: categoryId});
+            if (category){
+                //Check if the subcategory already exists
+                const subcategory = await this.getSubcategory(categoryId, subcategoryId);
+                if(subcategory){
+                    //let newSubcategories = category.subcategories;
+                    const newSubcategories = category.subcategories.filter((subcategory : any) => subcategory.subcategoryId !== subcategoryId);
+                    if (newSubcategories.length == category.subcategories.length) {
+                        console.log("No se encontró la subcategoría " + subcategoryId + " en la categoría " + categoryId);
+                        return false;
+                    }
+                    //newSubcategories.push(newSubcategory);
+                    console.log("La subcategoría " + subcategoryId + " se elmino de la categoría " + categoryId);
+                    const result = await collection.updateOne({ categoryId: categoryId}, { $set: { subcategories: newSubcategories } });
+                    return true;
+                } else {
+                    console.log("No se encontró la subcategoría " + subcategoryId + " en la categoría " + categoryId);
+                    return false;
+                }
+            } else {
+                console.log("No se encontró la categoría " + categoryId);
+                return false;
+            }
+
+        }catch(err){
+            console.log(err);
+        }
+    };
+
 }

@@ -8,6 +8,7 @@ router.delete("/deleteCategory", categoryController.deleteCategory);
 router.put("/updateCategory", categoryController.updateCategory);
 router.get("/getCategory", categoryController.getCategory);
 router.get("/getSubcategories", categoryController.getSubCategories);
+router.get("/getSubcategory", categoryController.getSubcategory);
 router.post("/addSubcategory", categoryController.addSubCategory);
 router.delete("/deleteSubcategory", categoryController.deleteSubCategory);
 router.put("/updateSubcategory", categoryController.updateSubCategory);
