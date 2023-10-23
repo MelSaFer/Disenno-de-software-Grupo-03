@@ -8,7 +8,6 @@ import {
   USER_COLLECTION,
   SHIPPINGADRESS_COLLECTION,
   PURCHASE_COLLECTION,
-  PURCHASEHISTORY_COLLECTION,
   IMAGETYPE_COLLECTION,
   IMAGE_COLLECTION,
   CATEGORY_COLLECTION,
@@ -26,20 +25,22 @@ import {DTOUser} from "./Controler/DTO/DTOUser";
 import {DAOProduct} from "./Controler/DAO/DAOProduct";
 import {DTOProduct} from "./Controler/DTO/DTOProduct";
 
-import {DAOCart} from "./Controler/DAO/DAOCart";
-import {DTOCart} from "./Controler/DTO/DTOCart";
-
 import {DAOContent} from "./Controler/DAO/DAOContent";
 import {DTOContent} from "./Controler/DTO/DTOContent";
 
-import {DAOPurchaseHistory} from "./Controler/DAO/DAOPurchaseHistory";
-import {DTOPurchaseHistory} from "./Controler/DTO/DTOPurchaseHistory";
+import {DAOPurchase} from "./Controler/DAO/DAOPurchase";
+import {DTOPurchase} from "./Controler/DTO/DTOPurchase";
+
+import {DAOCategory} from "./Controler/DAO/DAOCategory";
+import {DTOCategory} from "./Controler/DTO/DTOCategory";
+
+import * as data from "./Controler/DAO/schemas/data";
+import { MainController } from "./Controler/Administradores/MainController";
 
 require("dotenv").config();
 
 async function main() {
-  //await connectDB();
-  //await connectDB();
+
   SingletonMongo.getInstance().connect();
   const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
   const collection = db.collection(PRODUCT_COLLECTION);
@@ -48,86 +49,68 @@ async function main() {
   //console.log("holaaa "+ collection.findOne({name: "1"}));
 
   /*
-  const daoUser = new DTOUser(1, "hola@gmail.com", 0, [], []);
-  const dao = new DAOUser();
-  dao.create(daoUser);
- */
-/*
-  const adoProduct = new DTOProduct("1", "  ", 0, [], 12);
-  const daoP = new DAOProduct();
-  daoP.create(adoProduct);
-*/
+  USER TEST
+  */
+ /*
+  const daoUser = new DAOUser();
+  daoUser.create(data.user1);
+  daoUser.create(data.user2);
+  daoUser.create(data.user3);
 
-  /*-------------------------------------------------------------
-   //PRUEBAS PRODUCT
-  //const daoProduct = new DTOProduct("90", "  ", 0, [], 12);
-  const daoProd = new DAOProduct();
-  const dtoProd = new DTOProduct("abc", "  ", 0, [], 12);
-  daoProd.create(dtoProd);
-  //console.log(daoProd.getObject(1));
-  const dtoProd2 = new DTOProduct("abc", "  ", 0, [], 89);
-  daoProd.update(dtoProd2);
-  //const singletonMongo = SingletonMongo.getInstance();
-  const singletonFirebase = SingletonFirebase.getInstance();
-  //const connection = await SingletonMongo;
- -------------------------------------------------------------*/
-  let date: Date = new Date("2019-01-16");  
-  ///*-------------------------------------------------------------
-  //PRUEBAS CART
-  const daoCart = new DAOCart();
-  const dtoProd = new DTOCart(2, []);
-  const dtoProd2 = new DTOCart(3, []);
-  //daoCart.create(dtoProd);
-  //daoCart.create(dtoProd2);
-  //console.log(daoCart.getObject(2));
-  daoCart.delete(2);
-  //-------------------------------------------------------------*/
+  daoUser.update(data.user4);
 
-  /*-------------------------------------------------------------
-  //PRUEBAS content
-  const daoCont = new DAOContent();
-  const dtoCont = new DTOContent(54, "prueba2", "Esto es una prueba2", date, 22, 2, []);
-  daoCont.create(dtoCont);
-  //console.log(daoCont.getObject(23));
-  const dtoCont2 = new DTOContent(23, "pruebaActualizada", "Esto es una prueba actualizada", date, 22, 2, []);
-  daoCont.update(dtoCont2);
-  console.log(daoCont.getObject(23));
-  //const dtoCont = daoCont.getObject(23);
-  //daoCont.delete(54);
+  daoUser.delete(3);
 
-  -----------------------------------------------------------------*/
+  console.log(await daoUser.getAll());
 
-  ///*-------------------------------------------------------------
-  //Prueba Purchase H.
-  //const daoPurchaseH = new DAOPurchaseHistory();
-  //const dtoPurchaseH = new DTOPurchaseHistory([]);
-  //daoCart.create(dtoProd);
-  //console.log(daoCart.getObject(2));
-  //-------------------------------------------------------------*/
+  daoUser.getObject(1);
+
+  daoUser.updateCart(1, 1, 1);
+  daoUser.updateCart(data.user1, 3, 1);
+  */
+
+  //const mainController = new MainController();
+
+  //mainController.getInfoUser();
+
+  /*
+  PRODUCT TEST
+  */
+  //const daoProduct = new DAOProduct();
+
+  //daoProduct.create(data.product1);
+  //daoProduct.create(data.product2);
+  //daoProduct.create(data.product3);
 
 
   /*
-
-  if (singletonFirebase instanceof SingletonFirebase) {
-    if (singletonFirebase) {
-      //obtener credenciales solo para ver si funciona esta cosa
-      const auth = getAuth(singletonFirebase.getApp());
-      signInWithEmailAndPassword(auth, "fio@gmail.com", "fio123")
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          console.log(user.email);
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
-    } else {
-      console.log("2");
-    }
-  }
+  CONTENT TEST
   */
+  // const daoContent = new DAOContent();
+  // daoContent.create(data.content1);
+  // daoContent.create(data.content2);
+  // daoContent.create(data.content3);
+
+
+  /*
+  PURCHASE TEST
+  */
+  // const daoPurchase = new DAOPurchase();
+  // daoPurchase.create(data.purchase1);
+  // daoPurchase.create(data.purchase2);
+  // daoPurchase.create(data.purchase3);
+
+
+  /*
+  CATEGORY TEST
+  */
+  // const daoCategory = new DAOCategory();
+  // daoCategory.create(data.category1);
+  // daoCategory.create(data.category2);
+  // daoCategory.create(data.category3);
+
+
+
 
   app.listen(PORT);
   console.log("Server on port ", PORT);

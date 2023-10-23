@@ -4,25 +4,29 @@ Class Purchase
 */
 
 export class DTOPurchase{
-    private orderNumber: Number = 0;
-    private purchaseDetails: String = "";
-    private products  = [];
-    private voucher = null;
-    private aproxDeliveryDate: Date | undefined;
+    private purchaseId: number = 0;
+    private purchaseDetails: string = "";
+    private products: any[];
+    private voucherId = "";
+    private aproxDeliveryDate: Date | undefined | string;
     private shippingAdress = null;
-    private shippingPrice: Number = 1;
+    private shippingPrice: number = 1;
+    private userId = 0;
+    private state = "";
 
 
-    public constructor(orderNumber: Number, purchaseDetails: String, 
-        products: [], voucher: any, aproxDeliveryDate: Date, 
-        shippingAdress: any, shippingPrice: Number){        
-        this.orderNumber = orderNumber;
+    public constructor(purchaseId: number, purchaseDetails: string, 
+        products: any[], voucher: string, aproxDeliveryDate: Date | string, 
+        shippingAdress: any, shippingPrice: number, userId: number, state: string){        
+        this.purchaseId = purchaseId;
         this.purchaseDetails = purchaseDetails;
         this.products = products;
-        this.voucher = voucher;
+        this.voucherId = voucher;
         this.aproxDeliveryDate = aproxDeliveryDate;
         this.shippingAdress = shippingAdress;
         this.shippingPrice = shippingPrice;
+        this.userId = userId;
+        this.state = state;
     }
 
 }

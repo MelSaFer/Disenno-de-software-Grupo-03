@@ -4,39 +4,39 @@ Class Content
 */
 
 export class DTOContent{
-    private id: number = 0;
-    private name: string = "";
+    private contentId: number = 0;
+    private title: string = "";
     private description: string = "";
     private date: Date = new Date();
-    private image = null;
-    private category = null;
+    private imageId = "";
+    private categoryId = null;
     private tags: string[] = [];
 
     //-------------------------------
-    public constructor( id: number, name: string, description: string, date: Date, image: any, category: any, tags: string[]){
-        this.id = id;
-        this.name = name;
+    public constructor( contentId: number, title: string, description: string, date: Date, imageId: any, categoryId: any, tags: string[]){
+        this.contentId = contentId;
+        this.title = title;
         this.description = description;
         this.date = date;
-        this.image = image;
-        this.category = category;
+        this.imageId = imageId;
+        this.categoryId = categoryId;
         this.tags = tags;
     }
 
     //-------------------------------
     public getId(): number{
-        return this.id;
+        return this.contentId;
     }
-    public setId( id: number): void{
-        this.id = id;
+    public setId( contentId: number): void{
+        this.contentId = contentId;
     }
 
     //-------------------------------
     public getName(): string{
-        return this.name;
+        return this.title;
     }
-    public setName( name: string): void{
-        this.name = name;
+    public setName( title: string): void{
+        this.title = title;
     }
 
     //-------------------------------
@@ -57,18 +57,18 @@ export class DTOContent{
 
     //-------------------------------
     public getImage(){
-        return this.image;
+        return this.imageId;
     }
-    public setImage( image: any): void{
-        this.image = image;
+    public setImage( imageId: any): void{
+        this.imageId = imageId;
     }
 
     //-------------------------------
     public getCategory(){
-        return this.category;
+        return this.categoryId;
     }
-    public setCategory( category: any): void{
-        this.category = category;
+    public setCategory( categoryId: any): void{
+        this.categoryId = categoryId;
     }
 
     //-------------------------------
