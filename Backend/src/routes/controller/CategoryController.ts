@@ -21,8 +21,31 @@ export const getCategories: RequestHandler = async (req, res) => {
  */
 export const addCategory: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.addCategory(object);
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("name") ||  !body.hasOwnProperty("subcategories")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number" || typeof body.name != "string" || !Array.isArray(body.subcategories)){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0 || body.name.length == 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+
+    const categoryPromise = mainController.addCategory(body);
     const category = await categoryPromise; 
     res.status(200).json(category)
 }
@@ -33,8 +56,30 @@ ENDPOINT: /updateCategory
 */
 export const updateCategory: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.updateCategory(object);
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("name") ||  !body.hasOwnProperty("subcategories")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number" || typeof body.name != "string" || !Array.isArray(body.subcategories)){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0 || body.name.length == 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const categoryPromise = mainController.updateCategory(body);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -45,8 +90,30 @@ ENDPOINT: /getCategory
 */
 export const getCategory: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.getCategory(object.categoryId);
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number"){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const categoryPromise = mainController.getCategory(body.categoryId);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -57,8 +124,30 @@ ENDPOINT: /deleteCategory
 */
 export const deleteCategory: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.deleteCategory(object.categoryId);
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number"){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const categoryPromise = mainController.deleteCategory(body.categoryId);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -69,8 +158,30 @@ ENDPOINT: /getSubCategories
 */
 export const getSubCategories: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.getSubCategories(object.categoryId);
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number"){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const categoryPromise = mainController.getSubCategories(body.categoryId);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -81,8 +192,30 @@ ENDPOINT: /getSubCategory
 */
 export const getSubcategory: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.getSubcategory(object.categoryId, object.subcategoryId);
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategoryId")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number" || typeof body.subcategoryId != "number"){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0 || body.subcategoryId <= 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const categoryPromise = mainController.getSubcategory(body.categoryId, body.subcategoryId);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -93,8 +226,30 @@ ENDPOINT: /addSubCategory
 */
 export const addSubCategory: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.addSubCategory(object.categoryId, object.subcategory);
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategoryId")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number" || typeof body.subcategoryId != "number"){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0 || body.subcategoryId <= 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const categoryPromise = mainController.addSubCategory(body.categoryId, body.subcategory);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -105,8 +260,30 @@ ENDPOINT: /deleteSubCategory
 */
 export const deleteSubCategory: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.deleteSubCategory(object.categoryId, object.subcategoryId);
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategoryId")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number" || typeof body.subcategoryId != "number"){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0 || body.subcategoryId <= 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const categoryPromise = mainController.deleteSubCategory(body.categoryId, body.subcategoryId);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -117,8 +294,30 @@ ENDPOINT: /updateSubCategory
 */
 export const updateSubCategory: RequestHandler = async (req, res) => { 
     const mainController = new MainController();
-    const object = req.body;
-    const categoryPromise = mainController.updateSubCategory(object.categoryId, object.subcategory );
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategoryId")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.categoryId != "number" || typeof body.subcategoryId != "number"){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.categoryId <= 0 || body.subcategoryId <= 0){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const categoryPromise = mainController.updateSubCategory(body.categoryId, body.subcategory );
     const category = await categoryPromise;
     res.status(200).json(category)
 }

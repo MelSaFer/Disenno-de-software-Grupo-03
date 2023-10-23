@@ -33,7 +33,7 @@ export const addContent : RequestHandler = async (req, res) => {
     }
     
     // !! eliminar contentId
-    const contentPromise = mainController.addContent(body.contentId, body.title, body.description, body.date, body.imageId, body.categoryId, body.tags);
+    const contentPromise = mainController.addContent(body);
     const content = await contentPromise; // Espera a que la promesa se resuelva
 
     console.log("This is content: "+ content);
@@ -105,7 +105,7 @@ export const updateContent : RequestHandler = async (req, res) => {
     }
 
 
-    const contentPromise = mainController.updateContent(body.contentId, body.title, body.description, body.date, body.imageId, body.categoryId, body.tags);
+    const contentPromise = mainController.updateContent(body);
     const content = await contentPromise; // Espera a que la promesa se resuelva
 
     console.log("This is content: "+ content);

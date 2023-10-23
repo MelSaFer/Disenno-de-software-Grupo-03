@@ -102,16 +102,10 @@ import { API_URL } from '../config';
     METHOD MAKE PURCHASE
     PARAMS: userId, purchaseDetails, products, voucher, aproxDeliveryDate, shippingAdress, shippingPrice, state
     */
-    public async makePurchase(purchaseId: number, purchaseDetails: string, products: any[], voucher: string, aproxDeliveryDate: Date, shippingAdress: any, shippingPrice: number, userId: number, state: string){
+    public async makePurchase(object: any){
         try{
-            //Verify state is valid
-            if (state != "PENDING" && state != "CHECKED" && state != "DELIVERED" && state != "SEND"){
-                console.log("El estado ingresado no es válido");
-                return false;
-            }
-
             const adminUser = new AdminUser();
-            const result = adminUser.makePurchase(purchaseId, purchaseDetails, products, voucher, aproxDeliveryDate, shippingAdress, shippingPrice, userId, state);
+            const result = adminUser.makePurchase(object);
             return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);
@@ -123,10 +117,10 @@ import { API_URL } from '../config';
     /*
     METHOD ADD CONTENT
     */
-    public async addContent(contentId: number, title: string, description: string, date: Date, imageId: string, categoryId: number, tags: []){
+    public async addContent(object: any){
         try{
             const adminContent = new AdminContent();
-            const result = adminContent.addContent(contentId, title, description, date, imageId, categoryId, tags);
+            const result = adminContent.addContent(object);
             return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);
@@ -162,10 +156,10 @@ import { API_URL } from '../config';
     /*
     METHOD UPDATE CONTENT
     */
-    public async updateContent(contentId: number, title: string, description: string, date: Date, imageId: string, categoryId: number, tags: []){
+    public async updateContent(object: any){
         try{
             const adminContent = new AdminContent();
-            const result = adminContent.updateContent(contentId, title, description, date, imageId, categoryId, tags);
+            const result = adminContent.updateContent(object);
             return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);

@@ -88,11 +88,10 @@ export class AdminUser{
     METHOD MAKE PURCHASE
     PARAMS: userId, purchaseId, state
     */
-    makePurchase(purchaseId: number, purchaseDetails: string, products: any[], voucher: string, aproxDeliveryDate: Date, shippingAdress: any, shippingPrice: number, userId: number, state: string){
+    makePurchase(object: any){
         try {
             const daoPurchase = new DAOPurchase();
-            const dtoPurchase = new DTOPurchase(purchaseId, purchaseDetails, products, voucher, aproxDeliveryDate, shippingAdress, shippingPrice, userId, state);
-            const purchase = daoPurchase.create(dtoPurchase);
+            const purchase = daoPurchase.create(object);
             return purchase;
         } catch (error) {
             console.log("Error", error);

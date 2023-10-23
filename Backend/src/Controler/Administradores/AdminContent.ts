@@ -6,11 +6,10 @@ import { API_URL } from '../config';
 export class AdminContent{
     constructor(){}
 
-    public async addContent(contentId: number, title: string, description: string, date: Date, imageId: string, categoryId: number, tags: []){
+    public async addContent(object: any){
         try {
             const daoUser = new DAOContent();
-            const dtoContent = new DTOContent(contentId, title, description, date, imageId, categoryId, tags)
-            const user = daoUser.create(dtoContent);
+            const user = daoUser.create(object);
             return user;
         } catch (error) {
             console.log("Error", error);
@@ -40,11 +39,10 @@ export class AdminContent{
         
     }
 
-    public async updateContent(contentId: number, title: string, description: string, date: Date, imageId: string, categoryId: number, tags: []){
+    public async updateContent(object: any){
         try {
             const daoContent = new DAOContent();
-            const dtoContent = new DTOContent(contentId, title, description, date, imageId, categoryId, tags)
-            const content = daoContent.update(dtoContent);
+            const content = daoContent.update(object);
             return content;
         } catch (error) {
             console.log("Error", error);
