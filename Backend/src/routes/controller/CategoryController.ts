@@ -41,16 +41,36 @@ export const deleteCategory: RequestHandler = async (req, res) => {
 }
 
 
-export const getSubCategories: RequestHandler = (req, res) => { 
-    res.status(200).json({ message: 'Hello World' })
+export const getSubCategories: RequestHandler = async (req, res) => { 
+    const mainController = new MainController();
+    const object = req.body;
+    const categoryPromise = mainController.getSubCategories(object.categoryId);
+    const category = await categoryPromise;
+    res.status(200).json(category)
 }
 
-export const addSubCategory: RequestHandler = (req, res) => { 
-    res.status(200).json({ message: 'Hello World' })
+export const getSubcategory: RequestHandler = async (req, res) => { 
+    const mainController = new MainController();
+    const object = req.body;
+    const categoryPromise = mainController.getSubcategory(object.categoryId, object.subcategoryId);
+    const category = await categoryPromise;
+    res.status(200).json(category)
 }
 
-export const deleteSubCategory: RequestHandler = (req, res) => { 
-    res.status(200).json({ message: 'Hello World' })
+export const addSubCategory: RequestHandler = async (req, res) => { 
+    const mainController = new MainController();
+    const object = req.body;
+    const categoryPromise = mainController.addSubCategory(object.categoryId, object.subcategory);
+    const category = await categoryPromise;
+    res.status(200).json(category)
+}
+
+export const deleteSubCategory: RequestHandler = async (req, res) => { 
+    const mainController = new MainController();
+    const object = req.body;
+    const categoryPromise = mainController.deleteSubCategory(object.categoryId, object.subcategoryId);
+    const category = await categoryPromise;
+    res.status(200).json(category)
 }
 
 export const updateSubCategory: RequestHandler = (req, res) => { 
