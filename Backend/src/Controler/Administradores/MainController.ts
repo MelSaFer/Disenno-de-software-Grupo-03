@@ -18,6 +18,16 @@ import { API_URL } from '../config';
 
     constructor(){}
 
+    public async addUser(object: any){
+        try{
+            const adminUser = new AdminUser();
+            const result = await adminUser.addUser(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    }
+
     public async getInfoUser(id: number){
         try{
             console.log(id);

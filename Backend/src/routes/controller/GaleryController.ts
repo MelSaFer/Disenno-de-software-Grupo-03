@@ -13,22 +13,22 @@ export const addContent : RequestHandler = async (req, res) => {
     }
     //Verify if the body has the correct structure
     if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryId") || !body.hasOwnProperty("tags")){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "1-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
     if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryId != "number"){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "2-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the tags
     if(!Array.isArray(body.tags)){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "3-Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
     if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryId <= 0){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "4-Bad Request: Body is not correct"});
         return;
     }
     

@@ -12,6 +12,21 @@ export class AdminUser{
 
     }
 
+    /*
+    METHOD ADD USER
+    PARAMS: userId, email, roleType, cart
+    */
+    addUser(object: any){
+        try {
+            const daoUser = new DAOUser();
+            const user = daoUser.create(object);
+            return user;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
+    }
+
     getInfoUser(id: number){
         try {
             const daoUser = new DAOUser();

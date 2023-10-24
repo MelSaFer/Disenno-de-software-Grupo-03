@@ -127,17 +127,33 @@ export class DAOContent implements DAO{
             });
 
             //Check if the content already exists
-            const content = await collection.findOne({ contentId: object.contentId });
+            const content = await collection.findOne({ title: object.title });
             if (content){
-                console.log("El contenido " +  object.contentId + " ya existe");
+                console.log("El contenido " +  object.title + " ya existe");
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 return false;
             }
-            
+          
             //Insert the product in the database, convert it to JSON and parse it
             const newContentJson = JSON.stringify(newContent);
             const newContentparsed = JSON.parse(newContentJson);
             await collection.insertOne(newContentparsed);
+
+            //update id with the auto-generated id
+            const records = await collection.find().sort({contentId:-1});
+            //get only the ObjectId
+            const doc = await records.next();
+            if (!doc) {
+                console.log("No se encontró el content para actualizar");
+                return false;
+            }
+            const objectId = doc._id;
+            //convert ObjectId to string
+            const stringObjectId = objectId.toString();
+
+            //update the contentId with the stringObjectId
+            const result = await collection.updateOne({ _id: objectId }, { $set: { contentId: stringObjectId } });
+
             console.log("Se inserto: " + newContentJson);
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             return true;

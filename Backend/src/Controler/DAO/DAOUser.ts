@@ -209,19 +209,15 @@ export class DAOUser implements DAO{
 
             let newUser = new User({
                 userId: object.userId,
+                email: object.email,
                 roleType: object.roleType,
                 cart: object.cart
             });
-
-            const user = await collection.findOne({ userId: object.userId });
-            if (user){
-                console.log("El usuario " +  object.userId + " ya existe");
-                return false;
-            }
             
             const newUserJson = JSON.stringify(newUser);
             const newUserparsed = JSON.parse(newUserJson);
             await collection.insertOne(newUserparsed);
+            
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             return true;
         } catch(err){

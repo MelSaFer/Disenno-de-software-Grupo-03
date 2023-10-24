@@ -6,10 +6,11 @@ const router = Router();
 import * as userController from "./controller/UserController"
 
 //router.get('/profile', userController.getInfo)
-router.get('/infoUser', userController.getInfoUser)
-router.get('/getCart', userController.getCart)
-router.get('/getPurchaseHistory', userController.getPurchaseHistory)
+router.post('/infoUser', userController.getInfoUser)
+router.post('/getCart', userController.getCart)
+router.post('/getPurchaseHistory', userController.getPurchaseHistory)
 
+router.post('/addUser', userController.addUser);
 router.post('/updateCart', userController.updateCart)
 
 router.put('/updatePurchaseState', userController.updatePurchaseState)
