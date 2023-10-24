@@ -10,7 +10,7 @@ import {DATABASE_NAME, CATEGORY_COLLECTION} from "../config";
   to the category
  METHODS:
     - getAll()
-    - getObject(categoryId: unknown)
+    - getObject(categoryName: unknown)
     - create(object: any)
     - update(object: any)
     - delete(object: unknown)
@@ -68,21 +68,21 @@ export class DAOCategory implements DAO{
         - Category if the Category was found
         - false if the Category was not found
     */
-    async getObject(categoryId: unknown){
+    async getObject(categoryName: unknown){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CATEGORY_COLLECTION);
             //Get the Category from the database, using the code
-            const Category = await collection.findOne({ categoryId: categoryId });
+            const Category = await collection.findOne({ categoryName: categoryName });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the category was found, return it, else return false
             if (Category) {
                 console.log("Se encontro: " + JSON.stringify(Category, null, 2));
                 return Category;
             } else {
-                console.log("No se encontró el categoria con el código: " + categoryId);
+                console.log("No se encontró el categoria con el código: " + categoryName);
                 return false; 
             }
 
@@ -112,16 +112,16 @@ export class DAOCategory implements DAO{
 
             //Create a new category with the object received
             let newCategory = new Category({
-                categoryId: object.categoryId,
-                name: object.name,
+                //categoryName: object.categoryName,
+                categoryName: object.categoryName,
                 subcategories: object.subcategories
             });
 
             //Check if the category already exists
-            const category = await collection.findOne({ categoryId: object.categoryId });
+            const category = await collection.findOne({ categoryName: object.categoryName });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             if (category){
-                console.log("El categoria " +  object.categoryId + " ya existe");
+                console.log("El categoria " +  object.categoryName + " ya existe");
                 return false;
             }
             
@@ -159,27 +159,27 @@ export class DAOCategory implements DAO{
 
                 //Create a new product with the object received
                 let updatedCategory = new Category({
-                    categoryId: object.categoryId,
-                    name: object.name,
+                    //categoryName: object.categoryName,
+                    categoryName: object.categoryName,
                     subcategories: object.subcategories
                 });
 
                 //Verify existence of the category
-                const category = await collection.findOne({ categoryId: updatedCategory.categoryId });
+                const category = await collection.findOne({ categoryName: updatedCategory.categoryName });
                 if (!category){
-                    console.log("El category " +  updatedCategory.categoryId + " no existe");
+                    console.log("El category " +  updatedCategory.categoryName + " no existe");
                     return false;
                 }
 
                 //Create the update object for updating the category
                 const InfoToUpdate = {
                     $set: {
-                        categoryId: updatedCategory.categoryId,
-                        name: updatedCategory.name,
+                        //categoryName: updatedCategory.categoryName,
+                        categoryName: updatedCategory.categoryName,
                         subcategories: updatedCategory.subcategories
                         }
                 };
-                const result = await collection.updateOne({ categoryId: updatedCategory.categoryId }, InfoToUpdate); //Update the product in the database
+                const result = await collection.updateOne({ categoryName: updatedCategory.categoryName }, InfoToUpdate); //Update the product in the database
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 //Check if the product was updated  
                 if (result.modifiedCount > 0) {
@@ -205,21 +205,21 @@ export class DAOCategory implements DAO{
         - true if the product was deleted
         - false if the product was not deleted
     */
-    async delete(categoryId: unknown){
+    async delete(categoryName: unknown){
         try{
-            console.log("code: " + categoryId);
+            console.log("code: " + categoryName);
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CATEGORY_COLLECTION);
 
             //Verify existence of the category
-            const category = await collection.findOne({ categoryId: categoryId });
+            const category = await collection.findOne({ categoryName: categoryName });
             if (!category){
-                console.log("El category " +  categoryId + " no existe");
+                console.log("El category " +  categoryName + " no existe");
                 return false;
             }
             //Delete the category in the database
-            const result = await collection.deleteOne({ categoryId: categoryId });
+            const result = await collection.deleteOne({ categoryName: categoryName });
             
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the category was deleted
@@ -242,32 +242,32 @@ export class DAOCategory implements DAO{
     GET SUBCATEGORY METHOD
     Gets a subcateogry in the database
     PARAMS:
-        - categoryId:  Number
-        - subcategoryId: Number
+        - categoryName:  Number
+        - subcategoryName: Number
     RETURNS:
         - subcategory if the subcategory was found
         - false if the subcategory was not found
     */
-    async getSubcategory(categoryId: unknown, subcategoryId: unknown){
+    async getSubcategory(categoryName: unknown, subcategoryName: unknown){
         try{
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CATEGORY_COLLECTION);
             //Get the Category from the database, using the code
-            const Category = await collection.findOne({ categoryId: categoryId });
+            const Category = await collection.findOne({ categoryName: categoryName });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the category was found, return it, else return false
             if (Category) {
                 let subcategories = Category.subcategories;
-                let subcategory = subcategories.find((subcategory: any) => subcategory.subcategoryId === subcategoryId);
+                let subcategory = subcategories.find((subcategory: any) => subcategory.subcategoryName === subcategoryName);
                 //if the subcategory was not found
                 if (!subcategory){ 
-                    console.log("No se encontró la subcategoría con el código: " + subcategoryId);
+                    console.log("No se encontró la subcategoría con el código: " + subcategoryName);
                     return false; 
                 }
                 return subcategory;
             } else {
-                console.log("No se encontró el sub categoria con el código: " + subcategoryId);
+                console.log("No se encontró el sub categoria con el código: " + subcategoryName);
                 return false; 
             }
 
@@ -282,26 +282,26 @@ export class DAOCategory implements DAO{
     GET SUBCATEGORIES METHOD
     Gets all the subcategories in of a category in the database
     PARAMS:
-        - categoryId:  Number
+        - categoryName:  Number
     RETURNS:
         - subcategories if the subcategories were found
         - false if the subcategories were not found
     */
-    async getSubcategories(categoryId: unknown){
+    async getSubcategories(categoryName: unknown){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CATEGORY_COLLECTION);
             //Get the Category from the database, using the code
-            const Category = await collection.findOne({ categoryId: categoryId });
+            const Category = await collection.findOne({ categoryName: categoryName });
             // If the category was found, return it, else return false
             if (Category) {
                 let subcategories = Category.subcategories;
                 console.log("Se encontro la subcategoría: " + JSON.stringify(subcategories, null, 2));
                 return subcategories;
             } else {
-                console.log("No se encontró el subcategoria con el código: " + categoryId);
+                console.log("No se encontró el subcategoria con el código: " + categoryName);
                 return false; 
             }
 
@@ -316,29 +316,29 @@ export class DAOCategory implements DAO{
     ADD SUBCATEGORY METHOD
     Adds a subcateogry in a category in the database
     PARAMS:
-        - categoryId:  Number
+        - categoryName:  Number
         - object: Subcategory
     RETURNS:
         - true if the subcategory was added
         - false if the subcategory was not added
     */
-    async addSubcategory(categoryId: unknown, object: any){
+    async addSubcategory(categoryName: unknown, object: any){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CATEGORY_COLLECTION);
             //Check if the category already exists
-            const category = await collection.findOne({ categoryId: categoryId});
+            const category = await collection.findOne({ categoryName: categoryName});
             if (category){
                 //Check if the subcategory already exists
-                const subcategory = await this.getSubcategory(categoryId, object.subcategoryId);
+                const subcategory = await this.getSubcategory(categoryName, object.subcategoryName);
                 if(subcategory == false){ //if the subcategory does not exist
                     let newSubcategories = category.subcategories;
-                    let newSubcategory = { subcategoryId: object.subcategoryId, name: object.name };
+                    let newSubcategory = { subcategoryName: object.subcategoryName};
                     newSubcategories.push(newSubcategory);
-                    console.log("La subcategoría " + object.subcategoryId + " se agregó a la categoría " + categoryId);
-                    const result = await collection.updateOne({ categoryId: categoryId}, { $set: { subcategories: newSubcategories } });
+                    console.log("La subcategoría " + object.subcategoryName + " se agregó a la categoría " + categoryName);
+                    const result = await collection.updateOne({ categoryName: categoryName}, { $set: { subcategories: newSubcategories } });
                     return true;
                 }
                 return false;
@@ -354,13 +354,13 @@ export class DAOCategory implements DAO{
     DELETE SUBCATEGORY METHOD
     Deletes a subcateogry in a category in the database
     PARAMS:
-        - categoryId:  Number
-        - subcategoryId: Number
+        - categoryName:  Number
+        - subcategoryName: Number
     RETURNS:
         - true if the subcategory was deleted
         - false if the subcategory was not deleted
     */
-    async deleteSubcategory(categoryId: unknown, subcategoryId: unknown){
+    async deleteSubcategory(categoryName: unknown, subcategoryName: unknown){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
@@ -368,26 +368,26 @@ export class DAOCategory implements DAO{
             const collection = db.collection(CATEGORY_COLLECTION);
 
             //Check if the category already exists
-            const category = await collection.findOne({ categoryId: categoryId});
+            const category = await collection.findOne({ categoryName: categoryName});
             if (category){
                 //Check if the subcategory already exists
-                const subcategory = await this.getSubcategory(categoryId, subcategoryId);
+                const subcategory = await this.getSubcategory(categoryName, subcategoryName);
                 if(subcategory){
-                    const newSubcategories = category.subcategories.filter((subcategory : any) => subcategory.subcategoryId !== subcategoryId);
+                    const newSubcategories = category.subcategories.filter((subcategory : any) => subcategory.subcategoryName !== subcategoryName);
                     //check if a subcategory was deleted
                     if (newSubcategories.length == category.subcategories.length) {
-                        console.log("No se encontró la subcategoría " + subcategoryId + " en la categoría " + categoryId);
+                        console.log("No se encontró la subcategoría " + subcategoryName + " en la categoría " + categoryName);
                         return false;
                     }
-                    console.log("La subcategoría " + subcategoryId + " se elmino de la categoría " + categoryId);
-                    const result = await collection.updateOne({ categoryId: categoryId}, { $set: { subcategories: newSubcategories } });
+                    console.log("La subcategoría " + subcategoryName + " se elmino de la categoría " + categoryName);
+                    const result = await collection.updateOne({ categoryName: categoryName}, { $set: { subcategories: newSubcategories } });
                     return true;
                 } else {
-                    console.log("No se encontró la subcategoría " + subcategoryId + " en la categoría " + categoryId);
+                    console.log("No se encontró la subcategoría " + subcategoryName + " en la categoría " + categoryName);
                     return false;
                 }
             } else {
-                console.log("No se encontró la categoría " + categoryId);
+                console.log("No se encontró la categoría " + categoryName);
                 return false;
             }
 
@@ -401,13 +401,13 @@ export class DAOCategory implements DAO{
     UPDATE SUBCATEGORY METHOD
     Updates a subcateogry in a category in the database
     PARAMS:
-        - categoryId:  Number
+        - categoryName:  Number
         - object: Subcategory
     RETURNS:
         - true if the subcategory was updated
         - false if the subcategory was not updated
     */
-    async updateSubcategory(categoryId: unknown, object: any){
+    async updateSubcategory(categoryName: unknown, object: any){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
@@ -415,26 +415,26 @@ export class DAOCategory implements DAO{
             const collection = db.collection(CATEGORY_COLLECTION);
 
             //Check if the category already exists
-            const category = await collection.findOne({ categoryId: categoryId});
+            const category = await collection.findOne({ categoryName: categoryName});
             if (category){
                 //Check if the subcategory already exists
-                const subcategory = await this.getSubcategory(categoryId, object.subcategoryId);
+                const subcategory = await this.getSubcategory(categoryName, object.subcategoryName);
                 if(subcategory){
                     const newSubcategories = category.subcategories;
                     for(let i = 0; i < newSubcategories.length; i++){
-                        if(newSubcategories[i].subcategoryId == object.subcategoryId){
-                            newSubcategories[i].name = object.name;
+                        if(newSubcategories[i].subcategoryName == object.subcategoryName){
+                            newSubcategories[i].subcategoryName = object.subcategoryName;
                             break;
                         }
                     }
-                    const result = await collection.updateOne({ categoryId: categoryId}, { $set: { subcategories: newSubcategories } });
+                    const result = await collection.updateOne({ categoryName: categoryName}, { $set: { subcategories: newSubcategories } });
                     return true;
                 } else {
-                    console.log("No se encontró la subcategoría " + object.subcategoryId + " en la categoría " + categoryId);
+                    console.log("No se encontró la subcategoría " + object.subcategoryName + " en la categoría " + categoryName);
                     return false;
                 }
             } else {
-                console.log("No se encontró la categoría " + categoryId);
+                console.log("No se encontró la categoría " + categoryName);
                 return false;
             }
         }catch(err){

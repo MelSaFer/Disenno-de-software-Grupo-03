@@ -53,15 +53,15 @@ export const ContentSchema = new mongoose.Schema({
 
 //CATEGORY SCHEMA------------------------------------------------------------------------------------------------------------------------------
 export const CategorySchema = new mongoose.Schema({
-    categoryId: { type: Number, required: true },
-    name: { type: String, required: true },
+    //categoryId: { type: Number, required: true },
+    categoryName: { type: String, required: true },
     subcategories: { type: Array, required: true }
 });
 
 //CATEGORY SCHEMA------------------------------------------------------------------------------------------------------------------------------
 export const SubcategorySchema = new mongoose.Schema({
-    subcategoryId: { type: Number, required: true },
-    name: { type: String, required: true },
+    //subcategoryId: { type: Number, required: true },
+    subcategoryName: { type: String, required: true },
 });
 
 
