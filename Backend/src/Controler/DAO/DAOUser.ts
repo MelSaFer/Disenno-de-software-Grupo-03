@@ -121,7 +121,7 @@ export class DAOUser implements DAO{
                     let product = await daoProduct.getObject(productId);
 
                     if(product){
-                        let doc = {"productDescription": product.description, "quantity": quantity};
+                        let doc = {"name": product.name, "quantity": quantity};
                         newCart.push(doc);
                     }
                     else{

@@ -29,17 +29,17 @@ export const addCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("name") ||  !body.hasOwnProperty("subcategories")){
+    if(!body.hasOwnProperty("categoryName") ||  !body.hasOwnProperty("subcategories")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number" || typeof body.name != "string" || !Array.isArray(body.subcategories)){
+    if(typeof body.categoryName != "string" || !Array.isArray(body.subcategories)){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0 || body.name.length == 0){
+    if(body.categoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
@@ -64,17 +64,17 @@ export const updateCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("name") ||  !body.hasOwnProperty("subcategories")){
+    if(!body.hasOwnProperty("categoryName") ||  !body.hasOwnProperty("subcategories")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number" || typeof body.name != "string" || !Array.isArray(body.subcategories)){
+    if(typeof body.categoryName != "string" || !Array.isArray(body.subcategories)){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0 || body.name.length == 0){
+    if(body.categoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
@@ -98,22 +98,22 @@ export const getCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId")){
+    if(!body.hasOwnProperty("categoryName")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number"){
+    if(typeof body.categoryName != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0){
+    if(body.categoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const categoryPromise = mainController.getCategory(body.categoryId);
+    const categoryPromise = mainController.getCategory(body.categoryName);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -132,22 +132,22 @@ export const deleteCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId")){
+    if(!body.hasOwnProperty("categoryName")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number"){
+    if(typeof body.categoryName != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0){
+    if(body.categoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const categoryPromise = mainController.deleteCategory(body.categoryId);
+    const categoryPromise = mainController.deleteCategory(body.categoryName);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -166,22 +166,22 @@ export const getSubCategories: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId")){
+    if(!body.hasOwnProperty("categoryName")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number"){
+    if(typeof body.categoryName != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0){
+    if(body.categoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const categoryPromise = mainController.getSubCategories(body.categoryId);
+    const categoryPromise = mainController.getSubCategories(body.categoryName);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -200,22 +200,22 @@ export const getSubcategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategoryId")){
+    if(!body.hasOwnProperty("categoryName") || !body.hasOwnProperty("subcategoryName")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number" || typeof body.subcategoryId != "number"){
+    if(typeof body.categoryName != "string" || typeof body.subcategoryName != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0 || body.subcategoryId <= 0){
+    if(body.categoryName.length == 0 || body.subcategoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const categoryPromise = mainController.getSubcategory(body.categoryId, body.subcategoryId);
+    const categoryPromise = mainController.getSubcategory(body.categoryName, body.subcategoryName);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -234,22 +234,22 @@ export const addSubCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategoryId")){
+    if(!body.hasOwnProperty("categoryName") || !body.hasOwnProperty("subcategoryName")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number" || typeof body.subcategoryId != "number"){
+    if(typeof body.categoryName != "string" || typeof body.subcategoryName != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0 || body.subcategoryId <= 0){
+    if(body.categoryName.length == 0 || body.subcategoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const categoryPromise = mainController.addSubCategory(body.categoryId, body.subcategory);
+    const categoryPromise = mainController.addSubCategory(body.categoryName, body.subcategory);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -268,22 +268,22 @@ export const deleteSubCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategoryId")){
+    if(!body.hasOwnProperty("categoryName") || !body.hasOwnProperty("subcategoryName")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number" || typeof body.subcategoryId != "number"){
+    if(typeof body.categoryName != "string" || typeof body.subcategoryName != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0 || body.subcategoryId <= 0){
+    if(body.categoryName.length == 0 || body.subcategoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const categoryPromise = mainController.deleteSubCategory(body.categoryId, body.subcategoryId);
+    const categoryPromise = mainController.deleteSubCategory(body.categoryName, body.subcategoryName);
     const category = await categoryPromise;
     res.status(200).json(category)
 }
@@ -302,22 +302,22 @@ export const updateSubCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryId") || !body.hasOwnProperty("subcategory")){
+    if(!body.hasOwnProperty("categoryName") || !body.hasOwnProperty("subcategory")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryId != "number" || typeof body.subcategory.name != "string" || typeof body.subcategory.subcategoryId != "number"){
+    if(typeof body.categoryName != "string" || typeof body.subcategory.subcategoryName != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryId <= 0){
+    if(body.categoryName.length == 0 || body.subcategory.subcategoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const categoryPromise = mainController.updateSubCategory(body.categoryId, body.subcategory );
+    const categoryPromise = mainController.updateSubCategory(body.categoryName, body.subcategory );
     const category = await categoryPromise;
     res.status(200).json(category)
 }
