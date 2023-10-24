@@ -63,6 +63,3 @@ export const SubcategorySchema = new mongoose.Schema({
     subcategoryId: { type: String, required: true },
     name: { type: String, required: true },
 });
-
-
-
