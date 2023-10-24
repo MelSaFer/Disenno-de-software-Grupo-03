@@ -3,18 +3,16 @@
 import { Router } from "express";
 const router = Router();
 
-import * as userController from "./controller/UserController"
+import * as userController from "./controller/UserController";
 
 //router.get('/profile', userController.getInfo)
-router.get('/infoUser', userController.getInfoUser)
-router.get('/getCart', userController.getCart)
-router.get('/getPurchaseHistory', userController.getPurchaseHistory)
+router.post("/infoUser", userController.getInfoUser);
+router.get("/getCart", userController.getCart);
+router.post("/getPurchaseHistory", userController.getPurchaseHistory);
 
-router.post('/updateCart', userController.updateCart)
+router.post("/updateCart", userController.updateCart);
 
-router.put('/updatePurchaseState', userController.updatePurchaseState)
-router.post('/makePurchase', userController.makePurchase)
-
-
+router.put("/updatePurchaseState", userController.updatePurchaseState);
+router.post("/makePurchase", userController.makePurchase);
 
 export default router;

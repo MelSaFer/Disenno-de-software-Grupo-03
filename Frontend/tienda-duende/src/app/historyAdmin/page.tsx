@@ -7,6 +7,7 @@ import axios from "axios";
 import { useEffect, useState, Fragment } from "react";
 import { BiMessageAdd } from "react-icons/bi";
 import Modal from "../../components/modal";
+import * as Routes from "../routes";
 
 const baseURL = "https://mocki.io/v1/c1e66925-19a3-4338-a5a2-3ac53d8e5e04";
 
@@ -16,9 +17,18 @@ const HistoryAdmin = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const requestData = { userId: 1 };
       try {
-        const response = await axios.get(baseURL);
-        setHistory(response.data.pedidos.reverse());
+        const result = await axios.request({
+          method: "post",
+          url: Routes.getHistory,
+          headers: { "Content-Type": "application/json" },
+          data: requestData,
+        });
+        const sorted = result.data.sort((a, b) => {
+          return b.purchaseId - a.purchaseId;
+        });
+        setHistory(sorted);
       } catch (error) {
         console.error("Error al obtener datos:", error);
       }
@@ -35,34 +45,34 @@ const HistoryAdmin = () => {
         </header>
         <main className="flex-grow ml-12 mr-12">
           {history.map((item) => (
-            <div key={item.id} className="text-yellow-900">
+            <div key={item.purchaseId} className="text-yellow-900">
               <hr className="border border-red-400 w-6/6 mx-auto my-4"></hr>
               {/* --------------------------------------------------------------------------- */}
               <div className="flex">
                 <div className="w-1/2 text-left">
                   <h1 className="text-2xl font-semibold text-red-400 mb-2">
-                    Compra {item.id}
+                    Compra {item.purchaseId}
                   </h1>
                   <div className="pl-8">
                     <h2 className="font-bold">Productos:</h2>
                     <ul className="list-disc ml-8 mb-4">
-                      {item.productos.map((product) => (
-                        <li key={product.nombre}>
-                          {product.nombre} [x{product.cantidad}]
+                      {item.products.map((product) => (
+                        <li key={product.productId}>
+                          {product.productId} [x{product.quantity}]
                         </li>
                       ))}
                     </ul>
                     <h2 className="mb-3">
-                      <b>Total:</b> {item.precio}
+                      <b>Total:</b> {item.shippingPrice}
                     </h2>
                     <h2 className="mb-3">
-                      <b>Direccion:</b> {item.direccion_entrega}
+                      <b>Direccion:</b> {item.shippingAdress}
                     </h2>
                     <h2 className="mb-3">
-                      <b>Fecha:</b> {item.fecha_entrega}
+                      <b>Fecha:</b> {item.aproxDeliveryDate}
                     </h2>
                     <h2 className="mb-3">
-                      <b>Cliente:</b> {item.cliente}
+                      <b>Cliente:</b> {item.userId}
                     </h2>
                     <button
                       className="bg-red-500 text-white p-2 border rounded-full hover:bg-red-400"
@@ -86,7 +96,7 @@ const HistoryAdmin = () => {
                 </div>
                 <div className="w-1/2 text-right pr-10">
                   <h1 className="text-red-400 font-semibold text-2xl pb-10">
-                    Estado: {item.estado}
+                    Estado: {item.state}
                   </h1>
                   <div className="flex flex-col justify-center items-end">
                     <button className="bg-red-500 text-white p-2 border rounded-full w-[200px] mb-2 hover:bg-red-400">
