@@ -16,7 +16,7 @@ const UserInfo = () => {
       try {
         const result = await axios.request({
           method: "post",
-          url: Routes.getHistory,
+          url: Routes.getUserInfo,
           headers: { "Content-Type": "application/json" },
           data: requestData,
         });

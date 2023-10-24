@@ -7,7 +7,7 @@ import * as userController from "./controller/UserController";
 
 //router.get('/profile', userController.getInfo)
 router.post("/infoUser", userController.getInfoUser);
-router.get("/getCart", userController.getCart);
+router.post("/getCart", userController.getCart);
 router.post("/getPurchaseHistory", userController.getPurchaseHistory);
 
 router.post("/updateCart", userController.updateCart);

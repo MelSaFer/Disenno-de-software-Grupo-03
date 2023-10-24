@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Footer from "../../components/footer";
 import Navigation from "../../components/Navbar";
 import Navbar2 from "@/src/components/navbar2";
+import axios from "axios";
+import * as Routes from "../routes";
 
 const ShippingInfo = () => {
   const [provincia, setProvincia] = useState("");
@@ -16,16 +18,28 @@ const ShippingInfo = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Realiza el fetch para obtener la lista de elementos
-    fetch("https://mocki.io/v1/d2409301-51ef-4c92-8822-5d3cecef023d")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data.elementos); // Almacena los elementos en el estado
-      })
-      .catch((error) => {
-        console.error("Error al obtener elementos:", error);
-      });
+    const fetchData = async () => {
+      const requestData = { userId: 1 };
+      try {
+        const result = await axios.request({
+          method: "post",
+          url: Routes.getCart,
+          headers: { "Content-Type": "application/json" },
+          data: requestData,
+        });
+        // const sorted = result.data.sort((a, b) => {
+        //   return b.purchaseId - a.purchaseId;
+        // });
+        setProducts(result.data);
+      } catch (error) {
+        console.error("Error al obtener datos:", error);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  console.log(products);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -181,7 +195,9 @@ const ShippingInfo = () => {
                         <div className="flex font-bold">
                           <ul className="list-none font-light">
                             {products.map((product) => (
-                              <li key={product.nombre}>{product.nombre}</li>
+                              <li key={product.productDescription}>
+                                {product.productDescription}
+                              </li>
                             ))}
                           </ul>
                         </div>
