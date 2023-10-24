@@ -1,6 +1,7 @@
 import {DAO} from "./DAO"
 import {ContentSchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
+import { ObjectId } from 'mongodb';
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CONTENT_COLLECTION} from "../config";
 
@@ -117,7 +118,7 @@ export class DAOContent implements DAO{
 
             //Create a new content with the object received
             let newContent = new Content({
-                contentId: object.contentId,
+                contentId: " ",
                 title: object.title,
                 description: object.description,
                 date: object.date,
@@ -140,19 +141,21 @@ export class DAOContent implements DAO{
             await collection.insertOne(newContentparsed);
 
             //update id with the auto-generated id
-            const records = await collection.find().sort({contentId:-1});
-            //get only the ObjectId
-            const doc = await records.next();
-            if (!doc) {
+            const doc = await collection.findOne({ title: object.title });
+            if (!doc){
+                console.log("El content " +  object.title + " no existe");
+                return false;
+            }
+
+            //update the contentId with the stringObjectId
+            const result = await collection.updateOne({ title: newContent.title }, { $set: { contentId: doc._id } });
+            //validate if the content was updated
+            if (result.modifiedCount > 0) {
+                console.log("Content actualizado con éxito");
+            } else {
                 console.log("No se encontró el content para actualizar");
                 return false;
             }
-            const objectId = doc._id;
-            //convert ObjectId to string
-            const stringObjectId = objectId.toString();
-
-            //update the contentId with the stringObjectId
-            const result = await collection.updateOne({ _id: objectId }, { $set: { contentId: stringObjectId } });
 
             console.log("Se inserto: " + newContentJson);
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
@@ -183,7 +186,7 @@ export class DAOContent implements DAO{
                 const Content = mongoose.model('Content', ContentSchema);
                 //Create a new product with the object received
                 let updatedContent = new Content({
-                    contentId: object.contentId,
+                    _id: object._id,
                     title: object.title,
                     description: object.description,
                     date: object.date,
@@ -192,15 +195,25 @@ export class DAOContent implements DAO{
                     tags: object.tags
                 });
                 //Verify existence of the content
-                const content = await collection.findOne({ contentId: updatedContent.contentId });
+                const content = await collection.findOne({ contentId: object._id });
                 if (!content){
-                    console.log("El content " +  updatedContent.contentId + " no existe");
+                    console.log("El content " +  object._id + " no existe");
                     return false;
                 }
+                //Verify that the title is not already taken
+                const contentRepeated = await collection.find({ title: object.title });
+                for (let doc = await contentRepeated.next(); doc != null; doc = await contentRepeated.next()) {
+                    if (doc._id != object._id){
+                        console.log("El content " +  object.title + " ya existe");
+                        return false;
+                    }
+                }
+                
+
                 //Create the update object for updating the content
                 const InfoToUpdate = {
                     $set: {
-                        contentId: object.contentId,
+                        _id: object._id,
                         title: object.title,
                         description: object.description,
                         date: object.date,
@@ -209,11 +222,11 @@ export class DAOContent implements DAO{
                         tags: object.tags
                         }
                 };
-                const result = await collection.updateOne({ contentId: updatedContent.contentId }, InfoToUpdate); //Update the product in the database
+                const result = await collection.updateOne({ contentId: object._id }, InfoToUpdate); //Update the product in the database
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 //Check if the product was updated  
                 if (result.modifiedCount > 0) {
-                    console.log("Contenido actualizado con éxito " + JSON.stringify(updatedContent, null, 2));
+                    console.log("Contenido actualizado con éxito " + JSON.stringify(object, null, 2));
                     return true;
                 } else {
                     console.log("No se encontró el contenido para actualizar o no se actualizó ningun campo");
@@ -221,8 +234,8 @@ export class DAOContent implements DAO{
                 }
             } catch(err){
                 console.log(err);
+                return false
             } //end try-catch
-            return true;
         };
 
     /*

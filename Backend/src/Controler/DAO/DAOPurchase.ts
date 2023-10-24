@@ -121,7 +121,6 @@ export class DAOPurchase implements DAO{
             
             //Create a new purchase history with the object received
             let newPurchase = new Purchase({
-                purchaseId: object.purchaseId,
                 purchaseDetails: object.purchaseDetails,
                 products: object.products,
                 voucherId : object.voucherId,   
@@ -131,18 +130,12 @@ export class DAOPurchase implements DAO{
                 userId: object.userId,
                 state: object.state
             });
-
-            //Check if the purchase history already exists
-            const purchase = await collection.findOne({ purchaseId: object.purchaseId });
-            if (purchase){
-                console.log("El historial " +  object.purchaseId + " ya existe");
-                return false;
-            }
             
             //Insert the purchase in the database, convert it to JSON and parse it
             const newPurchaseJson = JSON.stringify(newPurchase);
             const newPurchaseParsed = JSON.parse(newPurchaseJson);
             await collection.insertOne(newPurchaseParsed);
+
             console.log("Se insertó: " + newPurchaseJson);
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             return true;
