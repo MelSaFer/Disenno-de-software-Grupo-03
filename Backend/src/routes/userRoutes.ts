@@ -10,6 +10,7 @@ router.post("/infoUser", userController.getInfoUser);
 router.post("/getCart", userController.getCart);
 router.post("/getPurchaseHistory", userController.getPurchaseHistory);
 
+router.post("/addUser", userController.addUser);
 router.post("/updateCart", userController.updateCart);
 
 router.put("/updatePurchaseState", userController.updatePurchaseState);

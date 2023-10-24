@@ -13,26 +13,25 @@ export const addContent : RequestHandler = async (req, res) => {
     }
     //Verify if the body has the correct structure
     if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryId") || !body.hasOwnProperty("tags")){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "1-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryId != "number"){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+    if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryId != "string"){
+        res.status(400).json({msg: "2-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the tags
     if(!Array.isArray(body.tags)){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "3-Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryId <= 0){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+    if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryId.length == 0){
+        res.status(400).json({msg: "4-Bad Request: Body is not correct"});
         return;
     }
-    
-    // !! eliminar contentId
+
     const contentPromise = mainController.addContent(body);
     const content = await contentPromise; // Espera a que la promesa se resuelva
 
@@ -51,22 +50,22 @@ export const deleteContent : RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("contentId")){
+    if(!body.hasOwnProperty("_id")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.contentId != "number"){
+    if(typeof body._id != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.contentId <= 0){
+    if(body._id.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const contentPromise = mainController.deleteContent(body.contentId);
+    const contentPromise = mainController.deleteContent(body._id);
     const content = await contentPromise; // Espera a que la promesa se resuelva
 
     console.log("This is content: "+ content);
@@ -84,12 +83,12 @@ export const updateContent : RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryId") || !body.hasOwnProperty("tags")){
+    if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryId") || !body.hasOwnProperty("tags") || !body.hasOwnProperty("_id")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryId != "number"){
+    if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryId != "string" || typeof body._id != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
@@ -99,7 +98,7 @@ export const updateContent : RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryId <= 0){
+    if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryId.length == 0 || body._id.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
@@ -123,22 +122,22 @@ export const getContentById : RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("contentId")){
+    if(!body.hasOwnProperty("_id")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.contentId != "number"){
+    if(typeof body._id != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.contentId <= 0){
+    if(body._id.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
 
-    const contentPromise = mainController.getContent(body.contentId);
+    const contentPromise = mainController.getContent(body._id);
     const content = await contentPromise; // Espera a que la promesa se resuelva
 
     console.log("This is content: "+ content);

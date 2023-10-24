@@ -156,16 +156,17 @@ export class DAOProduct implements DAO{
 
             //Create a new product with the object received
             let newProduct = new Product({
-                productId: object.productId,
+                productId: "",
+                name: object.name,
                 description: object.description,
                 cuantityAvailable: object.cuantityAvailable,
                 imageId: object.imageId,
                 price: object.price
             });
             //Check if the product already exists
-            const product = await collection.findOne({ productId: newProduct.productId });
+            const product = await collection.findOne({ name: newProduct.name });
             if (product){
-                console.log("El producto " +  object.productId + " ya existe");
+                console.log("El producto " +  object.name + " ya existe");
                 SingletonMongo.getInstance().disconnect_();
                 return false;
             }
@@ -173,6 +174,16 @@ export class DAOProduct implements DAO{
             const newProductJson = JSON.stringify(newProduct);
             const newProductparsed = JSON.parse(newProductJson);
             await collection.insertOne(newProductparsed);
+
+            
+            const theProduct = await collection.findOne({ name: newProduct.name });
+            if(!theProduct){
+                console.log("ERROR AL INSERTAR EL PRODUCTO");
+                SingletonMongo.getInstance().disconnect_();
+                return false;
+            }
+            //update the contentId with the stringObjectId
+            const result = await collection.updateOne({ name: object.name }, { $set: { productId: theProduct._id } });
             console.log("Se inserto: " + newProductJson);
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             return true;
@@ -200,31 +211,43 @@ export class DAOProduct implements DAO{
             const collection = db.collection(PRODUCT_COLLECTION);
             //Get the model from the database with the schema
             const Product = mongoose.model('Product', ProductSchema);
-            console.log(JSON.stringify(object.productId));
+            //console.log(JSON.stringify(object.productId));
             //Create a new product with the object received
             let updatedProduct = new Product({
                 productId: object.productId,
+                name: object.name,
                 description: object.description,
                 cuantityAvailable: object.cuantityAvailable,
                 imageId: object.imageId,
                 price: object.price
             });
-
+            //Check if the product exists
             const product_ = await collection.findOne({productId: object.productId});
             if (!product_){
                 console.log("El producto " +  JSON.stringify(object.productId) + " no existe");
                 return false;
             }
+            
+            //Verify that the name is not already taken
+            const contentRepeated = await collection.find({ name: object.name });
+            for (let doc = await contentRepeated.next(); doc != null; doc = await contentRepeated.next()) {
+                if (doc._id != object._id){
+                    console.log("El producto " +  JSON.stringify(object.title) + " ya existe");
+                    return false;
+                }
+            }
+
             //Create the update object for updating the product
             const InfoToUpdate = {
                 $set: {
                     description: updatedProduct.description,
+                    name: updatedProduct.name,
                     cuantityAvailable: updatedProduct.cuantityAvailable,
                     imageId: updatedProduct.imageId,
                     price: updatedProduct.price
                     }
             };
-            const result = await collection.updateOne({ productId: updatedProduct.productId }, InfoToUpdate); //Update the product in the database
+            const result = await collection.updateOne({ productId: object.productId }, InfoToUpdate); //Update the product in the database
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was updated  
             if (result.modifiedCount > 0) {

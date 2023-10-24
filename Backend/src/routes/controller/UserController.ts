@@ -23,13 +23,13 @@ export const getInfoUser: RequestHandler = async (req, res) => {
         return;
     }
     //Verify type of the content
-    if(typeof body.userId != "number"){
+    if(typeof body.userId != "string"){
         res.status(400).json({msg: "Bad Request: userId is not a number"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId <= 0){
-        res.status(400).json({msg: "Bad Request: userId is not a valid number"});
+    if(body.userId.length == 0){
+        res.status(400).json({msg: "Bad Request: userId is not a valid id"});
         return;
     }
     
@@ -62,13 +62,13 @@ export const updateCart: RequestHandler = async (req, res) => {
         return;
     }
     //Verify type of the content
-    if(typeof body.userId != "number" || typeof body.productId != "number" || typeof body.quantity != "number"){
-        res.status(400).json({msg: "Bad Request: userId, productId or quantity are not a number"});
+    if(typeof body.userId != "string" || typeof body.productId != "string" || typeof body.quantity != "number"){
+        res.status(400).json({msg: "Bad Request: userId, productId or quantity are not a number/string"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId <= 0 || body.productId <= 0 || body.quantity <= 0){
-        res.status(400).json({msg: "Bad Request: userId, productId or quantity are not a valid number"});
+    if(body.userId.length == 0 || body.productId.length == 0 || body.quantity <= 0){
+        res.status(400).json({msg: "Bad Request: userId, productId or quantity are not a valid input"});
         return;
     }
 
@@ -98,13 +98,13 @@ export const getCart: RequestHandler = async (req, res) => {
         return;
     }
     //Verify type of the content
-    if(typeof body.userId != "number"){
+    if(typeof body.userId != "string"){
         res.status(400).json({msg: "Bad Request: userId is not a number"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId <= 0){
-        res.status(400).json({msg: "Bad Request: userId is not a valid number"});
+    if(body.userId.length == 0){
+        res.status(400).json({msg: "Bad Request: userId is not a valid id"});
         return;
     }
 
@@ -133,13 +133,13 @@ export const getPurchaseHistory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify type of the content
-    if(typeof body.userId != "number"){
+    if(typeof body.userId != "string"){
         res.status(400).json({msg: "Bad Request: userId is not a number"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId <= 0){
-        res.status(400).json({msg: "Bad Request: userId is not a valid number"});
+    if(body.userId.length == 0){
+        res.status(400).json({msg: "Bad Request: userId is not a valid id"});
         return;
     }
 
@@ -169,13 +169,13 @@ export const updatePurchaseState: RequestHandler = async (req, res) => {
         return;
     }
     //Verify type of the content
-    if(typeof body.userId != "number" || typeof body.purchaseId != "number" || typeof body.state != "string"){
-        res.status(400).json({msg: "Bad Request: userId, purchaseId or state are not a number"});
+    if(typeof body.userId != "string" || typeof body.purchaseId != "string" || typeof body.state != "string"){
+        res.status(400).json({msg: "Bad Request: userId, purchaseId or state are not a string"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId <= 0 || body.purchaseId <= 0){
-        res.status(400).json({msg: "Bad Request: userId or purchaseId are not a valid number"});
+    if(body.userId.length == 0 || body.purchaseId.length == 0){
+        res.status(400).json({msg: "Bad Request: userId or purchaseId are not a valid string"});
         return;
     }
 
@@ -200,12 +200,12 @@ export const makePurchase: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("purchaseId") || !body.hasOwnProperty("purchaseDetails") || !body.hasOwnProperty("products") || !body.hasOwnProperty("voucherId") || !body.hasOwnProperty("aproxDeliveryDate") || !body.hasOwnProperty("shippingAddress") || !body.hasOwnProperty("shippingPrice") || !body.hasOwnProperty("userId") || !body.hasOwnProperty("state")){
+    if(!body.hasOwnProperty("purchaseDetails") || !body.hasOwnProperty("products") || !body.hasOwnProperty("voucherId") || !body.hasOwnProperty("aproxDeliveryDate") || !body.hasOwnProperty("shippingAddress") || !body.hasOwnProperty("shippingPrice") || !body.hasOwnProperty("userId") || !body.hasOwnProperty("state")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.purchaseId != "number" || typeof body.purchaseDetails != "string" || typeof body.voucherId != "string" || typeof body.aproxDeliveryDate != "string" || typeof body.shippingAddress != "string" || typeof body.shippingPrice != "number" || typeof body.userId != "number" || typeof body.state != "string"){
+    if(typeof body.purchaseDetails != "string" || typeof body.voucherId != "string" || typeof body.aproxDeliveryDate != "string" || typeof body.shippingAddress != "string" || typeof body.shippingPrice != "number" || typeof body.userId != "string" || typeof body.state != "string"){
         res.status(400).json({msg: "Bad Request: purchaseId, purchaseDetails, voucherId, aproxDeliveryDate, shippingAdress, shippingPrice, userId or state are not a number"});
         return;
     }
@@ -215,8 +215,8 @@ export const makePurchase: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(body.purchaseId <= 0 || body.shippingPrice <= 0 || body.userId <= 0){
-        res.status(400).json({msg: "Bad Request: purchaseId, shippingPrice or userId are not a valid number"});
+    if(body.shippingPrice <= 0 || body.userId.length == 0 || body.voucherId.length == 0){
+        res.status(400).json({msg: "Bad Request: voucherId, purchaseId, shippingPrice or userId are not a valid string/number"});
         return;
     }
     //Verify state is valid
@@ -226,6 +226,47 @@ export const makePurchase: RequestHandler = async (req, res) => {
     }
 
     const userPromise = mainController.makePurchase(body);
+    const user = await userPromise; // Espera a que la promesa se resuelva
+
+    console.log("This is user: "+ user);
+    res.status(200).json(user);
+}
+
+/*
+METHOD POST ADD USER
+*/
+export const addUser: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("userId") || !body.hasOwnProperty("email") || !body.hasOwnProperty("roleType") || !body.hasOwnProperty("cart")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.userId != "string" || typeof body.email != "string" || typeof body.roleType != "string"){
+        res.status(400).json({msg: "Bad Request: userId, email or roleType are not a string"});
+        return;
+    }
+    //Verify cart type of the content
+    if(!Array.isArray(body.cart)){
+        res.status(400).json({msg: "Bad Request: cart is not an array"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.userId.length == 0 || body.email == "" || body.roleType == ""){
+        res.status(400).json({msg: "Bad Request: userId, email or roleType are not a valid string"});
+        return;
+    }
+
+    const userPromise = mainController.addUser(body);
     const user = await userPromise; // Espera a que la promesa se resuelva
 
     console.log("This is user: "+ user);
