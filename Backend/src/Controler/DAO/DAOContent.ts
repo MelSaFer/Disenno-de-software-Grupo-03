@@ -195,7 +195,7 @@ export class DAOContent implements DAO{
                     tags: object.tags
                 });
                 //Verify existence of the content
-                const content = await collection.findOne({ _id: object._id });
+                const content = await collection.findOne({ contentId: object._id });
                 if (!content){
                     console.log("El content " +  object._id + " no existe");
                     return false;
@@ -222,7 +222,7 @@ export class DAOContent implements DAO{
                         tags: object.tags
                         }
                 };
-                const result = await collection.updateOne({ _id: object._id }, InfoToUpdate); //Update the product in the database
+                const result = await collection.updateOne({ contentId: object._id }, InfoToUpdate); //Update the product in the database
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 //Check if the product was updated  
                 if (result.modifiedCount > 0) {
