@@ -211,7 +211,7 @@ export class DAOProduct implements DAO{
             const collection = db.collection(PRODUCT_COLLECTION);
             //Get the model from the database with the schema
             const Product = mongoose.model('Product', ProductSchema);
-            console.log(JSON.stringify(object.productId));
+            //console.log(JSON.stringify(object.productId));
             //Create a new product with the object received
             let updatedProduct = new Product({
                 productId: object.productId,
@@ -221,15 +221,22 @@ export class DAOProduct implements DAO{
                 imageId: object.imageId,
                 price: object.price
             });
-
+            //Check if the product exists
             const product_ = await collection.findOne({productId: object.productId});
             if (!product_){
                 console.log("El producto " +  JSON.stringify(object.productId) + " no existe");
                 return false;
-            }else if (product_.name != object.name && object.productId != product_.productId){
-                console.log("El nombre de producto " +  JSON.stringify(object.name) + " ya existe");
-                return false;
             }
+            
+            //Verify that the name is not already taken
+            const contentRepeated = await collection.find({ name: object.name });
+            for (let doc = await contentRepeated.next(); doc != null; doc = await contentRepeated.next()) {
+                if (doc._id != object._id){
+                    console.log("El producto " +  JSON.stringify(object.title) + " ya existe");
+                    return false;
+                }
+            }
+
             //Create the update object for updating the product
             const InfoToUpdate = {
                 $set: {
