@@ -47,7 +47,7 @@ export const ContentSchema = new mongoose.Schema({
     description : { type: String, required: true },
     date: { type: Date, required: true },
     imageId: { type: String, required: true },
-    categoryId: { type: String, required: true },
+    categoryName: { type: String, required: true },
     tags: { type: Array, required: true }
 });
 
