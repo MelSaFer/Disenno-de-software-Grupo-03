@@ -15,6 +15,11 @@ DAO USER
     - create(object: any)
     - update(object: any)
     - delete(object: unknown)
+    - updateCart(userId: any, productId: number, quantity_: number)
+    - getCart(userId: unknown)
+    - getPurchaseHistory(userId: unknown)
+    - getCart(userId: unknown)
+    - getPurchaseHistory(userId: unknown)
 -----------------------------------------------------------------------*/
 export class DAOUser implements DAO{
 
@@ -28,6 +33,7 @@ export class DAOUser implements DAO{
         - none
     RETURNS:
         - users: array of users
+        - error: string, error message if exists
     */
         async getAll(){
             try {
@@ -59,7 +65,16 @@ export class DAOUser implements DAO{
     
         };
 
-
+        /*
+        -----------------------------------------------------------------------
+        GET OBJECT METHOD
+        Gets a user in the database
+        PARAMS:
+            - userId: number, the id of the user to get
+        RETURNS:
+            - user: user object
+            - error: string, error message if exists
+        */
         async getObject(userId: unknown){
             try{
                 //Get the database instance from the singleton and connect to it
@@ -70,7 +85,7 @@ export class DAOUser implements DAO{
                 //Get the cart from the database, using the code
                 const user = await collection.findOne({ userId: userId });
                 SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-                // If the user was found, return it, else return false
+                // If the user was found, return it, else return error
                 if (user) {
                     //console.log("Se encontró: " + JSON.stringify(user, null, 2));
                     //Insert the user in the database, convert it to JSON and parse it
@@ -94,7 +109,8 @@ export class DAOUser implements DAO{
     PARAMS:
         - userId: number, the id of the user to get the cart
     RETURNS:
-        - cart: array of products
+        - cart: array of products in the cart if the user was found
+        - error message if the user was not found
     */
     async getCart(userId: unknown){
         try{
@@ -106,7 +122,7 @@ export class DAOUser implements DAO{
             //Get the cart from the database, using the code
             const user = await collection.findOne({ userId: userId });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the user was found, return it, else return false
+            // If the user was found, return it, else return error
             if (user) {
                 
                 console.log("Se encontró: " + JSON.stringify(user, null, 2));
@@ -161,7 +177,7 @@ export class DAOUser implements DAO{
             const user = await user_collection.findOne({ userId: userId });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
 
-            // If the user was found, return it, else return false
+            // If the user was found, return it, else return error
             if (user) {
                 //console.log("Se encontró: " + JSON.stringify(user, null, 2));
                 //If the roletype is admin get all the purchase history
@@ -178,7 +194,7 @@ export class DAOUser implements DAO{
                     purchaseHistory.push(await cursor.next());
                 }                
 
-                //If the purchase history was found, return it, else return false
+                //If the purchase history was found, return it, else return error
                 if (purchaseHistory){
                     return purchaseHistory;
                 } else {
@@ -221,7 +237,6 @@ export class DAOUser implements DAO{
             console.log(err);
             return {"name": "No se pudo crear el usuario"}
         }
-        return false;
     };
 
     /*
@@ -231,8 +246,8 @@ export class DAOUser implements DAO{
     PARAMS:
         - object: User
     RETURNS:
-        - true if the user has been updated
-        - false if the user has not been updated
+        - ok message if the user has been updated
+        - error message if the user has not been updated
     -----------------------------------------------------------------------
     */
     async update(object: any){
@@ -275,7 +290,6 @@ export class DAOUser implements DAO{
             //console.log(err);
             return {"name": "No se pudo actualizar el usuario"};
         } //end try-catch
-        return true;
     };
 
 
@@ -286,8 +300,8 @@ export class DAOUser implements DAO{
     PARAMS:
         - object: User
     RETURNS:
-        - true if the user has been deleted
-        - false if the user has not been deleted
+        - ok message if the user has been deleted
+        - error if the user has not been deleted
     */
     async delete(userId: unknown){
         try{
@@ -318,7 +332,7 @@ export class DAOUser implements DAO{
             //console.log(err);
             return {"name" : "No se pudo eliminar el usuario"};
         }
-        return true;
+        //return ok message;
     };
 
     /*
@@ -330,8 +344,8 @@ export class DAOUser implements DAO{
         - productId: string, the id of the product to add
         - quantity: number, the amount of the product to add
     RETURNS:    
-        - true if the product was added to the cart
-        - false if the product was not added to the cart
+        - ok message if the product was added to the cart
+        - error if the product was not added to the cart
     */
         async updateCart(userId: any, productId: number, quantity_: number){
             try{
@@ -398,6 +412,6 @@ export class DAOUser implements DAO{
                 //console.log(err);
                 return {"name": "No se pudo actualizar el carrito"};
             }
-            return true;
+            //return ok message;
         };
 }

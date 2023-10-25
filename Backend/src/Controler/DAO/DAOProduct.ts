@@ -70,7 +70,7 @@ export class DAOProduct implements DAO{
         - code: String | Undefined
     RETURNS:
         - Product if the product was found
-        - false if the product was not found
+        - error if the product was not found
     */
     async getObject(idProduct_: unknown){
         try{
@@ -82,7 +82,7 @@ export class DAOProduct implements DAO{
             //Get the product from the database, using the code
             const product = await collection.findOne({ productId: idProduct_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the product was found, return it, else return false
+            // If the product was found, return it, else return error
             if (product) {
                 //console.log("Se encontro: " + JSON.stringify(product, null, 2));
                 return product;
@@ -106,7 +106,7 @@ export class DAOProduct implements DAO{
         - code: number
     RETURNS:
         - Product if the product was found
-        - false if the product was not found
+        - error if the product was not found
     */
 
     async getProductName(idProduct_: unknown){
@@ -119,7 +119,7 @@ export class DAOProduct implements DAO{
             //Get the product from the database, using the code
             const product = await collection.findOne({ productId: idProduct_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the product was found, return it, else return false
+            // If the product was found, return it, else return error
             if (product) {
                 console.log("Se encontro: " + JSON.stringify(product, null, 2));
                 return product.description;
@@ -142,7 +142,7 @@ export class DAOProduct implements DAO{
         - object: Product
     RETURNS:
         - true if the product was created
-        - false if the product was not created
+        - error if the product was not created
     */
     async create(object: any){
         try{
@@ -200,7 +200,7 @@ export class DAOProduct implements DAO{
         - object: Product
     RETURNS:
         - true if the product was updated
-        - false if the product was not updated
+        - error if the product was not updated
     */
     async update(object: any){
         try{
@@ -270,7 +270,7 @@ export class DAOProduct implements DAO{
         - object: Product
     RETURNS:
         - true if the product was updated
-        - false if the product was not updated
+        - error if the product was not updated
     */
     async delete(productId_: unknown){
         try{
@@ -282,8 +282,8 @@ export class DAOProduct implements DAO{
             //Verify existence of the product
             const product = await collection.findOne({ productId: productId_ });
             if (!product){
-                console.log("El producto " +  productId_ + " no existe");
-                return false;
+                //console.log("El producto " +  productId_ + " no existe");
+                return {"name": "El producto no existe"};
             }
             //Delete the product in the database
             const result = await collection.deleteOne({ productId: productId_ });
