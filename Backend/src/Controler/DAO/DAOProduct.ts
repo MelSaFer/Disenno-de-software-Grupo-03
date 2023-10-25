@@ -91,7 +91,9 @@ export class DAOProduct implements DAO{
                 return product;
             } else {
                 console.log("No se encontró el producto con el código: " + idProduct_);
-                return false; 
+                return {"name": "No se encontró el producto"}; 
+                //return false;
+                
             }
 
         } catch(err){
