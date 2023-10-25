@@ -15,6 +15,11 @@ DAO USER
     - create(object: any)
     - update(object: any)
     - delete(object: unknown)
+    - updateCart(userId: any, productId: number, quantity_: number)
+    - getCart(userId: unknown)
+    - getPurchaseHistory(userId: unknown)
+    - getCart(userId: unknown)
+    - getPurchaseHistory(userId: unknown)
 -----------------------------------------------------------------------*/
 export class DAOUser implements DAO{
 
@@ -28,6 +33,7 @@ export class DAOUser implements DAO{
         - none
     RETURNS:
         - users: array of users
+        - error: string, error message if exists
     */
         async getAll(){
             try {
@@ -45,21 +51,30 @@ export class DAOUser implements DAO{
                     return users;
                 }
                 else{
-                    console.log("No se encontraron carritos");
-                    return false;
+                    //console.log("No se encontraron carritos");
+                    return {"name": "No se encontraron carritos"};
                 }
                 
                 
     
             } catch (error) {
-                console.log(error);
-                return false;
+                //console.log(error);
+                return {"name": "No se encontraron carritos"};
             }
             
     
         };
 
-
+        /*
+        -----------------------------------------------------------------------
+        GET OBJECT METHOD
+        Gets a user in the database
+        PARAMS:
+            - userId: number, the id of the user to get
+        RETURNS:
+            - user: user object
+            - error: string, error message if exists
+        */
         async getObject(userId: unknown){
             try{
                 //Get the database instance from the singleton and connect to it
@@ -70,21 +85,20 @@ export class DAOUser implements DAO{
                 //Get the cart from the database, using the code
                 const user = await collection.findOne({ userId: userId });
                 SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-                // If the user was found, return it, else return false
+                // If the user was found, return it, else return error
                 if (user) {
-                    
-                    console.log("Se encontró: " + JSON.stringify(user, null, 2));
+                    //console.log("Se encontró: " + JSON.stringify(user, null, 2));
                     //Insert the user in the database, convert it to JSON and parse it
                     const newUserJson = JSON.stringify(user);
                     const newUserparsed = JSON.parse(newUserJson);
                     return newUserparsed;
                 } else {
-                    console.log("No se encontró el user con el código: " + userId);
-                    return false; 
+                    //console.log("No se encontró el user con el código: " + userId);
+                    return {"name": "No se encontró el usuario"};
                 }
             } catch(err){
-                console.log(err);
-                return false;
+                //console.log(err);
+                return {"name": "No se encontró el usuario"};
             }
         };
 
@@ -95,7 +109,8 @@ export class DAOUser implements DAO{
     PARAMS:
         - userId: number, the id of the user to get the cart
     RETURNS:
-        - cart: array of products
+        - cart: array of products in the cart if the user was found
+        - error message if the user was not found
     */
     async getCart(userId: unknown){
         try{
@@ -107,7 +122,7 @@ export class DAOUser implements DAO{
             //Get the cart from the database, using the code
             const user = await collection.findOne({ userId: userId });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the user was found, return it, else return false
+            // If the user was found, return it, else return error
             if (user) {
                 
                 console.log("Se encontró: " + JSON.stringify(user, null, 2));
@@ -126,19 +141,18 @@ export class DAOUser implements DAO{
                     }
                     else{
                         console.log("No se encontró el producto con el código: " + productId);
-                        return false;
+                        return {"name": "No se encontró el producto"};
                     }
                 }
-
                 return newCart;
 
             } else {
-                console.log("No se encontró el user con el código: " + userId);
-                return false; 
+                //console.log("No se encontró el user con el código: " + userId);
+                return {"name": "No se encontró el usuario"}; 
             }
         } catch(err){
-            console.log(err);
-            return false;
+            //console.log(err);
+            return {"name": "Error al obtener el carrito"};
         }
     };
 
@@ -163,10 +177,9 @@ export class DAOUser implements DAO{
             const user = await user_collection.findOne({ userId: userId });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
 
-            // If the user was found, return it, else return false
+            // If the user was found, return it, else return error
             if (user) {
                 //console.log("Se encontró: " + JSON.stringify(user, null, 2));
-
                 //If the roletype is admin get all the purchase history
                 let purchaseHistory = [];
                 if (user.roleType == "ADMINISTRATOR"){
@@ -181,21 +194,21 @@ export class DAOUser implements DAO{
                     purchaseHistory.push(await cursor.next());
                 }                
 
-                //If the purchase history was found, return it, else return false
+                //If the purchase history was found, return it, else return error
                 if (purchaseHistory){
                     return purchaseHistory;
                 } else {
-                    console.log("No se encontró el historial de compras del usuario con el código: " + userId);
-                    return false; 
+                    //console.log("No se encontró el historial de compras del usuario con el código: " + userId);
+                    return {"name": "No se encontró el historial del usuario"}; 
                 }
 
             } else {
-                console.log("No se encontró el user con el código: " + userId);
-                return false; 
+                //console.log("No se encontró el user con el código: " + userId);
+                return {"name": "No se encontró el usuario"}; 
             }
         } catch(err){
             console.log(err);
-            return false;
+            return {"name": "Error al obtener el historial de compras"};
         }
     };
 
@@ -219,11 +232,11 @@ export class DAOUser implements DAO{
             await collection.insertOne(newUserparsed);
             
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            return true;
+            return {"name": "Se creó el usuario con éxito"};
         } catch(err){
             console.log(err);
+            return {"name": "No se pudo crear el usuario"}
         }
-        return false;
     };
 
     /*
@@ -233,8 +246,8 @@ export class DAOUser implements DAO{
     PARAMS:
         - object: User
     RETURNS:
-        - true if the user has been updated
-        - false if the user has not been updated
+        - ok message if the user has been updated
+        - error message if the user has not been updated
     -----------------------------------------------------------------------
     */
     async update(object: any){
@@ -267,16 +280,16 @@ export class DAOUser implements DAO{
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was updated  
             if (result.modifiedCount > 0) {
-                console.log("Usuario actualizado con éxito " + JSON.stringify(updatedUser, null, 2));
-                return true;
+                //console.log("Usuario actualizado con éxito " + JSON.stringify(updatedUser, null, 2));
+                return {"name": "El usuario se actualizó con éxito"};
             } else {
-                console.log("No se encontró el Usuario para actualizar o no se actualizó ningun campo");
-                return false;
+                //console.log("No se encontró el Usuario para actualizar o no se actualizó ningun campo");
+                return {"name": "No se encontró el usuario para actualizar o no se actualizó ningun campo"};
             }
         } catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "No se pudo actualizar el usuario"};
         } //end try-catch
-        return true;
     };
 
 
@@ -287,8 +300,8 @@ export class DAOUser implements DAO{
     PARAMS:
         - object: User
     RETURNS:
-        - true if the user has been deleted
-        - false if the user has not been deleted
+        - ok message if the user has been deleted
+        - error if the user has not been deleted
     */
     async delete(userId: unknown){
         try{
@@ -300,7 +313,7 @@ export class DAOUser implements DAO{
             const user = await collection.findOne({ userId: userId });
             if (!user){
                 console.log("El user " +  userId + " no existe");
-                return false;
+                return {"name": "El usuario no existe"};
             }
             //Delete the user in the database
             const result = await collection.deleteOne({ userId: userId });
@@ -309,16 +322,17 @@ export class DAOUser implements DAO{
             //Check if the user was deleted
             if (result.deletedCount > 0) {
                 console.log("User eliminado con éxito");
-                return true;
+                return {"name" : "El usuario se eliminó con éxito"};
             } else {
-                console.log("No se encontró el user para eliminar");
-                return false;
+                //console.log("No se encontró el user para eliminar");
+                return {"name" : "No se encontró el usuario para eliminar"};
             }
 
         } catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name" : "No se pudo eliminar el usuario"};
         }
-        return true;
+        //return ok message;
     };
 
     /*
@@ -330,8 +344,8 @@ export class DAOUser implements DAO{
         - productId: string, the id of the product to add
         - quantity: number, the amount of the product to add
     RETURNS:    
-        - true if the product was added to the cart
-        - false if the product was not added to the cart
+        - ok message if the product was added to the cart
+        - error if the product was not added to the cart
     */
         async updateCart(userId: any, productId: number, quantity_: number){
             try{
@@ -345,21 +359,21 @@ export class DAOUser implements DAO{
 
                 const user = await user_collection.findOne({ userId: userId });
                 if (!user){
-                    console.log("El usuario " +  userId + " no existe");
-                    return false;
+                    //console.log("El usuario " +  userId + " no existe");
+                    return {"name": "El usuario no existe"};
                 }
     
                 //Verify existence of the product
                 const product = await product_collection.findOne({ productId: productId });
                 if (!product){
-                    console.log("El producto " +  productId + " no existe");
-                    return false;
+                    //console.log("El producto " +  productId + " no existe");
+                    return {"name": "El producto no existe"};
                 }
 
                 //Verify availability of the product
                 if (product.quantity < quantity_){
-                    console.log("No hay suficientes productos disponibles");
-                    return false;
+                    //console.log("No hay suficientes productos disponibles");
+                    return {"name": "No hay suficientes productos disponibles"};
                 }
     
                 //Get cart from user
@@ -368,19 +382,17 @@ export class DAOUser implements DAO{
                 //Check if the product is already in the cart and update it
                 for (let i = 0; i < cart.length; i++) {
                     if (cart[i].productId == productId){
-
-                        console.log(user);
-
+                        //console.log(user);
                         //Verify that the quantity is not less than 0
                         if (cart[i].quantity + quantity_ <= 0){
                             cart.splice(i, 1);
-                            console.log(user);
+                            //console.log(user);
                         }
                         else{
                             cart[i].quantity += quantity_;
                         }
                         const result = await user_collection.updateOne({ userId: user.userId }, { $set: { cart: cart } });
-                        return true;
+                        return {"name": "Se actualizó el carrito"};
                     }
                 }
     
@@ -389,19 +401,17 @@ export class DAOUser implements DAO{
                     productId: productId,
                     quantity: 1
                 });
-    
-                console.log("se agrego el producto al carrito");
-    
+                //console.log("se agrego el producto al carrito");
                 //Update cart in the database
                 const result = await user_collection.updateOne({ userId: user.userId }, { $set: { cart: cart } });
-                console.log("se actualizo el carrito");
-    
+                //console.log("se actualizo el carrito");
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-                return true
+                return {"name": "Se actualizó el carrito"};
     
             } catch(err){
-                console.log(err);
+                //console.log(err);
+                return {"name": "No se pudo actualizar el carrito"};
             }
-            return true;
+            //return ok message;
         };
 }

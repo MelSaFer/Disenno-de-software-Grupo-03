@@ -123,7 +123,7 @@ export class DAOContent implements DAO{
                 description: object.description,
                 date: object.date,
                 imageId: object.imageId,
-                categoryId: object.categoryId,
+                categoryName: object.categoryName,
                 tags: object.tags
             });
 
@@ -191,7 +191,7 @@ export class DAOContent implements DAO{
                     description: object.description,
                     date: object.date,
                     imageId: object.imageId,
-                    categoryId: object.categoryId,
+                    categoryName: object.categoryName,
                     tags: object.tags
                 });
                 //Verify existence of the content
@@ -218,7 +218,7 @@ export class DAOContent implements DAO{
                         description: object.description,
                         date: object.date,
                         imageId: object.imageId,
-                        categoryId: object.categoryId,
+                        categoryName: object.categoryName,
                         tags: object.tags
                         }
                 };
