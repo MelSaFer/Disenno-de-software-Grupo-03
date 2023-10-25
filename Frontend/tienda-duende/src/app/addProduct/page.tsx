@@ -7,13 +7,10 @@ import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
 import { Handlee } from "next/font/google";
 import { Link } from "react-router-dom";
-import { useRouter } from "next/navigation";
 import * as Routes from "../routes";
 
 const AddProduct = () => {
   const [imageSrc, setImageSrc] = useState("");
-  const [data, setData] = useState("");
-  const router = useRouter();
 
   // datos utilizados para el formulario
   const [name, setName] = useState("");

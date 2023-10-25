@@ -1,24 +1,23 @@
+// @ts-nocheck
 "use client";
 import React from "react";
 import Navbar2 from "@/src/components/navbar2";
 import Footer from "@/src/components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { set } from "firebase/database";
 
 const AddContent = () => {
   const [imageSrc, setImageSrc] = useState("");
-  const [data, setData] = useState("");
-  const router = useRouter();
 
   // datos utilizados para el formulario
-  const [nombre, setNombre] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [palabrasClave, setPalabrasClave] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [keyWords, setKeyWords] = useState("");
+  const [keyFormat, setKeyFormat] = useState(false);
   const [imagen, setImagen] = useState(null);
   const [imagenURL, setImagenURL] = useState("");
 
-  // @ts-ignore
   const handleImageChange = (e) => {
     // Captura la imagen seleccionada por el usuario
     const selectedImage = e.target.files[0];
@@ -31,13 +30,49 @@ const AddContent = () => {
     setImagenURL(imageURL);
   };
 
-  // @ts-ignore
+  const handleValidateTags = () => {
+    const regex = /#[^\s#]+/g;
+    const matches = keyWords.match(regex);
+
+    if (matches && matches.join("") === keyWords) {
+      const valTags = matches.join(" ");
+      console.log("Tags válidos:", valTags);
+      setKeyFormat(true);
+    } else {
+      console.log("Los tags no siguen el formato correcto");
+      setKeyFormat(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (nombre && descripcion && palabrasClave && imagen) {
+    if (name && description && keyWords && imagen) {
       // Construye los datos para enviar a la API
-      const datos = { nombre, descripcion, palabrasClave, imagen };
+      handleValidateTags();
+      if (!keyFormat) {
+        alert(
+          "Los tags no siguen el formato correcto. Por favor, intente de nuevo."
+        );
+        return;
+      }
+      const date = new Date();
+
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      const formatedDate = `${day}/${month}/${year}`;
+
+      const datos = {
+        title: name,
+        description: description,
+        date: formatedDate,
+        imageId: "imagen",
+        categoryName: "",
+        keyWords: keyWords,
+      };
+      console.log(datos);
 
       // Envía una solicitud a la API (sustituye la URL por la de tu API real)
       try {
@@ -61,11 +96,6 @@ const AddContent = () => {
     } else {
       alert("Por favor, complete todos los campos.");
     }
-  };
-
-  // @ts-ignore
-  const handleExit = (e) => {
-    router.push("/mainPage");
   };
 
   return (
@@ -103,29 +133,28 @@ const AddContent = () => {
           <div className="w-1/3 p-5 ml-4 text-yellow-900 flex flex-col justify-top">
             <form onSubmit={handleSubmit}>
               <div className="mb-10">
-                <label htmlFor="nombreProducto" className="font-semibold">
+                <label htmlFor="contentName" className="font-semibold">
                   Nombre:
                 </label>
                 <input
                   className="border rounded-full w-[350px] border-red-300 ml-2 p-2"
                   type="text"
-                  id="nombreProducto"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
+                  id="contentName"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="descripcionProducto" className="font-semibold">
+                <label htmlFor="contentDescription" className="font-semibold">
                   Descripcion:
                 </label>
                 <textarea
-                  id="descripcion"
-                  name="descripcion"
-                  // @ts-ignore
+                  id="description"
+                  name="description"
                   rows="4"
                   className="w-full p-2 border rounded border-red-300 mt-5"
-                  value={descripcion}
-                  onChange={(e) => setDescripcion(e.target.value)}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
               <div className="mb-5">
@@ -135,11 +164,11 @@ const AddContent = () => {
                 <textarea
                   id="clave"
                   name="clave"
-                  // @ts-ignore
                   rows="4"
+                  placeholder="Ingrese los tags en formato: #tag#tag#tag"
                   className="w-full p-2 border rounded border-red-300 mb-5 mt-5"
-                  value={palabrasClave}
-                  onChange={(e) => setPalabrasClave(e.target.value)}
+                  value={keyWords}
+                  onChange={(e) => setKeyWords(e.target.value)}
                 />
               </div>
               <div className="flex justify-center items-center mb-5">
@@ -158,17 +187,19 @@ const AddContent = () => {
               </div>
               <div className="flex justify-center items-center">
                 <button
-                  type="submit"
+                  type="button"
                   className="w-[150px] bg-red-400 text-white rounded-full px-3 py-2 mr-4 "
                   onClick={handleSubmit}
                 >
                   Guardar
                 </button>
                 <button
+                  type="button"
                   className="w-[150px] bg-red-400 text-white rounded-full px-3 py-2"
-                  onClick={handleExit}
                 >
-                  Cancelar
+                  <a href="/gallery" title="galeria">
+                    Cancelar
+                  </a>
                 </button>
               </div>
             </form>
