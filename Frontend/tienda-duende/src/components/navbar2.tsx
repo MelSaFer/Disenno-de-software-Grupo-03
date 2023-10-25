@@ -5,8 +5,25 @@ import { FiShoppingCart } from "react-icons/fi";
 import { GrGallery } from "react-icons/gr";
 import { IoExitOutline } from "react-icons/io5";
 import { GoHistory } from "react-icons/go";
+import { useAuthContext } from "../context/AuthContext";
+import Router from "next/router";
 
 const Navbar2 = () => {
+  const { user, logOut } = useAuthContext() as {
+    user: any;
+    logOut: () => Promise<void>;
+  };
+  const router = Router;
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      console.log("Sesión cerrada");
+    } catch (error) {
+      console.error("Error al cerrar sesión: ", error);
+    }
+  };
+
   return (
     <div className="mb-7">
       <div className="w-full h-10 bg-[#D8EABA] shadow-lg lg:flex-wrap lg:justify-start lg:py-4"></div>
@@ -59,7 +76,12 @@ const Navbar2 = () => {
               </li>
               {/* <!-- Exit link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/signin" title="cerrar sesión">
+                <a
+                  className=""
+                  href="/signin"
+                  title="cerrar sesión"
+                  onClick={handleLogout}
+                >
                   <IoExitOutline className="text-3xl" />
                 </a>
               </li>

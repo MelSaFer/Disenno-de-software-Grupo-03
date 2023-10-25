@@ -18,8 +18,9 @@ function Page(): JSX.Element {
   useEffect(() => {
     if (user == null) {
       router.push("/");
+    } else {
+      setUserEmail(user.email);
     }
-    setUserEmail(user.email);
   }, [user, router]);
 
   const handleLogout = async () => {

@@ -1,22 +1,28 @@
+// @ts-nocheck
 "use client";
 import React from "react";
 import Navbar2 from "@/src/components/navbar2";
 import Footer from "@/src/components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
+import { Handlee } from "next/font/google";
+import { Link } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import * as Routes from "../routes";
 
 const AddProduct = () => {
   const [imageSrc, setImageSrc] = useState("");
   const [data, setData] = useState("");
+  const router = useRouter();
 
   // datos utilizados para el formulario
-  const [nombre, setNombre] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [precio, setPrecio] = useState(0);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
   const [imagen, setImagen] = useState(null);
   const [imagenURL, setImagenURL] = useState("");
+  const [cuantity, setCuantity] = useState(0);
 
-  // @ts-ignore
   const handleImageChange = (e) => {
     // Captura la imagen seleccionada por el usuario
     const selectedImage = e.target.files[0];
@@ -29,37 +35,43 @@ const AddProduct = () => {
     setImagenURL(imageURL);
   };
 
-  // @ts-ignore
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (nombre && descripcion && precio && imagen) {
-      if (precio <= 0) {
+    if (name && description && price && imagen && cuantity) {
+      if (price <= 0) {
         alert("El precio debe ser mayor a 0");
         return;
       }
-      // Construye los datos para enviar a la API
-      const datos = { nombre, descripcion, precio, imagen };
-
-      // Envía una solicitud a la API (sustituye la URL por la de tu API real)
-      try {
-        const response = await fetch("URL_DE_LA_API", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(datos),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Respuesta de la API:", data);
-        } else {
-          console.error("Error al enviar la solicitud a la API");
-        }
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
+      if (cuantity <= 0) {
+        alert("La cantidad debe ser mayor a 0");
+        return;
       }
+      // Construye los datos para enviar a la API
+      const datos = {
+        name: name,
+        description: description,
+        cuantityAvailable: parseInt(cuantity),
+        imageId: "imagen",
+        price: parseInt(price),
+      };
+      console.log(datos);
+
+      const fetchData = async () => {
+        try {
+          const result = await axios.request({
+            method: "post",
+            url: Routes.addProduct,
+            headers: { "Content-Type": "application/json" },
+            data: datos,
+          });
+          console.log("fetch");
+          console.log(result);
+        } catch (error) {
+          console.error("Error al obtener datos:", error);
+        }
+      };
+      fetchData();
     } else {
       alert("Por favor, complete todos los campos.");
     }
@@ -100,44 +112,55 @@ const AddProduct = () => {
           <div className="w-1/3 p-5 ml-4 text-yellow-900 flex flex-col justify-top">
             <form onSubmit={handleSubmit}>
               <div className="mb-10">
-                <label htmlFor="nombreProducto" className="font-semibold">
+                <label htmlFor="nameProducto" className="font-semibold">
                   Nombre:
                 </label>
                 <input
                   className="border rounded-full w-[350px] border-red-300 ml-2 p-2"
                   type="text"
-                  id="nombreProducto"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
+                  id="productName"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="mb-10">
-                <label htmlFor="descripcionProducto" className="font-semibold">
+                <label htmlFor="productDescription" className="font-semibold">
                   Descripcion:
                 </label>
                 <textarea
-                  id="descripcion"
-                  name="descripcion"
-                  // @ts-ignore
+                  id="description"
+                  name="description"
                   rows="4"
                   className="w-full p-2 border rounded border-red-300 mb-5 mt-5"
-                  value={descripcion}
-                  onChange={(e) => setDescripcion(e.target.value)}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="precioProducto" className="font-semibold">
+                <label htmlFor="productCuantity" className="font-semibold">
+                  Cantidad:
+                </label>
+                <input
+                  className="border rounded-full w-[70px] border-red-300 ml-2 p-2"
+                  type="number"
+                  id="productCuantity"
+                  value={cuantity}
+                  onChange={(e) => setCuantity(e.target.value)}
+                />
+              </div>
+              <div className="mb-5">
+                <label htmlFor="productPrice" className="font-semibold">
                   Precio:
                 </label>
                 <input
-                  className="border rounded-full w-[250px] border-red-300 ml-2 p-2"
+                  className="border rounded-full w-[80px] border-red-300 ml-2 p-2"
                   type="number"
-                  id="precioProducto"
-                  value={precio}
-                  // @ts-ignore
-                  onChange={(e) => setPrecio(e.target.value)}
+                  id="productPrice"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
+
               <div className="flex justify-center items-center">
                 <button
                   type="submit"
@@ -146,10 +169,12 @@ const AddProduct = () => {
                   Guardar
                 </button>
                 <button
-                  type="submit"
+                  type="button"
                   className="bg-red-400 text-white rounded-full px-3 py-2"
                 >
-                  Cancelar
+                  <a href="/store" title="tienda">
+                    Cancelar
+                  </a>
                 </button>
               </div>
             </form>

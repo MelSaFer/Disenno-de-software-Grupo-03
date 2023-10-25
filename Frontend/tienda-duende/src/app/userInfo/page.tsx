@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import Link from "next/link";
 import Footer from "../../components/footer";
@@ -5,10 +6,12 @@ import React, { useState, useEffect } from "react";
 import Navbar2 from "@/src/components/navbar2";
 import axios from "axios";
 import * as Routes from "../routes";
+import { auth } from "../../firebase/config";
 
 const UserInfo = () => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
+  const [authUser, setAuthUser] = useState({ uid: "", email: "" });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +31,20 @@ const UserInfo = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setAuthUser({ uid: user.uid, email: user.email });
+        console.log(`El UID del usuario es ${user.uid} ${user.email}`);
+      } else {
+        console.log("No hay usuario iniciado sesión");
+      }
+    }, []);
+
+    return () => unsubscribe();
+  }, []);
+  // console.log(authUser);
 
   return (
     <div className="flex flex-col min-h-screen">

@@ -33,6 +33,7 @@ const History = () => {
     fetchData();
   }, []);
 
+  console.log(history);
   return (
     <div className="flex flex-col min-h-screen">
       <header>
@@ -40,7 +41,7 @@ const History = () => {
       </header>
       <main className="flex-grow ml-12 mr-12">
         {history.map((item) => (
-          <div key={item.purchaseId} className="text-yellow-900">
+          <div key={item._id} className="text-yellow-900">
             <hr className="border border-red-400 w-6/6 mx-auto my-4"></hr>
             <h1 className="text-2xl text-red-400 mb-2">
               Compra {item.purchaseId}

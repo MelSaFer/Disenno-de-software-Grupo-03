@@ -6,6 +6,7 @@ import Footer from "../../components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
 import Navbar2 from "@/src/components/navbar2";
+import * as Routes from "../routes";
 
 const ConsultProduct = () => {
   const [imageSrc, setImageSrc] = useState("");
@@ -39,19 +40,23 @@ const ConsultProduct = () => {
       }
     };
 
-    const obtenerProducto = async () => {
+    const fetchData = async () => {
+      const requestData = { productId: "65394e623ecb4725cdfb99b3" };
       try {
-        const response = await axios.get(
-          "https://mocki.io/v1/5ebd6bfc-65ed-471b-88b4-5dca2cafcae0"
-        );
-        const productoData = response.data;
-        setData(productoData);
+        const result = await axios.request({
+          method: "post",
+          url: Routes.getProduct,
+          headers: { "Content-Type": "application/json" },
+          data: requestData,
+        });
+        setData(result.data);
+        console.log(result);
       } catch (error) {
-        console.error("Error al obtener el producto:", error);
+        console.error("Error al obtener datos:", error);
       }
     };
+    fetchData();
 
-    obtenerProducto();
     getImage();
   }, []);
 
