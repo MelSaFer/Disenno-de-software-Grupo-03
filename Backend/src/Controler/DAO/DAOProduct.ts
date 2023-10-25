@@ -70,7 +70,7 @@ export class DAOProduct implements DAO{
         - code: String | Undefined
     RETURNS:
         - Product if the product was found
-        - error if the product was not found
+        - error message if the product was not found
     */
     async getObject(idProduct_: unknown){
         try{
@@ -82,7 +82,7 @@ export class DAOProduct implements DAO{
             //Get the product from the database, using the code
             const product = await collection.findOne({ productId: idProduct_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the product was found, return it, else return error
+            // If the product was found, return it, else return error message
             if (product) {
                 //console.log("Se encontro: " + JSON.stringify(product, null, 2));
                 return product;
@@ -106,7 +106,7 @@ export class DAOProduct implements DAO{
         - code: number
     RETURNS:
         - Product if the product was found
-        - error if the product was not found
+        - error message if the product was not found
     */
 
     async getProductName(idProduct_: unknown){
@@ -119,7 +119,7 @@ export class DAOProduct implements DAO{
             //Get the product from the database, using the code
             const product = await collection.findOne({ productId: idProduct_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the product was found, return it, else return error
+            // If the product was found, return it, else return error message
             if (product) {
                 console.log("Se encontro: " + JSON.stringify(product, null, 2));
                 return product.description;
@@ -141,8 +141,8 @@ export class DAOProduct implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was created
-        - error if the product was not created
+        - ok message if the product was created
+        - error message if the product was not created
     */
     async create(object: any){
         try{
@@ -164,9 +164,9 @@ export class DAOProduct implements DAO{
             //Check if the product already exists
             const product = await collection.findOne({ name: newProduct.name });
             if (product){
-                console.log("El producto " +  object.name + " ya existe");
+                //console.log("El producto " +  object.name + " ya existe");
                 SingletonMongo.getInstance().disconnect_();
-                return false;
+                return {"name": "Ya existe un producto con ese nombre"};
             }
             //Insert the product in the database, convert it to JSON and parse it
             const newProductJson = JSON.stringify(newProduct);
@@ -186,10 +186,9 @@ export class DAOProduct implements DAO{
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             return {"name": "Se insertó el producto con éxito"};
         } catch(err){
-            console.log(err);
+            //console.log(err);
             return {"name": "Error al insertar el producto"};
         }
-        return false;
     };
 
     /*
@@ -199,8 +198,8 @@ export class DAOProduct implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was updated
-        - error if the product was not updated
+        - ok message if the product was updated
+        - error message if the product was not updated
     */
     async update(object: any){
         try{
@@ -259,7 +258,7 @@ export class DAOProduct implements DAO{
             console.log(err);
             return {"name": "No se encontró el producto"};
         } //end try-catch
-        return true;
+        //return ok message;
     };
 
     /*
@@ -269,8 +268,8 @@ export class DAOProduct implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was updated
-        - error if the product was not updated
+        - ok message if the product was updated
+        - error message if the product was not updated
     */
     async delete(productId_: unknown){
         try{
@@ -302,6 +301,5 @@ export class DAOProduct implements DAO{
             //console.log(err);
             return {"name": "No se encontró el producto"};
         }
-        return true;
     };
 }
