@@ -201,8 +201,9 @@ export class DAOUser implements DAO{
                     for (let i = 0; i < purchaseHistory.length; i++) {
                         //Verify purchaseHistory[i] is not null
                         if(purchaseHistory[i]){
-                            let products = purchaseHistory[i].products;
+                            let products = purchaseHistory[i]?.products;
                             let newProducts = [];
+
                             for (let j = 0; j < products.length; j++) {
                                 let productId = products[j].productId;
                                 let quantity = products[j].quantity;
@@ -219,7 +220,13 @@ export class DAOUser implements DAO{
                                     return {"name": "No se encontró el producto en el historial de compras"};
                                 }
                             }
-                            purchaseHistory[i].products = newProducts;
+                            
+                            if (purchaseHistory[i]?.products) {
+                                purchaseHistory[i]!.products = newProducts;
+                            }
+
+
+
                         }
                         else{
                             //console.log("No se encontraron productos en el historial de compras del usuario con el código: " + userId);
