@@ -19,7 +19,7 @@ const ShippingInfo = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = { userId: 1 };
+      const requestData = { userId: "1" };
       try {
         const result = await axios.request({
           method: "post",
@@ -187,34 +187,37 @@ const ShippingInfo = () => {
               {/* internal columns */}
               <div className="flex text-black">
                 {/* left column */}
-                <div className="w-1/2 p-2">
+                <div className="w-2/3 p-2">
                   <div className="flex flex-col">
                     <p className="font-bold text-2xl">Producto</p>
-                    <div className="flex ">
-                      <div className="w-2/3 p-2 justify-start items-start">
-                        <div className="flex font-bold">
-                          <ul className="list-none font-light">
+                    <div className=" ">
+                      <div className="p-2 justify-start items-start">
+                        <div className=" font-bold">
+                          <ul className=" list-none font-light">
                             {products.map((product) => (
-                              <li key={product.productDescription}>
-                                {product.productDescription}
+                              <li key={product.name}>
+                                - {product.name}{" "}
+                                <t className="font-bold">
+                                  [{product.quantity}]
+                                </t>
                               </li>
                             ))}
                           </ul>
                         </div>
                       </div>
-                      <div className="w-1/3">
+                      {/* <div className="w-1/3">
                         <div className="w-1/2 p-2 font-bold">
                           <p>x4</p>
                           <p>x3</p>
                           <p>x1</p>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
 
                 {/* right column */}
-                <div className="w-1/2 p-2">
+                <div className="w-1/3 p-2">
                   <p className="font-bold text-2xl">Subtotal</p>
                   <div className="flex text-black p-2">
                     <ul className="list-none font-light">
