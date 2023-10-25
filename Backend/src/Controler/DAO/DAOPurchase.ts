@@ -40,6 +40,7 @@ export class DAOPurchase implements DAO{
         - none
     RETURNS:
         - purchasehistories: array of purchasehistories
+        - error 
     */
         async getAll(){
             try {
@@ -56,27 +57,23 @@ export class DAOPurchase implements DAO{
                     return purchase;
                 }
                 else{
-                    console.log("No se encontraron historiales de compra");
-                    return false;
+                    return {"name": "No se encontraron compras"};
                 }
-    
             } catch (error) {
-                console.log(error);
-                return false;
+                //console.log(error);
+                return {"name": "No se encontraron compras"};
             }
-            
-    
         };
 
     /*
     -----------------------------------------------------------------------
     GET OBJECT METHOD
-    Gets a purchase history in the database
+    Gets a purchase  in the database
     PARAMS:
         - code: unknown
     RETURNS:
-        - purchase history if the purchase history was found
-        - false if the purchase history was not found
+        - purchase  if the purchase  was found
+        - error message if the purchase was not found
     */
     async getObject(purchaseId_: unknown){
         try{
@@ -87,29 +84,29 @@ export class DAOPurchase implements DAO{
             //Get the Purchase from the database, using the code
             const purchase = await collection.findOne({ purchaseId: purchaseId_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the product history was found, return it, else return false
+            // If the product history was found, return it, else return error message
             if (purchase) {
-                console.log("Se encontró: " + JSON.stringify(purchase, null, 2));
+                //console.log("Se encontró: " + JSON.stringify(purchase, null, 2));
                 return purchase;
             } else {
-                console.log("No se encontró el historial con el código: " + purchaseId_);
-                return false; 
+                //console.log("No se encontró el historial con el código: " + purchaseId_);
+                return {"name": "No se encontró la compra"}; 
             }
         } catch(err){
-            console.log(err);
-            return false;
+            //console.log(err);
+            return {"name": "No se encontró la compra"};
         }
     };
 
      /*
     -----------------------------------------------------------------------
     CREATE METHOD
-    Create a purchase history in the database
+    Create a purchase in the database
     PARAMS:
         - object: Product History
     RETURNS:
-        - true if the purchase history was created
-        - false if the purchase history was not created
+        - ok message if the purchase was created
+        - error message if the purchase was not created
     */
     async create(object: any) {
         try{
@@ -119,7 +116,7 @@ export class DAOPurchase implements DAO{
             const collection = db.collection(PURCHASE_COLLECTION);
             const Purchase = mongoose.model('Purchase', PurchaseSchema);
             
-            //Create a new purchase history with the object received
+            //Create a new purchase with the object received
             let newPurchase = new Purchase({
                 purchaseDetails: object.purchaseDetails,
                 products: object.products,
@@ -136,28 +133,28 @@ export class DAOPurchase implements DAO{
             const newPurchaseParsed = JSON.parse(newPurchaseJson);
             await collection.insertOne(newPurchaseParsed);
 
-            console.log("Se insertó: " + newPurchaseJson);
+            //console.log("Se insertó: " + newPurchaseJson);
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            return true;
+            return {"name": "Se insertó la compra"};
             
         }catch(err){
-            console.log(err);
-        }   
-        return true;
+            //console.log(err);
+            return {"name": "No se insertó la compra"};
+        }
     };
 
     /*
     -----------------------------------------------------------------------
     UPDATE METHOD
-    Update a purchase history in the database
+    Update a purchase in the database
     PARAMS:
         - object: unknown
     RETURNS:
-        - true if the purchase history was updated
-        - false if the purchase history was not updated
+        - ok message if the purchase was updated
+        - error message if the purchase was not updated
     */
     async update(object: any){
-        //Si voy a agregar algo al carrito, me pego a mongo y lo agrego
+        //Si voy a agregar algo al purchase, me pego a mongo y lo agrego
         //no lo agrege porque creo que se plantea diferente al resto
         try{
             const purchase = mongoose.model('Purchase', PurchaseSchema);
@@ -165,7 +162,7 @@ export class DAOPurchase implements DAO{
         }catch(err){
             console.log(err);
         }
-        return true;
+        return {"name": "No se actualizó la compra"};
     };
 
     /*
@@ -175,8 +172,8 @@ export class DAOPurchase implements DAO{
     PARAMS:
         - object: unknown
     RETURNS:
-        - true if the purchase was updated
-        - false if the purchase was not updated
+        - ok message if the purchase was updated
+        - error message if the purchase was not updated
     */
     async updatePurchaseState(userId_: number, purchaseId_: number, state_: string){
         try{
@@ -187,8 +184,7 @@ export class DAOPurchase implements DAO{
             //Verify existence of the product history
             const purchase = await collection.findOne({ purchaseId: purchaseId_, userId: userId_ });
             if (!purchase){
-                console.log("La compra " +  purchaseId_ + " no existe");
-                return false;
+                return {"name": "La compra no existe"};
             }
             //Update the product in the database
             const result = await collection.updateOne({ purchaseId: purchaseId_ }, { $set: { state: state_ } });
@@ -196,28 +192,25 @@ export class DAOPurchase implements DAO{
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was updated
             if (result.modifiedCount > 0) {
-                console.log("La compra se actualizó con éxito");
-                return true;
+                //console.log("La compra se actualizó con éxito");
+                return {"name": "La compra se actualizó con éxito"};
             } else {
-                console.log("No se encontró la compra a actualizar");
-                return false;
+                return {"name": "No se encontró la compra a actualizar"};
             }
-
         } catch(err){
-            console.log(err);
+            return {"name": "No se actualizó la compra"};
         }
-        return true;
     };
 
     /*
     -----------------------------------------------------------------------
     DELETE METHOD
-    Delete a purchase history in the database
+    Delete a purchase in the database
     PARAMS:
         - object: unknown
     RETURNS:
-        - true if the purchase history was deleted
-        - false if the purchase history was not deleted
+        - ok message if the purchase  was deleted
+        - error message if the purchase  was not deleted
     */
     async delete(purchaseId_: unknown){
         try{
@@ -229,8 +222,8 @@ export class DAOPurchase implements DAO{
             //Verify existence of the product history
             const product = await collection.findOne({ purchaseId: purchaseId_ });
             if (!product){
-                console.log("El producto " +  purchaseId_ + " no existe");
-                return false;
+                //console.log("El producto " +  purchaseId_ + " no existe");
+                return {"name": "El producto no existe"};
             }
             //Delete the product in the database
             const result = await collection.deleteOne({ purchaseId: purchaseId_ });
@@ -238,16 +231,13 @@ export class DAOPurchase implements DAO{
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was deleted
             if (result.deletedCount > 0) {
-                console.log("La compra se eliminado con éxito");
-                return true;
+                return {"name": "La compra se eliminó con éxito"};
             } else {
-                console.log("No se encontró la compra a eliminar");
-                return false;
+                return {"name": "No se encontró la compra a eliminar"};
             }
 
         } catch(err){
-            console.log(err);
+            return {"name": "No se eliminó la compra"};
         }
-        return true;
     };
 }

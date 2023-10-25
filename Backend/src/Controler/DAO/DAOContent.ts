@@ -28,6 +28,7 @@ export class DAOContent implements DAO{
         - none
     RETURNS:
         - contents: array of contents
+        - error message if the contents were not found
     */
         async getAll(){
             try {
@@ -38,29 +39,19 @@ export class DAOContent implements DAO{
             
                 //Get the contents from the database, using the code
                 let contents = await collection.find({}).toArray();
-                // const cursor = await collection.find();
-                // for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-                //     purchaseHistory.push(doc);
-                // }
-                
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 if (contents) {
                     //console.log("Se encontraron los carritos: " + JSON.stringify(contents, null, 2));
                     return contents;
                 }
                 else{
-                    console.log("No se encontraron carritos");
-                    return false;
+                    return {"name": "No se encontraron contenidos"};
                 }
                 
-                
-    
             } catch (error) {
-                console.log(error);
-                return false;
+                //console.log(error);
+                return {"name": "No se encontraron contenidos"};
             }
-            
-    
         };
 
     /*
@@ -71,7 +62,7 @@ export class DAOContent implements DAO{
         - code: unknown
     RETURNS:
         - Content if the Content was found
-        - false if the Content was not found
+        - error message if the Content was not found
     */
     async getObject(contentId: unknown){
         try{
@@ -82,18 +73,18 @@ export class DAOContent implements DAO{
             //Get the Content from the database, using the code
             const Content = await collection.findOne({ contentId: contentId });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the content was found, return it, else return false
+            // If the content was found, return it, else return error message
             if (Content) {
-                console.log("Se encontro: " + JSON.stringify(Content, null, 2));
+                //console.log("Se encontro: " + JSON.stringify(Content, null, 2));
                 return Content;
             } else {
-                console.log("No se encontró el contenido con el código: " + contentId);
-                return false; 
+                //console.log("No se encontró el contenido con el código: " + contentId);
+                return {"name": "No se encontró el contenido"}; 
             }
 
         } catch(err){
-            console.log(err);
-            return false;
+            //console.log(err);
+            return {"name": "No se encontró el contenido"};
         }
     };
 
@@ -104,8 +95,8 @@ export class DAOContent implements DAO{
     PARAMS:
         - object: Content
     RETURNS:
-        - true if the Content was created
-        - false if the Content was not created
+        - ok message if the Content was created
+        - error message if the Content was not created
     */
     async create(object: any){
         try{
@@ -130,9 +121,9 @@ export class DAOContent implements DAO{
             //Check if the content already exists
             const content = await collection.findOne({ title: object.title });
             if (content){
-                console.log("El contenido " +  object.title + " ya existe");
+                //console.log("El contenido " +  object.title + " ya existe");
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-                return false;
+                return {"name": "El contenido " + object.title + " ya existe"};
             }
           
             //Insert the product in the database, convert it to JSON and parse it
@@ -143,27 +134,23 @@ export class DAOContent implements DAO{
             //update id with the auto-generated id
             const doc = await collection.findOne({ title: object.title });
             if (!doc){
-                console.log("El content " +  object.title + " no existe");
-                return false;
+                //console.log("El content " +  object.title + " no existe");
+                return {"name": "El contenido " + object.title + " no existe"};
             }
 
             //update the contentId with the stringObjectId
             const result = await collection.updateOne({ title: newContent.title }, { $set: { contentId: doc._id } });
             //validate if the content was updated
             if (result.modifiedCount > 0) {
-                console.log("Content actualizado con éxito");
+                //console.log("Content actualizado con éxito");
+                return {"name": "Contenido actualizado con éxito"};
             } else {
-                console.log("No se encontró el content para actualizar");
-                return false;
+                //console.log("No se encontró el content para actualizar");
+                return {"name": "No se encontró el contenido para actualizar"};
             }
-
-            console.log("Se inserto: " + newContentJson);
-            //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            return true;
         } catch(err){
-            console.log(err);
+            return {"name": "No se encontró el contenido"};
         }
-        return false;
     };
 
     /*
@@ -173,8 +160,8 @@ export class DAOContent implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was updated
-        - false if the product was not updated
+        - ok message if the product was updated
+        - error message if the product was not updated
     */
         async update(object: any){
             try{
@@ -197,19 +184,17 @@ export class DAOContent implements DAO{
                 //Verify existence of the content
                 const content = await collection.findOne({ contentId: object._id });
                 if (!content){
-                    console.log("El content " +  object._id + " no existe");
-                    return false;
+                    //console.log("El content " +  object._id + " no existe");
+                    return {"name": "El contenido no existe"};
                 }
                 //Verify that the title is not already taken
                 const contentRepeated = await collection.find({ title: object.title });
                 for (let doc = await contentRepeated.next(); doc != null; doc = await contentRepeated.next()) {
                     if (doc._id != object._id){
-                        console.log("El content " +  object.title + " ya existe");
-                        return false;
+                        //console.log("El content " +  object.title + " ya existe");
+                        return {"name": "El contenido" + object.title + " ya existe"};
                     }
                 }
-                
-
                 //Create the update object for updating the content
                 const InfoToUpdate = {
                     $set: {
@@ -226,15 +211,15 @@ export class DAOContent implements DAO{
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 //Check if the product was updated  
                 if (result.modifiedCount > 0) {
-                    console.log("Contenido actualizado con éxito " + JSON.stringify(object, null, 2));
-                    return true;
+                    //console.log("Contenido actualizado con éxito " + JSON.stringify(object, null, 2));
+                    return {"name": "Contenido actualizado con éxito"};
                 } else {
-                    console.log("No se encontró el contenido para actualizar o no se actualizó ningun campo");
-                    return false;
+                    //console.log("No se encontró el contenido para actualizar o no se actualizó ningun campo");
+                    return {"name": "No se encontró el contenido para actualizar o no se actualizó ningun campo"};
                 }
             } catch(err){
-                console.log(err);
-                return false
+                //console.log(err);
+                return {"name": "No se encontró el contenido"};
             } //end try-catch
         };
 
@@ -245,8 +230,8 @@ export class DAOContent implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was deleted
-        - false if the product was not deleted
+        - ok message if the product was deleted
+        - error message if the product was not deleted
     */
     async delete(contentId: unknown){
         try{
@@ -258,8 +243,8 @@ export class DAOContent implements DAO{
             //Verify existence of the content
             const content = await collection.findOne({ contentId: contentId });
             if (!content){
-                console.log("El content " +  contentId + " no existe");
-                return false;
+                //console.log("El content " +  contentId + " no existe");
+                return {"name": "El contenido no existe"};
             }
             //Delete the content in the database
             const result = await collection.deleteOne({ contentId: contentId });
@@ -267,17 +252,17 @@ export class DAOContent implements DAO{
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the content was deleted
             if (result.deletedCount > 0) {
-                console.log("Content eliminado con éxito");
-                return true;
+                //console.log("Content eliminado con éxito");
+                return {"name": "Contenido eliminado con éxito"};
             } else {
-                console.log("No se encontró el content para eliminar");
-                return false;
+                //console.log("No se encontró el content para eliminar");
+                return {"name": "No se pudo eliminar contenido"};
             }
 
         } catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "No se puso eliminar el contenido"};
         }
-        return true;
     };
     
 }
