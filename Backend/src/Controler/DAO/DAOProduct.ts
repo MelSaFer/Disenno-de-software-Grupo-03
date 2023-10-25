@@ -49,17 +49,14 @@ export class DAOProduct implements DAO{
                 
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 if (product) {
-                    //console.log("Se encontraron los carritos: " + JSON.stringify(contents, null, 2));
                     return product;
                 }
                 else{
-                    console.log("No se encontraron productos");
-                    return false;
+                    return {"name": "No se encontraron productos"};
                 }
-            
             } catch (error) {
-                console.log(error);
-                return false;
+                //console.log(error);
+                return {"name": "No se encontraron productos"};
             }
             
     
@@ -73,7 +70,7 @@ export class DAOProduct implements DAO{
         - code: String | Undefined
     RETURNS:
         - Product if the product was found
-        - false if the product was not found
+        - error message if the product was not found
     */
     async getObject(idProduct_: unknown){
         try{
@@ -85,20 +82,19 @@ export class DAOProduct implements DAO{
             //Get the product from the database, using the code
             const product = await collection.findOne({ productId: idProduct_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the product was found, return it, else return false
+            // If the product was found, return it, else return error message
             if (product) {
-                console.log("Se encontro: " + JSON.stringify(product, null, 2));
+                //console.log("Se encontro: " + JSON.stringify(product, null, 2));
                 return product;
             } else {
-                console.log("No se encontró el producto con el código: " + idProduct_);
+                //console.log("No se encontró el producto con el código: " + idProduct_);
                 return {"name": "No se encontró el producto"}; 
-                //return false;
                 
             }
 
         } catch(err){
-            console.log(err);
-            return false;
+            //console.log(err);
+            return {"name": "No se encontró el producto"};
         }
     };
 
@@ -110,7 +106,7 @@ export class DAOProduct implements DAO{
         - code: number
     RETURNS:
         - Product if the product was found
-        - false if the product was not found
+        - error message if the product was not found
     */
 
     async getProductName(idProduct_: unknown){
@@ -123,18 +119,18 @@ export class DAOProduct implements DAO{
             //Get the product from the database, using the code
             const product = await collection.findOne({ productId: idProduct_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the product was found, return it, else return false
+            // If the product was found, return it, else return error message
             if (product) {
                 console.log("Se encontro: " + JSON.stringify(product, null, 2));
                 return product.description;
             } else {
-                console.log("No se encontró el producto con el código: " + idProduct_);
-                return false; 
+                //console.log("No se encontró el producto con el código: " + idProduct_);
+                return {"name": "No se encontró el producto"}; 
             }
 
         } catch(err){
-            console.log(err);
-            return false;
+            //console.log(err);
+            return {"name": "No se encontró el producto"};
         }
     };
 
@@ -145,8 +141,8 @@ export class DAOProduct implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was created
-        - false if the product was not created
+        - ok message if the product was created
+        - error message if the product was not created
     */
     async create(object: any){
         try{
@@ -168,9 +164,9 @@ export class DAOProduct implements DAO{
             //Check if the product already exists
             const product = await collection.findOne({ name: newProduct.name });
             if (product){
-                console.log("El producto " +  object.name + " ya existe");
+                //console.log("El producto " +  object.name + " ya existe");
                 SingletonMongo.getInstance().disconnect_();
-                return false;
+                return {"name": "Ya existe un producto con ese nombre"};
             }
             //Insert the product in the database, convert it to JSON and parse it
             const newProductJson = JSON.stringify(newProduct);
@@ -180,19 +176,19 @@ export class DAOProduct implements DAO{
             
             const theProduct = await collection.findOne({ name: newProduct.name });
             if(!theProduct){
-                console.log("ERROR AL INSERTAR EL PRODUCTO");
+                //console.log("ERROR AL INSERTAR EL PRODUCTO");
                 SingletonMongo.getInstance().disconnect_();
-                return false;
+                return {"name": "Error al insertar el producto"};
             }
             //update the contentId with the stringObjectId
             const result = await collection.updateOne({ name: object.name }, { $set: { productId: theProduct._id } });
-            console.log("Se inserto: " + newProductJson);
+            //console.log("Se inserto: " + newProductJson);
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            return true;
+            return {"name": "Se insertó el producto con éxito"};
         } catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "Error al insertar el producto"};
         }
-        return false;
     };
 
     /*
@@ -202,8 +198,8 @@ export class DAOProduct implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was updated
-        - false if the product was not updated
+        - ok message if the product was updated
+        - error message if the product was not updated
     */
     async update(object: any){
         try{
@@ -213,7 +209,6 @@ export class DAOProduct implements DAO{
             const collection = db.collection(PRODUCT_COLLECTION);
             //Get the model from the database with the schema
             const Product = mongoose.model('Product', ProductSchema);
-            //console.log(JSON.stringify(object.productId));
             //Create a new product with the object received
             let updatedProduct = new Product({
                 productId: object.productId,
@@ -226,8 +221,8 @@ export class DAOProduct implements DAO{
             //Check if the product exists
             const product_ = await collection.findOne({productId: object.productId});
             if (!product_){
-                console.log("El producto " +  JSON.stringify(object.productId) + " no existe");
-                return false;
+                //console.log("El producto " +  JSON.stringify(object.productId) + " no existe");
+                return {"name": "El producto no existe"};
             }
             
             //Verify that the name is not already taken
@@ -235,7 +230,7 @@ export class DAOProduct implements DAO{
             for (let doc = await contentRepeated.next(); doc != null; doc = await contentRepeated.next()) {
                 if (doc._id != object._id){
                     console.log("El producto " +  JSON.stringify(object.title) + " ya existe");
-                    return false;
+                    return {"name": "Ya existe un producto con ese nombre"};
                 }
             }
 
@@ -253,16 +248,17 @@ export class DAOProduct implements DAO{
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was updated  
             if (result.modifiedCount > 0) {
-                console.log("Producto actualizado con éxito " + JSON.stringify(updatedProduct, null, 2));
-                return true;
+                //console.log("Producto actualizado con éxito " + JSON.stringify(updatedProduct, null, 2));
+                return {"name": "Producto actualizado con éxito"};
             } else {
-                console.log("No se encontró el producto para actualizar o no se actualizó ningun campo");
-                return false;
+                //console.log("No se encontró el producto para actualizar o no se actualizó ningun campo");
+                return {"name": "No se encontró el producto a actualizar o no se actualizó ningun campo"};
             }
         } catch(err){
             console.log(err);
+            return {"name": "No se encontró el producto"};
         } //end try-catch
-        return true;
+        //return ok message;
     };
 
     /*
@@ -272,8 +268,8 @@ export class DAOProduct implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was updated
-        - false if the product was not updated
+        - ok message if the product was updated
+        - error message if the product was not updated
     */
     async delete(productId_: unknown){
         try{
@@ -285,8 +281,8 @@ export class DAOProduct implements DAO{
             //Verify existence of the product
             const product = await collection.findOne({ productId: productId_ });
             if (!product){
-                console.log("El producto " +  productId_ + " no existe");
-                return false;
+                //console.log("El producto " +  productId_ + " no existe");
+                return {"name": "El producto no existe"};
             }
             //Delete the product in the database
             const result = await collection.deleteOne({ productId: productId_ });
@@ -294,16 +290,16 @@ export class DAOProduct implements DAO{
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was deleted
             if (result.deletedCount > 0) {
-                console.log("Product eliminado con éxito");
-                return true;
+                //console.log("Product eliminado con éxito");
+                return {"name": "Producto eliminado con éxito"};
             } else {
-                console.log("No se encontró el product para eliminar");
-                return false;
+                //console.log("No se encontró el product para eliminar");
+                return {"name": "No se encontró el producto"};
             }
 
         } catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "No se encontró el producto"};
         }
-        return true;
     };
 }

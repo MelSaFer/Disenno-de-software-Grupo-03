@@ -14,6 +14,13 @@ import {DATABASE_NAME, CATEGORY_COLLECTION} from "../config";
     - create(object: any)
     - update(object: any)
     - delete(object: unknown)
+    - getSubcategory(categoryName: unknown, subcategoryName: unknown)
+    - getSubcategories(categoryName: unknown)
+    - addSubcategory(categoryName: unknown, object: any)
+    - deleteSubcategory(categoryName: unknown, subcategoryName: unknown)
+    - updateSubcategory(categoryName: unknown, object: any)
+    - getSubcategory(categoryName: unknown, subcategoryName: unknown)
+    - getSubcategories(categoryName: unknown)
 -----------------------------------------------------------------------*/
 
 export class DAOCategory implements DAO{
@@ -27,6 +34,7 @@ export class DAOCategory implements DAO{
         - none
     RETURNS:
         - categories: array of categories
+        - error message: error message if there was no error
     */
         async getAll(){
             try {
@@ -38,24 +46,19 @@ export class DAOCategory implements DAO{
                 //Get the categories from the database, using the code
                 let categories = await collection.find({}).toArray();
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-    
                 if (categories) {
                     //console.log("Se encontraron los carritos: " + JSON.stringify(categories, null, 2));
                     return categories;
                 }
                 else{
-                    console.log("No se encontraron carritos");
-                    return false;
+                    //console.log("No se encontraron carritos");
+                    return {"name": "No se encontraron categorias"};
                 }
                 
-                
-    
             } catch (error) {
-                console.log(error);
-                return false;
+                //console.log(error);
+                return {"name": "No se encontraron categorias"};
             }
-            
-    
         };
 
     /*
@@ -66,7 +69,7 @@ export class DAOCategory implements DAO{
         - code: unknown
     RETURNS:
         - Category if the Category was found
-        - false if the Category was not found
+        - error if the Category was not found
     */
     async getObject(categoryName: unknown){
         try{
@@ -77,18 +80,17 @@ export class DAOCategory implements DAO{
             //Get the Category from the database, using the code
             const Category = await collection.findOne({ categoryName: categoryName });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
-            // If the category was found, return it, else return false
+            // If the category was found, return it, else return error message message
             if (Category) {
                 console.log("Se encontro: " + JSON.stringify(Category, null, 2));
                 return Category;
             } else {
                 console.log("No se encontró el categoria con el código: " + categoryName);
-                return false; 
+                return {"name": "No se encontró el categorias"}; 
             }
-
         } catch(err){
-            console.log(err);
-            return false;
+            //console.log(err);
+            return {"name": "No se encontró el categorias"};
         }
     };
 
@@ -99,8 +101,8 @@ export class DAOCategory implements DAO{
     PARAMS:
         - object: Category
     RETURNS:
-        - true if the Category was created
-        - false if the Category was not created
+        - ok message if the Category was created
+        - error message if the Category was not created
     */
     async create(object: any){
         try{
@@ -121,20 +123,20 @@ export class DAOCategory implements DAO{
             const category = await collection.findOne({ categoryName: object.categoryName });
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             if (category){
-                console.log("El categoria " +  object.categoryName + " ya existe");
-                return false;
+                //console.log("El categoria " +  object.categoryName + " ya existe");
+                return {"name": "La categoria ya existe"};
             }
             
             //Insert the product in the database, convert it to JSON and parse it
             const newCategoryJson = JSON.stringify(newCategory);
             const newCategoryparsed = JSON.parse(newCategoryJson);
             await collection.insertOne(newCategoryparsed);
-            console.log("Se inserto: " + newCategoryJson);
-            return true;
+            //console.log("Se inserto: " + newCategoryJson);
+            return {"name": "Se inserto la categoria" + newCategory.categoryName};
         } catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "No se inserto la categoria"};
         }
-        return false;
     };
 
     /*
@@ -144,7 +146,7 @@ export class DAOCategory implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was updated
+        - ok message if the product was updated
         - false if the product was not updated
     */
         async update(object: any){
@@ -168,7 +170,7 @@ export class DAOCategory implements DAO{
                 const category = await collection.findOne({ categoryName: updatedCategory.categoryName });
                 if (!category){
                     console.log("El category " +  updatedCategory.categoryName + " no existe");
-                    return false;
+                    return {"name": "El category no existe"};
                 }
 
                 //Create the update object for updating the category
@@ -183,16 +185,16 @@ export class DAOCategory implements DAO{
                 //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
                 //Check if the product was updated  
                 if (result.modifiedCount > 0) {
-                    console.log("Contenido actualizado con éxito " + JSON.stringify(updatedCategory, null, 2));
-                    return true;
+                    //console.log("Contenido actualizado con éxito " + JSON.stringify(updatedCategory, null, 2));
+                    return {"name": "Contenido actualizado con éxito"};
                 } else {
-                    console.log("No se encontró el categoria para actualizar o no se actualizó ningun campo");
-                    return false;
+                    //console.log("No se encontró el categoria para actualizar o no se actualizó ningun campo");
+                    return {"name": "No se encontró el categoria para actualizar o no se actualizó ningun campo"};
                 }
             } catch(err){
-                console.log(err);
+                //console.log(err);
+                return {"name": "No se actualizó el categoria"};
             } //end try-catch
-            return true;
         };
 
     /*
@@ -202,8 +204,8 @@ export class DAOCategory implements DAO{
     PARAMS:
         - object: Product
     RETURNS:
-        - true if the product was deleted
-        - false if the product was not deleted
+        - ok message if the product was deleted
+        - error message if the product was not deleted
     */
     async delete(categoryName: unknown){
         try{
@@ -216,7 +218,7 @@ export class DAOCategory implements DAO{
             const category = await collection.findOne({ categoryName: categoryName });
             if (!category){
                 console.log("El category " +  categoryName + " no existe");
-                return false;
+                return {"name": "El category no existe"};
             }
             //Delete the category in the database
             const result = await collection.deleteOne({ categoryName: categoryName });
@@ -224,17 +226,17 @@ export class DAOCategory implements DAO{
             //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the category was deleted
             if (result.deletedCount > 0) {
-                console.log("Category eliminado con éxito");
-                return true;
+                //console.log("Category eliminado con éxito");
+                return {"name": "Category eliminado con éxito"};
             } else {
-                console.log("No se encontró el category para eliminar");
-                return false;
+                //console.log("No se encontró el category para eliminar");
+                return {"name": "No se encontró la categoria" + categoryName};
             }
 
         } catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "No se pudo eliminar el categoria"};
         }
-        return true;
     };
 
     /*
@@ -246,7 +248,7 @@ export class DAOCategory implements DAO{
         - subcategoryName: Number
     RETURNS:
         - subcategory if the subcategory was found
-        - false if the subcategory was not found
+        - error message if the subcategory was not found
     */
     async getSubcategory(categoryName: unknown, subcategoryName: unknown){
         try{
@@ -262,18 +264,18 @@ export class DAOCategory implements DAO{
                 let subcategory = subcategories.find((subcategory: any) => subcategory.subcategoryName === subcategoryName);
                 //if the subcategory was not found
                 if (!subcategory){ 
-                    console.log("No se encontró la subcategoría con el código: " + subcategoryName);
-                    return false; 
+                    //console.log("No se encontró la subcategoría con el código: " + subcategoryName);
+                    return {"name": "No se encontró la subcategoría " + subcategoryName}; 
                 }
                 return subcategory;
             } else {
-                console.log("No se encontró el sub categoria con el código: " + subcategoryName);
-                return false; 
+                //console.log("No se encontró el sub categoria " + subcategoryName);
+                return {"name": "No se encontró el sub categoria " + subcategoryName}; 
             }
 
         } catch(err){
-            console.log(err);
-            return false;
+            //console.log(err);
+            return {"name": "No se encontró el sub categoria"};
         }
     };
 
@@ -285,7 +287,7 @@ export class DAOCategory implements DAO{
         - categoryName:  Number
     RETURNS:
         - subcategories if the subcategories were found
-        - false if the subcategories were not found
+        - error message if the subcategories were not found
     */
     async getSubcategories(categoryName: unknown){
         try{
@@ -298,16 +300,16 @@ export class DAOCategory implements DAO{
             // If the category was found, return it, else return false
             if (Category) {
                 let subcategories = Category.subcategories;
-                console.log("Se encontro la subcategoría: " + JSON.stringify(subcategories, null, 2));
+                //console.log("Se encontro la subcategoría: " + JSON.stringify(subcategories, null, 2));
                 return subcategories;
             } else {
-                console.log("No se encontró el subcategoria con el código: " + categoryName);
-                return false; 
+                //console.log("No se encontró el subcategoria con el código: " + categoryName);
+                return {"name": "No se encontró el subcategoria " + categoryName}; 
             }
 
         } catch(err){
-            console.log(err);
-            return false;
+            //console.log(err);
+            return {"name": "No se encontró el subcategoria"};
         }
     };
 
@@ -319,8 +321,8 @@ export class DAOCategory implements DAO{
         - categoryName:  Number
         - object: Subcategory
     RETURNS:
-        - true if the subcategory was added
-        - false if the subcategory was not added
+        - ok message if the subcategory was added
+        - error message if the subcategory was not added
     */
     async addSubcategory(categoryName: unknown, object: any){
         try{
@@ -339,12 +341,13 @@ export class DAOCategory implements DAO{
                     newSubcategories.push(newSubcategory);
                     console.log("La subcategoría " + object.subcategoryName + " se agregó a la categoría " + categoryName);
                     const result = await collection.updateOne({ categoryName: categoryName}, { $set: { subcategories: newSubcategories } });
-                    return true;
+                    return {"name": "La subcategoría " + object.subcategoryName + " se agregó a la categoría " + categoryName};
                 }
-                return false;
+                return {"name": "La subcategoría " + object.subcategoryName + " ya existe en la categoría " + categoryName};
             }
         } catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "No se agregó la subcategoría a la categoría"};
         }
         return false;
     };
@@ -357,8 +360,8 @@ export class DAOCategory implements DAO{
         - categoryName:  Number
         - subcategoryName: Number
     RETURNS:
-        - true if the subcategory was deleted
-        - false if the subcategory was not deleted
+        - ok message if the subcategory was deleted
+        - error message if the subcategory was not deleted
     */
     async deleteSubcategory(categoryName: unknown, subcategoryName: unknown){
         try{
@@ -376,23 +379,24 @@ export class DAOCategory implements DAO{
                     const newSubcategories = category.subcategories.filter((subcategory : any) => subcategory.subcategoryName !== subcategoryName);
                     //check if a subcategory was deleted
                     if (newSubcategories.length == category.subcategories.length) {
-                        console.log("No se encontró la subcategoría " + subcategoryName + " en la categoría " + categoryName);
-                        return false;
+                        //console.log("No se encontró la subcategoría " + subcategoryName + " en la categoría " + categoryName);
+                        return {"name": "No se encontró la subcategoría " + subcategoryName + " en la categoría " + categoryName};
                     }
-                    console.log("La subcategoría " + subcategoryName + " se elmino de la categoría " + categoryName);
+                    //console.log("La subcategoría " + subcategoryName + " se elmino de la categoría " + categoryName);
                     const result = await collection.updateOne({ categoryName: categoryName}, { $set: { subcategories: newSubcategories } });
-                    return true;
+                    return {"name": "La subcategoría " + subcategoryName + " se eliminó de la categoría " + categoryName};
                 } else {
-                    console.log("No se encontró la subcategoría " + subcategoryName + " en la categoría " + categoryName);
-                    return false;
+                    //console.log("No se encontró la subcategoría " + subcategoryName + " en la categoría " + categoryName);
+                    return {"name": "No se encontró la subcategoría " + subcategoryName + " en la categoría " + categoryName};
                 }
             } else {
-                console.log("No se encontró la categoría " + categoryName);
-                return false;
+                //console.log("No se encontró la categoría " + categoryName);
+                return {"name": "No se encontró la categoría " + categoryName};
             }
 
         }catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "No se eliminó la subcategoría de la categoría"};
         }
     };
 
@@ -404,8 +408,8 @@ export class DAOCategory implements DAO{
         - categoryName:  Number
         - object: Subcategory
     RETURNS:
-        - true if the subcategory was updated
-        - false if the subcategory was not updated
+        - ok message if the subcategory was updated
+        - error message if the subcategory was not updated
     */
     async updateSubcategory(categoryName: unknown, object: any){
         try{
@@ -428,17 +432,18 @@ export class DAOCategory implements DAO{
                         }
                     }
                     const result = await collection.updateOne({ categoryName: categoryName}, { $set: { subcategories: newSubcategories } });
-                    return true;
+                    return {"name": "La subcategoría " + object.subcategoryName + " se actualizó en la categoría " + categoryName};
                 } else {
-                    console.log("No se encontró la subcategoría " + object.subcategoryName + " en la categoría " + categoryName);
-                    return false;
+                    //console.log("No se encontró la subcategoría " + object.subcategoryName + " en la categoría " + categoryName);
+                    return {"name": "No se encontró la subcategoría " + object.subcategoryName + " en la categoría " + categoryName};
                 }
             } else {
-                console.log("No se encontró la categoría " + categoryName);
-                return false;
+                //console.log("No se encontró la categoría " + categoryName);
+                return {"name": "No se encontró la categoría " + categoryName};
             }
         }catch(err){
-            console.log(err);
+            //console.log(err);
+            return {"name": "No se actualizó la subcategoría de la categoría"};
         }
     };
 
