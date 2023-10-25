@@ -1,3 +1,8 @@
+/*
+Class Purchase
+
+*/
+
 import {Product} from "./Product"
 import {Image_} from "./Image_"
 import {ShippingAddress} from "./ShippingAdress"
@@ -10,11 +15,12 @@ export class Purchase{
     private aproxDeliveryDate: Date | undefined;
     private shippingAdress: ShippingAddress | undefined;
     private shippingPrice: Number = 1;
+    private state: String = "PENDING";
 
 
     public constructor(orderNumber: Number, purchaseDetails: String, 
         products: Product[], voucher: Image_, aproxDeliveryDate: Date, 
-        shippingAdress: ShippingAddress, shippingPrice: Number){        
+        shippingAdress: ShippingAddress, shippingPrice: Number, state: String){        
         this.orderNumber = orderNumber;
         this.purchaseDetails = purchaseDetails;
         this.products = products;
@@ -22,6 +28,7 @@ export class Purchase{
         this.aproxDeliveryDate = aproxDeliveryDate;
         this.shippingAdress = shippingAdress;
         this.shippingPrice = shippingPrice;
+        this.state = state;
     }
 
 }

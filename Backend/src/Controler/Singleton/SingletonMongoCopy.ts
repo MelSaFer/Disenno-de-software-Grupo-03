@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import {MONGODB_URI} from './config';
+import {MONGODB_URI} from '../config';
 import { connect, Connection } from 'mongoose';
 //import { async } from '@firebase/util';
 
