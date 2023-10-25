@@ -28,7 +28,7 @@ function Page(): JSX.Element {
     // Redirect to the admin page
     // Typically you would want to redirect them to a protected page an add a check to see if they are admin or
     // create a new page for admin
-    router.push("/admin");
+    router.push("/mainPage");
   };
 
   return (
@@ -73,13 +73,13 @@ function Page(): JSX.Element {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
-          <div className="flex items-end justify-end text-blue-500 mb-3">
+          <div className="flex items-end justify-end text-yellow-900 mb-3">
             <Link href="/forgotPassword">Forgot your password?</Link>
           </div>
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white font-semibold py-2 rounded"
+              className="w-full bg-yellow-900 text-white font-semibold py-2 rounded"
             >
               Sign In
             </button>

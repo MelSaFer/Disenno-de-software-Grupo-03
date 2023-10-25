@@ -64,12 +64,12 @@ function ForgotPassword(): JSX.Element {
           <div className="flex items-center justify-between mb-3">
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white font-semibold py-2 rounded"
+              className="w-full bg-yellow-900 text-white font-semibold py-2 rounded"
             >
               Send
             </button>
           </div>
-          <div className="flex items-center justify-center text-blue-500">
+          <div className="flex items-center justify-center text-yellow-900">
             <Link href="/signin">Go back</Link>
           </div>
         </form>

@@ -64,11 +64,11 @@ function Page(): JSX.Element {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-semibold py-2 rounded"
+            className="w-full bg-yellow-900 text-white font-semibold py-2 rounded"
           >
             Sign up
           </button>
-          <div className="flex items-center justify-center text-blue-500">
+          <div className="flex items-center justify-center text-yellow-900">
             <Link href="/">Go back</Link>
           </div>
         </form>

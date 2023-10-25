@@ -1,52 +1,74 @@
+// @ts-nocheck
 "use client";
 import Link from "next/link";
+import Footer from "../../components/footer";
 import React, { useState, useEffect } from "react";
+import Navbar2 from "@/src/components/navbar2";
+import axios from "axios";
+import * as Routes from "../routes";
+import { auth } from "../../firebase/config";
 
 const UserInfo = () => {
   const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [authUser, setAuthUser] = useState({ uid: "", email: "" });
 
   useEffect(() => {
-    fetch("https://catfact.ninja/fact")
-      .then((response) => response.json())
-      .then((data) => {
-        const nombre = data.fact;
-        setNombre(nombre);
-      })
-      .catch((error) => console.error(error));
+    const fetchData = async () => {
+      const requestData = { userId: "1" };
+      try {
+        const result = await axios.request({
+          method: "post",
+          url: Routes.getUserInfo,
+          headers: { "Content-Type": "application/json" },
+          data: requestData,
+        });
+        setNombre(result.data.userId);
+        console.log(result);
+      } catch (error) {
+        console.error("Error al obtener datos:", error);
+      }
+    };
+    fetchData();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setAuthUser({ uid: user.uid, email: user.email });
+        console.log(`El UID del usuario es ${user.uid} ${user.email}`);
+      } else {
+        console.log("No hay usuario iniciado sesión");
+      }
+    }, []);
+
+    return () => unsubscribe();
+  }, []);
+  // console.log(authUser);
+
   return (
-    <div>
-      <header className="bg-green-200 py-5 mb-6"></header>
-      <div className="font-bold text-4xl text-yellow-900 text-center mb-3">
-        DUENDE MAQUILLISTA
-      </div>
-      <div className="flex items-start justify-center text-yellow-900 mb-20">
-        <button className="bg-white border border-gray-300 hover:bg-gray-200 hover:border-gray-300 px-4 py-2 rounded">
-          Tienda
-        </button>
-        <button className="bg-white border border-gray-300 hover:bg-gray-200 hover:border-gray-300 px-4 py-2 rounded">
-          Galería
-        </button>
-        <Link href="/admin">
-          <button className="bg-white border border-gray-300 hover:bg-gray-200 hover:border-gray-300 px-4 py-2 rounded">
-            Salir
-          </button>
-        </Link>
-      </div>
-      <div className="flex flex-col items-center justify-center text-yellow-900 mb-10">
-        <h1 className="font-bold text-2xl">Nombre del usuario: </h1>
-        <p>{nombre}</p>
-        <h1 className="font-bold text-2xl">Correo electrónico:</h1>
-        <p>{nombre}</p>
-      </div>
-      <div className="flex items-center justify-center">
-        <Link href="/admin">
-          <button className=" text-white  bg-red-500  hover:bg-red-400 hover:border-gray-300 px-4 py-2 rounded-full">
-            Historial de compras
-          </button>
-        </Link>
-      </div>
+    <div className="flex flex-col min-h-screen">
+      <header>
+        <Navbar2 />
+      </header>
+      <main className="flex-grow">
+        <div className="flex flex-col items-center justify-center text-yellow-900 mb-10">
+          <h1 className="font-bold text-2xl">Nombre del usuario: </h1>
+          <p>{nombre}</p>
+          <h1 className="font-bold text-2xl">Correo electrónico:</h1>
+          <p>{email}</p>
+        </div>
+        <div className="flex items-center justify-center">
+          <Link href="/admin">
+            <button className=" text-white  bg-red-500  hover:bg-red-400 hover:border-gray-300 px-4 py-2 rounded-full">
+              Historial de compras
+            </button>
+          </Link>
+        </div>
+      </main>
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 };
