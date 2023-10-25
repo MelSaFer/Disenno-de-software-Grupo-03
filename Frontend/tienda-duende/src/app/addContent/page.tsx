@@ -14,7 +14,7 @@ const AddContent = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [keyWords, setKeyWords] = useState("");
-  const [keyFormat, setKeyFormat] = useState(false);
+  const [keyFormat, setKeyFormat] = useState(true);
   const [imagen, setImagen] = useState(null);
   const [imagenURL, setImagenURL] = useState("");
 
@@ -62,7 +62,7 @@ const AddContent = () => {
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
 
-      const formatedDate = `${day}/${month}/${year}`;
+      const formatedDate = `${year}-${month}-${day}T00:00:00.000Z`;
 
       const datos = {
         title: name,
