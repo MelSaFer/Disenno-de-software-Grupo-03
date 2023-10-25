@@ -12,7 +12,7 @@ const UserInfo = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = { userId: 1 };
+      const requestData = { userId: "1" };
       try {
         const result = await axios.request({
           method: "post",

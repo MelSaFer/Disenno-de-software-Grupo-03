@@ -13,7 +13,7 @@ const History = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = { userId: 2 };
+      const requestData = { userId: "2" };
       try {
         const result = await axios.request({
           method: "post",
