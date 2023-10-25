@@ -1,44 +1,51 @@
 'use client'
 import { useAuthContext } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Image from 'next/image';
+import profilePic from "../../../public/images/ProfilePic.png";
+import Navigation from "../../../components/Navbar";
 
 function Page(): JSX.Element {
-  // Access the user object from the authentication context
-  // const { user } = useAuthContext();
-  const { user, logOut} = useAuthContext() as { user: any; logOut: () => Promise<void>;  }; // Use 'as' to assert the type as { user: any }
+  const { user, logOut } = useAuthContext() as { user: any; logOut: () => Promise<void> };
   const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
-  useEffect( () => {
-    // Redirect to the home page if the user is not logged in
-    if ( user == null ) {
-      router.push( "/" );
+  useEffect(() => {
+    if (user == null) {
+      router.push("/");
     }
-    // }, [ user ] );
-  }, [ user, router ] ); // Include 'router' in the dependency array to resolve eslint warning
+    setUserEmail(user.email);
+  }, [user, router]);
 
   const handleLogout = async () => {
     try {
-      await logOut(); // Llama a la función para cerrar la sesión
-      router.push("/"); // Redirige al usuario a la página de inicio después del cierre de sesión
+      await logOut();
+      router.push("/");
     } catch (error) {
       console.error("Error al cerrar sesión: ", error);
     }
   };
-
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1>Only logged-in users can view this page</h1>
-      <button
-        onClick={() => {
-          logOut();
-          router.push('/');
-      }}
-      className="rounded-md bg-green-600 px-10 py-3 text-white shadow-sm hover:bg-green-700"
-  >
-      Logout
-      </button>
-    </div>
+    <>
+      <Navigation />
+      <main className="flex flex-col items-center">
+        <div className="grid w-full grid-cols-6 gap-16 ">
+          <div className="col-span-3 mt-80 mx-32 flex text-4xl flex-col items-start justify-start">
+            <h1 className="text-5xl uppercase text-dark/75">Sobre mi</h1>
+            <p className="font-medium mt-10">
+              Soy una joven emprendedora de la zona de Concepción de Tres Ríos con un talento excepcional para el arte del maquillaje de caracterización. Me dedico a brindar servicios profesionales de maquillaje, cursos de automaquillaje y más.
+            </p>
+          </div>
+
+          <div className="mx-600 relative h-max rounded-2x1 border-0 border-solid border-dark bg-light p-8">
+            <div className="absolute top-0 z-10 w-[102%] h-[103%] rounded-[2rem] mt-60 bg-red justify-end">
+              <Image src={profilePic} alt="Main" className="pw-full h-auto max-h-[70vh] max-w-[70vh] rounded-2x1" />
+            </div>
+          </div>
+        </div>
+      </main>
+    </>
   );
 }
 
