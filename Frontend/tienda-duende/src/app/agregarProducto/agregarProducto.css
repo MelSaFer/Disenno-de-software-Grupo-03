@@ -1,0 +1,13 @@
+.page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ajusta la altura según tus necesidades */
+  }
+  
+  .content-container {
+    margin-top: 250px; /* Aplica el padding necesario aquí */
+    margin-left: 100px;
+    flex: 1; /* Esto permite que el contenido ocupe el espacio restante en la columna */
+    overflow-y: auto; /* Agrega un desplazamiento vertical si es necesario */
+  }
+  

@@ -30,17 +30,17 @@ export const addCategory: RequestHandler = async (req, res) => {
     }
     //Verify if the body has the correct structure
     if(!body.hasOwnProperty("categoryName") ||  !body.hasOwnProperty("subcategories")){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "1.Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
     if(typeof body.categoryName != "string" || !Array.isArray(body.subcategories)){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "2.Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
     if(body.categoryName.length == 0){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "3.Bad Request: Body is not correct"});
         return;
     }
 
@@ -234,17 +234,17 @@ export const addSubCategory: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("categoryName") || !body.hasOwnProperty("subcategoryName")){
+    if(!body.hasOwnProperty("categoryName") || !body.hasOwnProperty("subcategory")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.categoryName != "string" || typeof body.subcategoryName != "string"){
+    if(typeof body.categoryName != "string" || typeof body.subcategory.subcategoryName != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.categoryName.length == 0 || body.subcategoryName.length == 0){
+    if(body.categoryName.length == 0 || body.subcategory.subcategoryName.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
