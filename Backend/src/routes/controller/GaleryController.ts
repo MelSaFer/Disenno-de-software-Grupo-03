@@ -12,12 +12,12 @@ export const addContent : RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryId") || !body.hasOwnProperty("tags")){
+    if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryName") || !body.hasOwnProperty("tags")){
         res.status(400).json({msg: "1-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryId != "string"){
+    if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryName != "string"){
         res.status(400).json({msg: "2-Bad Request: Body is not correct"});
         return;
     }
@@ -27,7 +27,7 @@ export const addContent : RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryId.length == 0){
+    if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryName.length == 0){
         res.status(400).json({msg: "4-Bad Request: Body is not correct"});
         return;
     }
@@ -83,12 +83,12 @@ export const updateContent : RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryId") || !body.hasOwnProperty("tags") || !body.hasOwnProperty("_id")){
+    if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryName") || !body.hasOwnProperty("tags") || !body.hasOwnProperty("_id")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryId != "string" || typeof body._id != "string"){
+    if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryName != "string" || typeof body._id != "string"){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
@@ -98,7 +98,7 @@ export const updateContent : RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryId.length == 0 || body._id.length == 0){
+    if(body.title.length == 0 || body.date.length == 0 || body.imageId.length == 0 || body.categoryName.length == 0 || body._id.length == 0){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
