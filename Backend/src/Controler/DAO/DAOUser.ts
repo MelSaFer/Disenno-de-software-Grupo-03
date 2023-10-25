@@ -173,7 +173,7 @@ export class DAOUser implements DAO{
             const user_collection = db.collection(USER_COLLECTION);
             const purchasehistory_collection = db.collection(PURCHASE_COLLECTION);
             
-            //Get the cart from the database, using the code
+            //Get the user from the database, using the code
             const user = await user_collection.findOne({ userId: userId });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
 
@@ -196,6 +196,38 @@ export class DAOUser implements DAO{
 
                 //If the purchase history was found, return it, else return error
                 if (purchaseHistory){
+
+                    //Change productId for productName
+                    for (let i = 0; i < purchaseHistory.length; i++) {
+                        //Verify purchaseHistory[i] is not null
+                        if(purchaseHistory[i]){
+                            let products = purchaseHistory[i].products;
+                            let newProducts = [];
+                            for (let j = 0; j < products.length; j++) {
+                                let productId = products[j].productId;
+                                let quantity = products[j].quantity;
+
+                                let daoProduct = new DAOProduct();
+                                let product = await daoProduct.getObject(productId);
+
+                                if(product){
+                                    let doc = {"productName": product.name, "quantity": quantity};
+                                    newProducts.push(doc);
+                                }
+                                else{
+                                    //console.log("No se encontró el producto con el código: " + productId);
+                                    return {"name": "No se encontró el producto en el historial de compras"};
+                                }
+                            }
+                            purchaseHistory[i].products = newProducts;
+                        }
+                        else{
+                            //console.log("No se encontraron productos en el historial de compras del usuario con el código: " + userId);
+                            return {"name": "No se encontraron productos en el historial de compras del usuario"};
+                        }
+                        
+                    }
+
                     return purchaseHistory;
                 } else {
                     //console.log("No se encontró el historial de compras del usuario con el código: " + userId);
