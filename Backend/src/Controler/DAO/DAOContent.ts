@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { ObjectId } from 'mongodb';
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CONTENT_COLLECTION} from "../config";
+import {DAOCategory} from "./DAOCategory";
 
 /*-----------------------------------------------------------------------
  DAO CONTENT
@@ -264,5 +265,61 @@ export class DAOContent implements DAO{
             return {"name": "No se puso eliminar el contenido"};
         }
     };
+
+
+    async getAllWithFilters( categoryNames: string[], tags : string[]){
+        try {
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CONTENT_COLLECTION);
+            
+            //Get the contents from the database, using the code
+            let contents = await collection.find({}).toArray();
+            //----------------------------------------------------------------------------
+            let filterCategory : any[] = [];
+            if (categoryNames.length > 0){
+                for (let i = 0; i < categoryNames.length; i++) {
+                    filterCategory.push(contents.filter((content) => content.categoryName == categoryNames[i]));
+                } 
+            }
+
+            //----------------------------------------------------------------------------
+            let filterTags : any[] = [];
+            if(tags.length > 0){
+                for (let i = 0; i < tags.length; i++) {
+                    filterTags.push(contents.filter((content) => content.tags.includes(tags[i])));
+                } 
+                //console.log("filterTags: " + JSON.stringify(filterTags));
+            }
+
+            if (filterCategory.length == 0){
+                console.log("filterTags: " + JSON.stringify(filterTags));
+                return filterTags
+            } else if (filterTags.length == 0){
+                //console.log("filterTags: " + JSON.stringify(filterCategory, null, 2));
+                return filterCategory;
+            }else{
+                let resultado = filterCategory.concat(filterTags);
+                //console.log("resultado: " + JSON.stringify(resultado, null, 2));
+                //let uniqueIds = resultado.filter((content, index, self) => self.findIndex(c => c.contentId === content.contentId) === index).map((content) => content.contentId);
+                let resultadoDef:any = [];
+                for (let i = 0; i < resultado.length; i++) {
+                    if(!resultadoDef.includes(resultado[i][0])){
+                        //console.log("resultado[i]: " + JSON.stringify(resultado[i][0], null, 2));
+                        resultadoDef.push(resultado[i][0]);
+                    }
+                }
+                console.log("resultadoDef: " + JSON.stringify(resultadoDef, null, 2));
+                return resultadoDef;
+            }
+        } catch (error) {
+            //console.log(error);
+            return {"name": "No se encontraron contenidos"};
+        }
+        
+    }
+};
     
-}
+
+
