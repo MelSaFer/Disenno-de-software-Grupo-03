@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import React from "react";
 import Navbar2 from "@/src/components/navbar2";
@@ -9,7 +8,58 @@ import { Handlee } from "next/font/google";
 import { Link } from "react-router-dom";
 import * as Routes from "../routes";
 
+//Firebase image upload
+import { firebaseStorageURL } from "../../firebase/config";
+import firebase_app from "../../firebase/config";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+
+// Subir imagen a firestore
+const storage = getStorage(firebase_app, firebaseStorageURL);
+
+// Crea el nombre unico para cada imagen
+function createUniqueFileName(getFile: { name: string }): string {
+  const timeStamp = Date.now();
+  const randomStringValue = Math.random().toString(36).substring(2, 12);
+
+  return `${getFile.name}-${timeStamp}-${randomStringValue}`;
+}
+
+async function helperForUploadingImageToFirebase(file) {
+  const getFileName = createUniqueFileName(file);
+  const storageReference = ref(storage, `proyecto/${getFileName}`);
+  const uploadImage = uploadBytesResumable(storageReference, file);
+
+  return new Promise((resolve, reject) => {
+    uploadImage.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+        reject(error);
+      },
+      () => {
+        getDownloadURL(uploadImage.snapshot.ref)
+          .then((downloadUrl) => resolve(downloadUrl))
+          .catch((error) => reject(error));
+      }
+    );
+  });
+}
+
 const AddProduct = () => {
+  // Subir imagen a firestore
+  async function handleImage(event) {
+    console.log(event.targe.files);
+    const extractImageUrl = await helperForUploadingImageToFirebase(
+      event.target.files[0]
+    );
+  }
+
   const [imageSrc, setImageSrc] = useState("");
 
   // datos utilizados para el formulario
@@ -44,6 +94,7 @@ const AddProduct = () => {
         alert("La cantidad debe ser mayor a 0");
         return;
       }
+
       // Construye los datos para enviar a la API
       const datos = {
         name: name,
@@ -53,6 +104,8 @@ const AddProduct = () => {
         price: parseInt(price),
       };
       console.log(datos);
+
+      // Sube imagen y forma url
 
       const fetchData = async () => {
         try {

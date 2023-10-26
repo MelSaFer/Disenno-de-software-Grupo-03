@@ -8,6 +8,7 @@ import ProductTile from "../../../components/ProductTile";
 import Filters from "../../../components/Filters";
 import Footer from "@/src/components/footer";
 import Navbar2 from "@/src/components/navbar2";
+import axios from 'axios';
 
 /*
 const dummyData = [
@@ -45,12 +46,17 @@ const Page = () => {
   const itemsPerPage = 3;
 
   useEffect(() => {
-    // Fetch data from an API
-    fetch("https://mocki.io/v1/545cca0f-625d-4bf6-a971-d62bc2782135")
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) => console.error("Error fetching data:", error));
+    // Request data from API using axios
+    axios.get("https://mocki.io/v1/545cca0f-625d-4bf6-a971-d62bc2782135")
+    //axios.get('https://localhost:3002/getAllContent')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
   }, []);
+
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;

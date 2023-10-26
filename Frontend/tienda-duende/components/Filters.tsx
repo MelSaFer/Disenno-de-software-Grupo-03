@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import axios from 'axios';
 
 const Filters = () => {
 
@@ -104,9 +105,14 @@ const Filters = () => {
   }, [])
   
   const fetchCategories = async () => {
-    const res = await fetch('https://mocki.io/v1/9d5299ba-9de8-4386-a06a-0cf43b229d3c');
-    setCategories(await res.json());
+    try {
+      const res = await axios.get('https://mocki.io/v1/9d5299ba-9de8-4386-a06a-0cf43b229d3c');
+      setCategories(res.data);
+    } catch (err) {
+      console.error('Error fetching categories', err);
+    }
   }
+
 
   return (
     <aside className="md:w-1/3 lg:w-1/4 px-4">
