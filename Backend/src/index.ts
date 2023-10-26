@@ -39,12 +39,11 @@ import * as data from "./Controler/DAO/schemas/data";
 import { MainController } from "./Controler/Administradores/MainController";
 
 require("dotenv").config();
-//@ts-nocheck
 
-function intersection(first:any, second:any){
-    var s = new Set(second);
-    return first.filter(item => s.has(item));
-};
+// function intersection(first:any, second:any){
+//     var s = new Set(second);
+//     return first.filter(item => s.has(item));
+// };
  
 
 
@@ -52,16 +51,16 @@ async function main() {
 
   const dao = new DAOContent();
 
-  const filter1 = ["Maquillaje casual"];
+  const filter1: string[] = [];
   //const filter2 = ["Brillante", "Elegante"];
-  const filter2 : string[]= ["fasdf"];
+  const filter2 : string[]= [];
   dao.getAllWithFilters(filter1, filter2);
 
-  var first = [ 1, 2, 3 ];
-  var second = [ 2, 3, 4, 5 ];
+  // var first = [ 1, 2, 3 ];
+  // var second = [ 2, 3, 4, 5 ];
  
-  var common = intersection(first, second);
-  console.log("The common elements are: " + common);
+  // var common = intersection(first, second);
+  // console.log("The common elements are: " + common);
 
 
   
