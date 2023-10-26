@@ -1,3 +1,4 @@
+// @ts-nocheck
 import app from "./app";
 import { SingletonFirebase } from "./Controler/Singleton/SingletonFirebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -38,79 +39,32 @@ import * as data from "./Controler/DAO/schemas/data";
 import { MainController } from "./Controler/Administradores/MainController";
 
 require("dotenv").config();
+//@ts-nocheck
+
+function intersection(first:any, second:any){
+    var s = new Set(second);
+    return first.filter(item => s.has(item));
+};
+ 
+
 
 async function main() {
 
-  SingletonMongo.getInstance().connect();
-  const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
-  const collection = db.collection(PRODUCT_COLLECTION);
-  //const doc = { name: "Holaaaaaa", type: "hello" };
-  //collection.insertOne(doc);
-  //console.log("holaaa "+ collection.findOne({name: "1"}));
+  const dao = new DAOContent();
 
-  /*
-  USER TEST
-  */
- /*
-  const daoUser = new DAOUser();
-  daoUser.create(data.user1);
-  daoUser.create(data.user2);
-  daoUser.create(data.user3);
+  const filter1 = ["Maquillaje casual"];
+  //const filter2 = ["Brillante", "Elegante"];
+  const filter2 : string[]= ["fasdf"];
+  dao.getAllWithFilters(filter1, filter2);
 
-  daoUser.update(data.user4);
-
-  daoUser.delete(3);
-
-  console.log(await daoUser.getAll());
-
-  daoUser.getObject(1);
-
-  daoUser.updateCart(1, 1, 1);
-  daoUser.updateCart(data.user1, 3, 1);
-  */
-
-  //const mainController = new MainController();
-
-  //mainController.getInfoUser();
-
-  /*
-  PRODUCT TEST
-  */
-  //const daoProduct = new DAOProduct();
-
-  //daoProduct.create(data.product1);
-  //daoProduct.create(data.product2);
-  //daoProduct.create(data.product3);
+  var first = [ 1, 2, 3 ];
+  var second = [ 2, 3, 4, 5 ];
+ 
+  var common = intersection(first, second);
+  console.log("The common elements are: " + common);
 
 
-  /*
-  CONTENT TEST
-  */
-  // const daoContent = new DAOContent();
-  // daoContent.create(data.content1);
-  // daoContent.create(data.content2);
-  // daoContent.create(data.content3);
-
-
-  /*
-  PURCHASE TEST
-  */
-  // const daoPurchase = new DAOPurchase();
-  // daoPurchase.create(data.purchase1);
-  // daoPurchase.create(data.purchase2);
-  // daoPurchase.create(data.purchase3);
-
-
-  /*
-  CATEGORY TEST
-  */
-  // const daoCategory = new DAOCategory();
-  // daoCategory.create(data.category1);
-  // daoCategory.create(data.category2);
-  // daoCategory.create(data.category3);
-
-
-
+  
 
   app.listen(PORT);
   console.log("Server on port ", PORT);
