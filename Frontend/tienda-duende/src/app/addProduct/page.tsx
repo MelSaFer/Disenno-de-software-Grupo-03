@@ -50,7 +50,7 @@ async function helperForUploadingImageToFirebase(file) {
     );
   });
 }
-
+//  ==========================================================================
 const AddProduct = () => {
   // Subir imagen a firestore
   async function handleImage(event) {
@@ -58,6 +58,7 @@ const AddProduct = () => {
     const extractImageUrl = await helperForUploadingImageToFirebase(
       event.target.files[0]
     );
+    console.log(extractImageUrl);
   }
 
   const [imageSrc, setImageSrc] = useState("");
@@ -155,6 +156,14 @@ const AddProduct = () => {
                   />
                 </div>
               )}
+            </div>
+            <div>
+              <input
+                accept="image/"
+                max="100000"
+                type="file"
+                onChange={handleImage}
+              ></input>
             </div>
           </div>
 
