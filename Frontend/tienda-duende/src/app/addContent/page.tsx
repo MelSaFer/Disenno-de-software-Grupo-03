@@ -6,6 +6,8 @@ import Footer from "@/src/components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
 import { set } from "firebase/database";
+import * as Routes from "../routes";
+import { useRouter } from "next/navigation";
 
 const AddContent = () => {
   const [imageSrc, setImageSrc] = useState("");
@@ -14,9 +16,9 @@ const AddContent = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [keyWords, setKeyWords] = useState("");
-  const [keyFormat, setKeyFormat] = useState(true);
   const [imagen, setImagen] = useState(null);
   const [imagenURL, setImagenURL] = useState("");
+  const router = useRouter();
 
   const handleImageChange = (e) => {
     // Captura la imagen seleccionada por el usuario
@@ -30,32 +32,11 @@ const AddContent = () => {
     setImagenURL(imageURL);
   };
 
-  const handleValidateTags = () => {
-    const regex = /#[^\s#]+/g;
-    const matches = keyWords.match(regex);
-
-    if (matches && matches.join("") === keyWords) {
-      const valTags = matches.join(" ");
-      console.log("Tags válidos:", valTags);
-      setKeyFormat(true);
-    } else {
-      console.log("Los tags no siguen el formato correcto");
-      setKeyFormat(false);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (name && description && keyWords && imagen) {
-      // Construye los datos para enviar a la API
-      handleValidateTags();
-      if (!keyFormat) {
-        alert(
-          "Los tags no siguen el formato correcto. Por favor, intente de nuevo."
-        );
-        return;
-      }
+      // formar la fecha
       const date = new Date();
 
       const day = date.getDate();
@@ -64,34 +45,42 @@ const AddContent = () => {
 
       const formatedDate = `${year}-${month}-${day}T00:00:00.000Z`;
 
-      const datos = {
-        title: name,
-        description: description,
-        date: formatedDate,
-        imageId: "imagen",
-        categoryName: "",
-        keyWords: keyWords,
-      };
-      console.log(datos);
+      // validar los tags
+      const regex = /#\w+/g; // Modificamos el regex para que coincida con una sola etiqueta a la vez.
+      const matches = keyWords.match(regex);
 
-      // Envía una solicitud a la API (sustituye la URL por la de tu API real)
-      try {
-        const response = await fetch("URL_DE_LA_API", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(datos),
-        });
+      if (matches && matches.join("") === keyWords) {
+        const valTags = matches.map((tag) => tag.replace("#", "")); // Elimina el "#" de cada etiqueta.
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Respuesta de la API:", data);
-        } else {
-          console.error("Error al enviar la solicitud a la API");
-        }
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
+        // Crear el objeto de datos
+        const datos = {
+          title: name,
+          description: description,
+          date: formatedDate,
+          imageId: "imagen",
+          categoryName: "terror",
+          tags: valTags,
+        };
+
+        // Enviar datos al backend
+        const fetchData = async () => {
+          try {
+            const result = await axios.request({
+              method: "post",
+              url: Routes.addContent,
+              headers: { "Content-Type": "application/json" },
+              data: datos,
+            });
+            console.log(result);
+            router.push("/gallery");
+          } catch (error) {
+            console.error("Error al obtener datos:", error);
+          }
+        };
+        // enviar datos
+        fetchData();
+      } else {
+        alert("Los tags no siguen el formato correcto");
       }
     } else {
       alert("Por favor, complete todos los campos.");
@@ -187,9 +176,8 @@ const AddContent = () => {
               </div>
               <div className="flex justify-center items-center">
                 <button
-                  type="button"
+                  type="submit"
                   className="w-[150px] bg-red-400 text-white rounded-full px-3 py-2 mr-4 "
-                  onClick={handleSubmit}
                 >
                   Guardar
                 </button>
