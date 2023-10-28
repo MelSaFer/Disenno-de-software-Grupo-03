@@ -38,4 +38,10 @@ export class AdminProduct {
         const result = await daoProduct.create(product);
         return result;
     }
+
+    async getProductByName(name: string) {
+        const daoProduct = new DAOProduct();
+        const result = await daoProduct.getObjectByName(name);
+        return result;
+    }
 }

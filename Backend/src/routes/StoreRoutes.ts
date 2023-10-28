@@ -13,5 +13,7 @@ router.post("/getProduct", StoreController.getProduct);
 router.delete("/deleteProduct", StoreController.deleteProduct);
 //Create a new product in the store
 router.post("/addProduct", StoreController.addProduct);
+//Consult a product from the store by the name of the product
+router.post("/getProductByName", StoreController.getProductByName);
 
 export default router;

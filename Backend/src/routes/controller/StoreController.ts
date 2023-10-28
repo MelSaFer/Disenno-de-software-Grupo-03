@@ -132,5 +132,35 @@ export const addProduct: RequestHandler = async (req, res) => {
     res.status(200).json(product)
 }
 
+export const getProductByName: RequestHandler = async (req, res) => {  
+    const mainController = new MainController();
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("name")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.name != "string"){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.name == ""){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+
+    const productPromise = mainController.getProductByName(body.name);
+    const product = await productPromise; 
+    res.status(200).json(product)
+}
+
 
 
