@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React from "react";
 import Navbar2 from "@/src/components/navbar2";
@@ -6,6 +7,7 @@ import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
 import { Handlee } from "next/font/google";
 import { Link } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import * as Routes from "../routes";
 
 //Firebase image upload
@@ -21,47 +23,13 @@ import {
 // Subir imagen a firestore
 const storage = getStorage(firebase_app, firebaseStorageURL);
 
-// Crea el nombre unico para cada imagen
-function createUniqueFileName(getFile: { name: string }): string {
-  const timeStamp = Date.now();
-  const randomStringValue = Math.random().toString(36).substring(2, 12);
-
-  return `${getFile.name}-${timeStamp}-${randomStringValue}`;
-}
-
-async function helperForUploadingImageToFirebase(file) {
-  const getFileName = createUniqueFileName(file);
-  const storageReference = ref(storage, `proyecto/${getFileName}`);
-  const uploadImage = uploadBytesResumable(storageReference, file);
-
-  return new Promise((resolve, reject) => {
-    uploadImage.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.log(error);
-        reject(error);
-      },
-      () => {
-        getDownloadURL(uploadImage.snapshot.ref)
-          .then((downloadUrl) => resolve(downloadUrl))
-          .catch((error) => reject(error));
-      }
-    );
-  });
-}
 //  ==========================================================================
 const AddProduct = () => {
-  // Subir imagen a firestore
-  async function handleImage(event) {
-    console.log(event.targe.files);
-    const extractImageUrl = await helperForUploadingImageToFirebase(
-      event.target.files[0]
-    );
-    console.log(extractImageUrl);
-  }
-
-  const [imageSrc, setImageSrc] = useState("");
+  const [imageFile, setImageFile] = useState<File>();
+  const [downloadURL, setDownloadURL] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [progressUpload, setProgressUpload] = useState(0);
+  const router = useRouter();
 
   // datos utilizados para el formulario
   const [name, setName] = useState("");
@@ -71,17 +39,68 @@ const AddProduct = () => {
   const [imagenURL, setImagenURL] = useState("");
   const [cuantity, setCuantity] = useState(0);
 
-  const handleImageChange = (e) => {
-    // Captura la imagen seleccionada por el usuario
-    const selectedImage = e.target.files[0];
-    setImagen(selectedImage);
+  // const handleImageChange = (e) => {
+  //   // Captura la imagen seleccionada por el usuario
+  //   const selectedImage = e.target.files[0];
+  //   setImagen(selectedImage);
 
-    // Crea una URL de objeto para la vista previa de la imagen
-    const imageURL = URL.createObjectURL(selectedImage);
+  //   // Crea una URL de objeto para la vista previa de la imagen
+  //   const imageURL = URL.createObjectURL(selectedImage);
 
-    setImagen(selectedImage);
-    setImagenURL(imageURL);
+  //   setImagen(selectedImage);
+  //   setImagenURL(imageURL);
+  // };
+
+  const handleSelectedFile = (files: any) => {
+    if (files && files[0].size < 10000000) {
+      setImageFile(files[0]);
+      console.log(files[0]);
+      setImagen(files[0]);
+      const imageURL = URL.createObjectURL(files[0]);
+      setImagenURL(imageURL);
+    } else {
+      MessageChannel.error("File size to large");
+    }
   };
+
+  async function handleUploadedFile() {
+    if (imageFile) {
+      const name = imageFile.name;
+      const storageRef = ref(storage, `image/${name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          setProgressUpload(progress); // to show progress upload
+
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          message.error(error.message);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            //url is download url of file
+            setDownloadURL(url);
+            console.log(url);
+            return url;
+          });
+        }
+      );
+    } else {
+      message.error("File not found");
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,14 +114,15 @@ const AddProduct = () => {
         alert("La cantidad debe ser mayor a 0");
         return;
       }
+      const imageUrl = await handleUploadedFile();
 
       // Construye los datos para enviar a la API
       const datos = {
         name: name,
         description: description,
         cuantityAvailable: parseInt(cuantity),
-        imageId: "imagen",
-        price: parseInt(price),
+        imageId: downloadURL,
+        price: parseFloat(price),
       };
       console.log(datos);
 
@@ -118,6 +138,7 @@ const AddProduct = () => {
           });
           console.log("fetch");
           console.log(result);
+          router.push("/store");
         } catch (error) {
           console.error("Error al obtener datos:", error);
         }
@@ -128,6 +149,8 @@ const AddProduct = () => {
     }
   };
 
+  const handleRemoveFile = () => setImageFile(undefined);
+
   return (
     <div className="flex flex-col min-h-screen">
       <header>
@@ -137,7 +160,7 @@ const AddProduct = () => {
       <main className="flex-grow">
         <div className="flex h-full justify-center items-top">
           {/* Columna izquierda con la imagen */}
-          <div className=" flex justify-center items-center w-1/3 p-2 mr-4 border">
+          <div className=" flex flex-col justify-center items-center w-1/3 p-2 mr-4 border">
             <div>
               <input
                 type="file"
@@ -145,7 +168,7 @@ const AddProduct = () => {
                 name="imagen"
                 className="w-full p-2 border rounded mb-5 mt-5"
                 accept="image/*"
-                onChange={handleImageChange}
+                onChange={(files) => handleSelectedFile(files.target.files)}
               />
               {imagenURL && (
                 <div>
@@ -157,14 +180,9 @@ const AddProduct = () => {
                 </div>
               )}
             </div>
-            <div>
-              <input
-                accept="image/"
-                max="100000"
-                type="file"
-                onChange={handleImage}
-              ></input>
-            </div>
+            {/* <div>
+              <button onClick={handleUploadedFile}>Upload</button>
+            </div> */}
           </div>
 
           {/* Columna derecha con el título y descripción */}

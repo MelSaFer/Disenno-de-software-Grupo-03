@@ -228,7 +228,7 @@ export class DAOProduct implements DAO{
             //Verify that the name is not already taken
             const contentRepeated = await collection.find({ name: object.name });
             for (let doc = await contentRepeated.next(); doc != null; doc = await contentRepeated.next()) {
-                if (doc._id != object._id){
+                if (doc.productId != object.productId){
                     console.log("El producto " +  JSON.stringify(object.title) + " ya existe");
                     return {"name": "Ya existe un producto con ese nombre"};
                 }
