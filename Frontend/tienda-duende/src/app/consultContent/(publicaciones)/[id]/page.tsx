@@ -70,19 +70,14 @@ const ConsultProduct = ({ params }: PageProps) => {
             <p className="mb-4">{data.description}</p>
             <p className="mb-4">
               <b>TAGS: </b>
-              {/* {data.tags ? (
-              data.tags.map((tag, index) => (
-                <p key={index}>#{tag}</p>
-              ))
-            ) : null} */}
               {data.tags
                 ? data.tags.map((tag, index) => (
-                    <p
+                    <span
                       key={index}
                       style={{ display: "inline-block", margin: "0 5px" }}
                     >
                       #{tag}
-                    </p>
+                    </span>
                   ))
                 : null}
             </p>
@@ -90,13 +85,39 @@ const ConsultProduct = ({ params }: PageProps) => {
               <b>Fecha: </b>
               {formatDate(data.date)}
             </p>
-            <button
-              type="submit"
-              className="bg-white hover:bg-gray-50 text-red-400 font-semibold rounded-full border border-red-400 px-4 py-2 mt-5 w-full"
-              onClick={handleSubmit}
-            >
-              Categorias?
-            </button>
+            <div className="flex flex-wrap">
+            {/* {data.
+                ? data.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      style={{ display: "inline-block", margin: "0 5px" }}
+                    >
+                      #{tag}
+                    </span>
+                  ))
+                : null} */}
+              <div
+                className="basis-1/4 text-center mx-1 bg-white text-red-400 font-semibold rounded-full border border-red-400 py-2 mt-5 "
+              >
+                Cas
+              </div>
+              <div
+                className="basis-1/4 text-center mx-1 bg-white text-red-400 font-semibold rounded-full border border-red-400 py-2 mt-5 "
+              >
+                Cas
+              </div>
+              <div
+                className="basis-1/4 text-center mx-1 bg-white text-red-400 font-semibold rounded-full border border-red-400  py-2 mt-5 "
+              >
+                Cas
+              </div>
+              <div
+                className="basis-1/4 text-center mx-1 bg-white text-red-400 font-semibold rounded-full border border-red-400  py-2 mt-5 "
+              >
+                Cas
+              </div>
+              
+            </div>
           </div>
         </div>
       </main>
