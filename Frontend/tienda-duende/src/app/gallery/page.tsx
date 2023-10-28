@@ -10,6 +10,7 @@ import Footer from "@/src/components/footer";
 import Navbar2 from "@/src/components/navbar2";
 import axios from "axios";
 import Link from "next/link";
+import * as Routes from "../routes";
 
 const Page = () => {
   const router = useRouter();
@@ -20,8 +21,7 @@ const Page = () => {
   useEffect(() => {
     // Request data from API using axios
     axios
-      .get("http://localhost:3001/getAllContent")
-      //axios.get('https://localhost:3002/getAllContent')
+      .get(Routes.getGallery)
       .then((response) => {
         setData(response.data);
       })

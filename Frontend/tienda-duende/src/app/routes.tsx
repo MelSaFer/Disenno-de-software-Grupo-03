@@ -1,11 +1,21 @@
-// ADMIN ROUTES
-export const getCatogue = "http://localhost:5000/getCatalogue";
-export const getUserInfo = "http://localhost:5000/infoUser";
-export const getHistory = "http://localhost:5000/getPurchaseHistory";
-export const getCart = "http://localhost:5000/getCart";
-export const getProduct = "http://localhost:5000/getProduct";
-export const addProduct = "http://localhost:5000/addProduct";
-export const addContent = "http://localhost:5000/addContent";
-export const modifyProduct = "http://localhost:5000/updateProduct";
+// PORT
+const port = 3001;
+
+// STORE
+export const getCatogue = `http://localhost:${port}/getCatalogue`;
+export const getProduct = `http://localhost:${port}/getProduct`;
+export const addProduct = `http://localhost:${port}/addProduct`;
+export const modifyProduct = `http://localhost:${port}/updateProduct`;
+
+// GALLERY
+export const getContent = `http://localhost:${port}/getContent`;
+export const getGallery = `http://localhost:${port}/getAllContent`;
+export const addContent = `http://localhost:${port}/addContent`;
+export const modifyContent = `http://localhost:${port}/updateContent`;
+
+// USER
+export const getUserInfo = `http://localhost:${port}/infoUser`;
+export const getHistory = `http://localhost:${port}/getPurchaseHistory`;
+export const getCart = `http://localhost:${port}/getCart`;
 
 // USER ROUTES

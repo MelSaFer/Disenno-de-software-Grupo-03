@@ -14,15 +14,15 @@ interface PageProps {
 const ConsultProduct = ({ params }: PageProps) => {
   const [imageSrc, setImageSrc] = useState("");
   const [data, setData] = useState("");
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const requestData = { productId: params.id };
-      console.log("Estos son los parametros:", params.id)
+      console.log("Estos son los parametros:", params.id);
       try {
         const result = await axios.request({
           method: "post",
-          url: "http://localhost:3001/getProduct",
+          url: Routes.getProduct,
           headers: { "Content-Type": "application/json" },
           data: requestData,
         });
@@ -39,7 +39,7 @@ const ConsultProduct = ({ params }: PageProps) => {
 
   const handleSubmit = async (e) => {
     // Agregar lógica de manejo de submit aquí
-    console.log("agregar al carrito")
+    console.log("agregar al carrito");
   };
 
   return (

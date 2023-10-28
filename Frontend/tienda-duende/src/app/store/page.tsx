@@ -8,8 +8,9 @@ import ProductTile from "../../../components/ProductTile";
 import Filters from "../../../components/Filters";
 import Footer from "@/src/components/footer";
 import Navbar2 from "@/src/components/navbar2";
-import axios from 'axios';
-import Link from 'next/link'; 
+import axios from "axios";
+import Link from "next/link";
+import * as Routes from "../routes";
 
 const Page = () => {
   const router = useRouter();
@@ -20,13 +21,14 @@ const Page = () => {
 
   useEffect(() => {
     // Request data from API using axios
-    axios.get("http://localhost:3001/getCatalogue")
-    //axios.get('https://localhost:3002/getAllContent')
-      .then(response => {
+    axios
+      .get(Routes.getCatogue)
+      //axios.get('https://localhost:3002/getAllContent')
+      .then((response) => {
         setData(response.data);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
   }, []);
 
@@ -35,7 +37,6 @@ const Page = () => {
       console.log("El selectedItem y su info", selectedItem);
     }
   }, [selectedItem]);
-
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -74,7 +75,7 @@ const Page = () => {
                   key={item.code}
                   item={item}
                   //href = '/consultProduct/'
-                  href= {`/consultProduct/${item._id}`}
+                  href={`/consultProduct/${item._id}`}
                   onClick={() => {
                     setSelectedItem(item);
                   }}
