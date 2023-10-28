@@ -1,10 +1,11 @@
+// @ts-nocheck
 'use client'
 
 export default function ProductTile({item}){
     return ( 
         <div>
             <div className="flex overflow-hidden items-center justify-center aspect-w-1 aspect-h-1 h-52">
-                <img src={item.image} 
+                <img src={item.imageId} 
                 alt="Product Image"
                 className="object-cover transition-all duration-300 group-hover:scale-125" 
                 style={{height:'200px', marginTop:'20px'}}

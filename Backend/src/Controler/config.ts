@@ -2,9 +2,9 @@ import { config } from "dotenv";
 config();
 
 //API
-export const API_URL = "http://localhost:5000";
+export const API_URL = "http://localhost:3001";
 
-export const PORT = 5000;
+export const PORT = 3001;
 
 //MONGO DB
 export const MONGODB_URI =

@@ -9,45 +9,18 @@ import Filters from "../../../components/Filters";
 import Footer from "@/src/components/footer";
 import Navbar2 from "@/src/components/navbar2";
 import axios from 'axios';
-
-/*
-const dummyData = [
-  {
-  code: 123213123,
-  name: "Uno",
-  description: "asdadasdasdasda",
-  cuantityAv: 123,
-  price: 1231,
-  image: "https://firebasestorage.googleapis.com/v0/b/proyectodisenno-7d92d.appspot.com/o/ProfilePic.png?alt=media&token=dfa6f323-10cd-4634-bbdf-0139513659b1",
-  },
-  {
-      code: 1213123,
-      name: "Dos",
-      description: "asdadasdasdasda",
-      cuantityAv: 1,
-      price: 1231,
-      image: "https://firebasestorage.googleapis.com/v0/b/proyectodisenno-7d92d.appspot.com/o/ProfilePic.png?alt=media&token=dfa6f323-10cd-4634-bbdf-0139513659b1",
-  },
-  {
-      code: 12123,
-      name: "Tres",
-      description: "asdadasdasdasda",
-      cuantityAv: 1,
-      price: 1231,
-      image: "https://firebasestorage.googleapis.com/v0/b/proyectodisenno-7d92d.appspot.com/o/ProfilePic.png?alt=media&token=dfa6f323-10cd-4634-bbdf-0139513659b1",
-  }
-];
-*/
+import Link from 'next/link'; 
 
 const Page = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     // Request data from API using axios
-    axios.get("https://mocki.io/v1/545cca0f-625d-4bf6-a971-d62bc2782135")
+    axios.get("http://localhost:3001/getCatalogue")
     //axios.get('https://localhost:3002/getAllContent')
       .then(response => {
         setData(response.data);
@@ -56,6 +29,12 @@ const Page = () => {
         console.error('Error fetching data:', error);
       });
   }, []);
+
+  useEffect(() => {
+    if (selectedItem !== null) {
+      console.log("El selectedItem y su info", selectedItem);
+    }
+  }, [selectedItem]);
 
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -90,13 +69,21 @@ const Page = () => {
 
             <div className="col-span-4 mt-10 grid grid-cols-3 gap-8 sm:gap-4 lg:mt-7">
               {itemsToDisplay.map((item) => (
-                <article
+                <Link
                   className="relative flex flex-col overflow-hidden border cursor-pointer"
                   key={item.code}
+                  item={item}
+                  href = '/consultProduct/'
+                  //href= {`/consultProduct/${item._id}`}
                   onClick={() => {
-                    console.log(item.code);
-                    router.push(`/consultProduct/${item.code}`);
+                    setSelectedItem(item);
                   }}
+                  /*
+                  onClick={() => {
+                    //console.log("Es estes")
+                    router.push(`/consultProduct?datas=${item._id}`)
+                }}
+                */
                 >
                   {item.cuantityAv !== 0 ? (
                     <div>
@@ -104,7 +91,7 @@ const Page = () => {
                       <ProductButton item={item} />
                     </div>
                   ) : null}
-                </article>
+                </Link>
               ))}
             </div>
           </div>
