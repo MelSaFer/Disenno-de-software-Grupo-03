@@ -73,8 +73,8 @@ const Page = () => {
                   className="relative flex flex-col overflow-hidden border cursor-pointer"
                   key={item.code}
                   item={item}
-                  href = '/consultProduct/'
-                  //href= {`/consultProduct/${item._id}`}
+                  //href = '/consultProduct/'
+                  href= {`/consultProduct/${item._id}`}
                   onClick={() => {
                     setSelectedItem(item);
                   }}
