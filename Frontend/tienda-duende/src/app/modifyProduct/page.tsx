@@ -19,37 +19,53 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { set } from "firebase/database";
 
 // Subir imagen a firestore
 const storage = getStorage(firebase_app, firebaseStorageURL);
 
 //  ==========================================================================
-const AddProduct = () => {
+const ModifyProduct = () => {
   const [imageFile, setImageFile] = useState<File>();
   const [downloadURL, setDownloadURL] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
-  const [progressUpload, setProgressUpload] = useState(0);
   const router = useRouter();
 
   // datos utilizados para el formulario
+  const [productId, setProductId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [imagen, setImagen] = useState(null);
   const [imagenURL, setImagenURL] = useState("");
   const [cuantity, setCuantity] = useState(0);
+  const [data, setData] = useState({});
 
-  // const handleImageChange = (e) => {
-  //   // Captura la imagen seleccionada por el usuario
-  //   const selectedImage = e.target.files[0];
-  //   setImagen(selectedImage);
+  useEffect(() => {
+    async function fetchData() {
+      const requestData = { productId: "653a06f71bb6b20f741ea33d" };
+      try {
+        const result = await axios.request({
+          method: "post",
+          url: Routes.getProduct,
+          headers: { "Content-Type": "application/json" },
+          data: requestData,
+        });
+        setData(result.data);
+        console.log(result);
 
-  //   // Crea una URL de objeto para la vista previa de la imagen
-  //   const imageURL = URL.createObjectURL(selectedImage);
-
-  //   setImagen(selectedImage);
-  //   setImagenURL(imageURL);
-  // };
+        setProductId(result.data._id);
+        setName(result.data.name);
+        setDescription(result.data.description);
+        setPrice(result.data.price);
+        setCuantity(result.data.cuantityAvailable);
+        setDownloadURL(result.data.imageId);
+        setImagenURL(result.data.imageId);
+      } catch (error) {
+        console.error("Error al obtener datos:", error);
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleSelectedFile = (files: any) => {
     if (files && files[0].size < 10000000) {
@@ -63,7 +79,7 @@ const AddProduct = () => {
     }
   };
 
-  async function handleUploadedFile() {
+  const handleUploadedFile = () => {
     if (imageFile) {
       const name = imageFile.name;
       const storageRef = ref(storage, `image/${name}`);
@@ -93,19 +109,18 @@ const AddProduct = () => {
             //url is download url of file
             setDownloadURL(url);
             console.log(url);
-            return url;
           });
         }
       );
     } else {
       message.error("File not found");
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (name && description && price && imagen && cuantity) {
+    if (name && description && price && imagenURL && cuantity) {
       if (price <= 0) {
         alert("El precio debe ser mayor a 0");
         return;
@@ -114,10 +129,13 @@ const AddProduct = () => {
         alert("La cantidad debe ser mayor a 0");
         return;
       }
-      const imageUrl = await handleUploadedFile();
+      if (imagen != null) {
+        const imageUrl = await handleUploadedFile();
+      }
 
       // Construye los datos para enviar a la API
       const datos = {
+        productId: productId,
         name: name,
         description: description,
         cuantityAvailable: parseInt(cuantity),
@@ -131,8 +149,8 @@ const AddProduct = () => {
       const fetchData = async () => {
         try {
           const result = await axios.request({
-            method: "post",
-            url: Routes.addProduct,
+            method: "put",
+            url: Routes.modifyProduct,
             headers: { "Content-Type": "application/json" },
             data: datos,
           });
@@ -265,4 +283,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default ModifyProduct;
