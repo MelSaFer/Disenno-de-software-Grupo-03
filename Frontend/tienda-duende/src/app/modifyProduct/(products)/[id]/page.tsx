@@ -8,11 +8,15 @@ import axios from "axios";
 import { Handlee } from "next/font/google";
 import { Link } from "react-router-dom";
 import { useRouter } from "next/navigation";
-import * as Routes from "../routes";
+import * as Routes from "../../../routes";
+
+interface PageProps {
+  params: { id: string };
+}
 
 //Firebase image upload
-import { firebaseStorageURL } from "../../firebase/config";
-import firebase_app from "../../firebase/config";
+import { firebaseStorageURL } from "../../../../firebase/config";
+import firebase_app from "../../../../firebase/config";
 import {
   getDownloadURL,
   getStorage,
@@ -25,10 +29,12 @@ import { set } from "firebase/database";
 const storage = getStorage(firebase_app, firebaseStorageURL);
 
 //  ==========================================================================
-const ModifyProduct = () => {
+const ModifyProduct = ({ params }: PageProps) => {
   const [imageFile, setImageFile] = useState<File>();
   const [downloadURL, setDownloadURL] = useState("");
+  const [progressUpload, setProgressUpload] = useState(0);
   const router = useRouter();
+  const [newImageURL, setNewImageURL] = useState();
 
   // datos utilizados para el formulario
   const [productId, setProductId] = useState("");
@@ -42,7 +48,8 @@ const ModifyProduct = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const requestData = { productId: "653a06f71bb6b20f741ea33d" };
+      const requestData = { productId: params.id };
+      console.log("Estos son los parametros:", params.id);
       try {
         const result = await axios.request({
           method: "post",
@@ -67,7 +74,7 @@ const ModifyProduct = () => {
     fetchData();
   }, []);
 
-  const handleSelectedFile = (files: any) => {
+  const handleSelectedFile = (files: File[] | undefined) => {
     if (files && files[0].size < 10000000) {
       setImageFile(files[0]);
       console.log(files[0]);
@@ -106,9 +113,10 @@ const ModifyProduct = () => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            //url is download url of file
-            setDownloadURL(url);
-            console.log(url);
+            console.log("Nueva URL", url);
+
+            // Guardar url en estado
+            setNewImageURL(url); 
           });
         }
       );
@@ -120,6 +128,9 @@ const ModifyProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // if(imagen != null) {
+    //   await handleUploadedFile(); 
+    // }
     if (name && description && price && imagenURL && cuantity) {
       if (price <= 0) {
         alert("El precio debe ser mayor a 0");
@@ -130,16 +141,19 @@ const ModifyProduct = () => {
         return;
       }
       if (imagen != null) {
-        const imageUrl = await handleUploadedFile();
+        const newImageUrl = await handleUploadedFile();
       }
-
+      while(!newImageURL) {
+        await new Promise(resolve => setTimeout(resolve, 1000)); 
+      }
+      console.log("Este es la nueva URL y que se envia en el put ", newImageURL);
       // Construye los datos para enviar a la API
       const datos = {
         productId: productId,
         name: name,
         description: description,
         cuantityAvailable: parseInt(cuantity),
-        imageId: downloadURL,
+        imageId: newImageURL,
         price: parseFloat(price),
       };
       console.log(datos);
@@ -188,6 +202,9 @@ const ModifyProduct = () => {
                 accept="image/*"
                 onChange={(files) => handleSelectedFile(files.target.files)}
               />
+              {/* <div className="progress">
+                  <progress value={progressUpload} max="100"/>
+              </div> */}
               {imagenURL && (
                 <div>
                   <img

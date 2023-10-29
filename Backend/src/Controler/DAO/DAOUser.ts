@@ -182,17 +182,17 @@ export class DAOUser implements DAO{
                 //console.log("Se encontró: " + JSON.stringify(user, null, 2));
                 //If the roletype is admin get all the purchase history
                 let purchaseHistory = [];
+                let cursor;
                 if (user.roleType == "ADMINISTRATOR"){
-                    const cursor = await purchasehistory_collection.find();
-                    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-                        purchaseHistory.push(doc);
-                    }
-
+                    cursor = await purchasehistory_collection.find();
                 }
                 else{
-                    const cursor = await purchasehistory_collection.find({ userId: userId });
-                    purchaseHistory.push(await cursor.next());
-                }                
+                    cursor = await purchasehistory_collection.find({ userId: userId });
+                }             
+                
+                for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+                    purchaseHistory.push(doc);
+                }
 
                 //If the purchase history was found, return it, else return error
                 if (purchaseHistory){
