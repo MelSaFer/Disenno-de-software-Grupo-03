@@ -33,18 +33,27 @@ const Cart = () => {
   const reduceQuantity = async (product) => {
     console.log(product);
     try {
-      const available = product.additionalData.cuantityAvailable - 1;
-      const datos = {
-        productId: product.additionalData.productId,
-        name: product.additionalData.name,
-        description: product.additionalData.description,
-        cuantityAvailable: parseInt(available),
-        imageId: product.additionalData.imageId,
-        price: parseFloat(product.additionalData.price),
-      };
+      // const available = product.additionalData.cuantityAvailable - 1;
+      // const datos = {
+      //   productId: product.additionalData.productId,
+      //   name: product.additionalData.name,
+      //   description: product.additionalData.description,
+      //   cuantityAvailable: parseInt(available),
+      //   imageId: product.additionalData.imageId,
+      //   price: parseFloat(product.additionalData.price),
+      // };
 
-      const response = await axios.put(Routes.modifyProduct, datos);
-      console.log("Producto modificado:", response.data);
+      // const response = await axios.put(Routes.modifyProduct, datos);
+
+      const datosCart = {
+        userId: "1",
+        productId: product.additionalData.productId,
+        quantity: parseInt(1),
+      };
+      console.log(datosCart);
+      const response = await axios.post(Routes.updateCart, datosCart);
+
+      setQuantity(quantity - 1);
     } catch (error) {
       console.error("Error al modificar el carrito:", error);
     }
@@ -65,7 +74,7 @@ const Cart = () => {
         function fetchProductData(product) {
           // Realiza una solicitud a la API utilizando el nombre del producto
           return axios
-            .post(Routes.getProduct, { productId: product.name })
+            .post(Routes.getProductByName, { name: product.name })
             .then((response) => {
               // Procesa la respuesta y obtiene los datos adicionales
               const productData = response.data;
@@ -86,7 +95,7 @@ const Cart = () => {
         Promise.all(result.data.map(fetchProductData))
           .then((updatedData) => {
             // La variable updatedProducts contendrá los objetos de productos actualizados con datos adicionales
-            console.log(updatedData);
+            // console.log(updatedData);
           })
           .catch((err) => {
             console.error(`Error en Promise.all: ${err}`);
@@ -100,7 +109,7 @@ const Cart = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [quantity]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -116,7 +125,7 @@ const Cart = () => {
     return () => unsubscribe();
   }, []);
 
-  console.log(data);
+  // console.log(data);
 
   // // Utiliza Promise.all para realizar las solicitudes en paralelo
   // Promise.all(data.map(fetchProductData))
