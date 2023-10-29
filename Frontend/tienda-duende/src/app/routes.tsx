@@ -6,6 +6,8 @@ export const getCatogue = `http://localhost:${port}/getCatalogue`;
 export const getProduct = `http://localhost:${port}/getProduct`;
 export const addProduct = `http://localhost:${port}/addProduct`;
 export const modifyProduct = `http://localhost:${port}/updateProduct`;
+export const updateCart = `http://localhost:${port}/updateCart`;
+export const deleteProduct = `http://localhost:${port}/deleteProduct`;
 
 // GALLERY
 export const getContent = `http://localhost:${port}/getContent`;

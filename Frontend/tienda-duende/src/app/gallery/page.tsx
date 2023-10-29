@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductButton from "../../../components/ProductButtons";
-import ProductTile from "../../../components/ProductTile";
+import ContentTile from "../../../components/ContentTile";
 import Filters from "../../../components/Filters";
 import Footer from "@/src/components/footer";
 import Navbar2 from "@/src/components/navbar2";
@@ -80,8 +80,8 @@ const Page = () => {
                 >
                   {item.cuantityAv !== 0 ? (
                     <div>
-                      <ProductTile item={item} />
-                      <ProductButton item={item} />
+                      <ContentTile item={item} />
+                      {/* <ProductButton item={item} /> */}
                     </div>
                   ) : null}
                 </Link>
