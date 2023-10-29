@@ -5,112 +5,19 @@ import React from "react";
 import Footer from "../../components/footer";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { set } from "firebase/database";
 import Link from "next/link";
 import Navbar2 from "@/src/components/navbar2";
 import * as Routes from "../routes";
 import { auth } from "../../firebase/config";
 
 const Cart = () => {
-  const [imageSrc, setImageSrc] = useState("");
   const [data, setData] = useState([]);
+  const [costoTotal, setCostoTotal] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [authUser, setAuthUser] = useState({ uid: "", email: "" });
   const [loading, setLoading] = useState(true);
 
-  const reduceQuantity2 = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  const increaseQuantity = () => {
-    if (quantity < 999) {
-      setQuantity(quantity + 1);
-    }
-  };
-
-  const reduceQuantity = async (product) => {
-    console.log(product);
-    try {
-      // const available = product.additionalData.cuantityAvailable - 1;
-      // const datos = {
-      //   productId: product.additionalData.productId,
-      //   name: product.additionalData.name,
-      //   description: product.additionalData.description,
-      //   cuantityAvailable: parseInt(available),
-      //   imageId: product.additionalData.imageId,
-      //   price: parseFloat(product.additionalData.price),
-      // };
-
-      // const response = await axios.put(Routes.modifyProduct, datos);
-
-      const datosCart = {
-        userId: "1",
-        productId: product.additionalData.productId,
-        quantity: parseInt(1),
-      };
-      console.log(datosCart);
-      const response = await axios.post(Routes.updateCart, datosCart);
-
-      setQuantity(quantity - 1);
-    } catch (error) {
-      console.error("Error al modificar el carrito:", error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const requestData = { userId: "1" };
-      try {
-        const result = await axios.request({
-          method: "post",
-          url: Routes.getCart,
-          headers: { "Content-Type": "application/json" },
-          data: requestData,
-        });
-
-        // Función para obtener datos adicionales para cada producto
-        function fetchProductData(product) {
-          // Realiza una solicitud a la API utilizando el nombre del producto
-          return axios
-            .post(Routes.getProductByName, { name: product.name })
-            .then((response) => {
-              // Procesa la respuesta y obtiene los datos adicionales
-              const productData = response.data;
-
-              // Agrega los datos adicionales al objeto del producto
-              product.additionalData = productData;
-
-              return product;
-            })
-            .catch((error) => {
-              console.error(
-                `Error al obtener datos para ${product.name}: ${error.message}`
-              );
-              return product; // En caso de error, devuelve el objeto sin datos adicionales
-            });
-        }
-
-        Promise.all(result.data.map(fetchProductData))
-          .then((updatedData) => {
-            // La variable updatedProducts contendrá los objetos de productos actualizados con datos adicionales
-            // console.log(updatedData);
-          })
-          .catch((err) => {
-            console.error(`Error en Promise.all: ${err}`);
-          })
-          .finally(() => {
-            setLoading(false);
-            setData(result.data);
-          });
-      } catch (error) {
-        console.error("Error al obtener datos:", error);
-      }
-    };
-    fetchData();
-  }, [quantity]);
-
+  // obtains the user's uid and email
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -125,20 +32,120 @@ const Cart = () => {
     return () => unsubscribe();
   }, []);
 
-  // console.log(data);
+  /*
+  receives a product and reduces the quantity you have in the cart. 
+  Modify it in the database.
+  */
+  const reduceQuantity = async (product) => {
+    try {
+      const datosCart = {
+        userId: "1", // cambiar por el userId del usuario logueado
+        productId: product.additionalData.productId,
+        quantity: parseInt(-1), // se resta uno
+      };
+      // console.log(datosCart);
+      const response = await axios.post(Routes.updateCart, datosCart);
 
-  // // Utiliza Promise.all para realizar las solicitudes en paralelo
-  // Promise.all(data.map(fetchProductData))
-  //   .then((updatedData) => {
-  //     // La variable updatedProducts contendrá los objetos de productos actualizados con datos adicionales
-  //     console.log(updatedData);
-  //   })
-  //   .catch((err) => {
-  //     console.error(`Error en Promise.all: ${err}`);
-  //   })
-  //   .finally(() => {
-  //     setLoading(false);
-  //   });
+      setQuantity(quantity - 1); // actualiza la ventana
+    } catch (error) {
+      console.error("Error al modificar el carrito:", error);
+    }
+  };
+
+  /*
+  receives a product and increases the quantity you have in the cart. 
+  Modify it in the database.
+  */
+  const increaseQuantity = async (product) => {
+    if (product.quantity >= 50) {
+      alert("No puedes agregar más de 50 productos");
+      return;
+    }
+    try {
+      const datosCart = {
+        userId: "1", // cambiar por el userId del usuario logueado
+        productId: product.additionalData.productId,
+        quantity: parseInt(1), // se suma uno
+      };
+      // console.log(datosCart);
+      const response = await axios.post(Routes.updateCart, datosCart);
+
+      setQuantity(quantity + 1); // actualiza la ventana
+    } catch (error) {
+      console.error("Error al modificar el carrito:", error);
+    }
+  };
+
+  /* 
+  receives the data of the products in the cart and calculates the total cost of the purchase
+  */
+  function calcularCostoTotal(data) {
+    let total = 0;
+    for (const product of data) {
+      const ProductCost = product.quantity * product.additionalData.price;
+      total += ProductCost;
+    }
+    // return costoTotal;
+    setCostoTotal(total);
+  }
+
+  /*
+  receives the data of the products in the cart and calculates the total cost of the purchase
+  */
+  useEffect(() => {
+    const fetchData = async () => {
+      const requestData = { userId: "1" }; // cambiar por el userId del usuario logueado
+      // obtains the products in the cart
+      try {
+        const result = await axios.request({
+          method: "post",
+          url: Routes.getCart,
+          headers: { "Content-Type": "application/json" },
+          data: requestData,
+        });
+
+        // function to obtain additional data from each product
+        function fetchProductData(product) {
+          // make a request to the server to obtain the additional data
+          return axios
+            .post(Routes.getProductByName, { name: product.name })
+            .then((response) => {
+              // process the response
+              const productData = response.data;
+
+              // add the additional data to the product object
+              product.additionalData = productData;
+
+              return product;
+            })
+            .catch((error) => {
+              console.error(
+                `Error al obtener datos para ${product.name}: ${error.message}`
+              );
+              return product; // in case of error, return the product without additional data
+            });
+        }
+
+        Promise.all(result.data.map(fetchProductData))
+          .then((updatedData) => {
+            // console.log(updatedData);
+          })
+          .catch((err) => {
+            console.error(`Error en Promise.all: ${err}`);
+          })
+          .finally(() => {
+            setLoading(false);
+            setData(result.data);
+            calcularCostoTotal(result.data);
+          });
+      } catch (error) {
+        console.error("Error al obtener datos:", error);
+      }
+    };
+    fetchData();
+  }, [quantity]);
+
+  // console.log(data);
 
   return (
     <div>
@@ -183,7 +190,7 @@ const Cart = () => {
                         {item.quantity}
                         <button
                           className="bg-white border text-yellow-900 px-2 ml-2"
-                          onClick={increaseQuantity}
+                          onClick={() => increaseQuantity(item)}
                         >
                           +
                         </button>
@@ -196,12 +203,15 @@ const Cart = () => {
                 <div className="bg-white flex-col p-4 ">
                   <div className="w-2/3 text-black border border-yellow-900 text-yellow-900 rounded-lg mb-5 p-5">
                     <h1 className="text-2xl">Total</h1>
-                    <h1 className="text-3xl font-bold">$ 100.00</h1>
+                    <h1 className="text-3xl font-bold">$ {costoTotal}</h1>
                   </div>
                   <div className="w-2/3 text-black ">
                     <h1>
                       <Link href="/shippingInfo">
-                        <button className="w-full text-red-500 bg-red-white border border-red-500  hover:bg-red-50 hover:border-gray-300 px-4 py-2 rounded-full">
+                        <button
+                          className="w-full text-red-500 bg-red-white border border-red-500  hover:bg-red-50 hover:border-gray-300 px-4 py-2 rounded-full"
+                          href="/shippingInfo"
+                        >
                           Finalizar compra
                         </button>
                       </Link>

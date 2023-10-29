@@ -19,5 +19,6 @@ export const getUserInfo = `http://localhost:${port}/infoUser`;
 export const getHistory = `http://localhost:${port}/getPurchaseHistory`;
 export const getCart = `http://localhost:${port}/getCart`;
 export const updateCart = `http://localhost:${port}/updateCart`;
+export const makePurchase = `http://localhost:${port}/makePurchase`;
 
 // USER ROUTES

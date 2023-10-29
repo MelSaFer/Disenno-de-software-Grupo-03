@@ -39,18 +39,6 @@ const AddProduct = () => {
   const [imagenURL, setImagenURL] = useState("");
   const [cuantity, setCuantity] = useState(0);
 
-  // const handleImageChange = (e) => {
-  //   // Captura la imagen seleccionada por el usuario
-  //   const selectedImage = e.target.files[0];
-  //   setImagen(selectedImage);
-
-  //   // Crea una URL de objeto para la vista previa de la imagen
-  //   const imageURL = URL.createObjectURL(selectedImage);
-
-  //   setImagen(selectedImage);
-  //   setImagenURL(imageURL);
-  // };
-
   const handleSelectedFile = (files: any) => {
     if (files && files[0].size < 10000000) {
       setImageFile(files[0]);
