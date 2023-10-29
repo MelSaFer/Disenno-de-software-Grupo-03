@@ -67,7 +67,7 @@ export const updateCart: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId.length == 0 || body.productId.length == 0 || body.quantity <= 0){
+    if(body.userId.length == 0 || body.productId.length == 0){
         res.status(400).json({msg: "Bad Request: userId, productId or quantity are not a valid input"});
         return;
     }

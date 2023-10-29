@@ -302,4 +302,40 @@ export class DAOProduct implements DAO{
             return {"name": "No se encontró el producto"};
         }
     };
+
+    /*
+    -----------------------------------------------------------------------
+    GET OBJECT METHOD
+    Gets a product in the database
+    PARAMS:
+        - name: String | Undefined
+    RETURNS:
+        - Product if the product was found
+        - error message if the product was not found
+    */
+        async getObjectByName(name_: unknown){
+            try{
+                //Get the database instance from the singleton and connect to it
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const collection = db.collection(PRODUCT_COLLECTION);
+    
+                //Get the product from the database, using the code
+                const product = await collection.findOne({ name: name_ });
+                SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+                // If the product was found, return it, else return error message
+                if (product) {
+                    //console.log("Se encontro: " + JSON.stringify(product, null, 2));
+                    return product;
+                } else {
+                    //console.log("No se encontró el producto con el código: " + idProduct_);
+                    return {"name": "No se encontró el producto"}; 
+                    
+                }
+    
+            } catch(err){
+                //console.log(err);
+                return {"name": "No se encontró el producto"};
+            }
+        };
 }

@@ -58,6 +58,7 @@ import { API_URL } from '../config';
         }   
     };
 
+
     // -----------------------------
 
     /*
@@ -242,6 +243,16 @@ import { API_URL } from '../config';
             console.log("Error al cargar la info del usuario", err);
         }   
     }
+
+    public async getProductByName(name_: any){
+        try{
+           const adminProduct = new AdminProduct();
+           const result = adminProduct.getProductByName(name_);
+           return result;
+       } catch(err){
+           console.log("Error al cargar la info del usuario", err);
+       }
+   };
 
     //CATEGORY------------------------------------------------------
     public async addCategory(object: any){
