@@ -5,6 +5,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { GrGallery } from "react-icons/gr";
 import { IoExitOutline } from "react-icons/io5";
 import { GoHistory } from "react-icons/go";
+import { BiMessageDetail } from "react-icons/bi";
 import { useAuthContext } from "../context/AuthContext";
 import Router from "next/router";
 
@@ -35,27 +36,27 @@ const Navbar2 = () => {
           <div className=" flex-grow basis-[100%] items-center justify-center lg:mt-0 lg:!flex lg:basis-auto">
             {/* <!-- Left links --> */}
             <ul className="list-style-none flex flex-col pl-0 lg:mt-1 lg:flex-row">
-              {/* <!-- Cart link --> */}
-              <li className="">
-                <a href="/userView/cart" title="carrito de compra">
-                  <FiShoppingCart className="text-3xl mx-5" />
-                </a>
-              </li>
               {/* <!-- UserInfo link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
                 <a
                   className=""
-                  href="/userView/userInfo"
+                  href="/adminView/userInfo"
                   title="información de usuario"
                 >
                   <AiOutlineUser className="text-3xl mr-5" />
+                </a>
+              </li>
+              {/* <!-- Message link --> */}
+              <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
+                <a className="" href="/addContent" title="agenda">
+                  <BiMessageDetail className="text-3xl mr-5" />
                 </a>
               </li>
               {/* <!-- History link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
                 <a
                   className=""
-                  href="/userView/history"
+                  href="/adminView/historyAdmin"
                   title="historial de pedidos"
                 >
                   <GoHistory className="text-3xl" />
@@ -64,7 +65,7 @@ const Navbar2 = () => {
               <li>
                 <a
                   className="text-3xl font-bold text-yellow-900 px-20"
-                  href="/userView/mainPage"
+                  href="/adminView/mainPageAdmin"
                   title="Ir a la página de inicio"
                 >
                   TIENDA DUENDE
@@ -72,13 +73,13 @@ const Navbar2 = () => {
               </li>
               {/* <!-- Store link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/userView/store" title="tienda">
+                <a className="" href="/adminView/storeAdmin" title="tienda">
                   <FaStore className="text-3xl mx-5" />
                 </a>
               </li>
               {/* <!-- Gallery link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/userView/gallery" title="galería">
+                <a className="" href="/adminView/galleryAdmin" title="galería">
                   <GrGallery className="text-3xl mr-5" />
                 </a>
               </li>
