@@ -301,18 +301,34 @@ export class DAOContent implements DAO{
 
             if (filterCategory.length == 0){
                 console.log("filterTags: " + JSON.stringify(filterTags));
-                return filterTags
+                return filterTags[0];
             } else if (filterTags.length == 0){
                 //console.log("filterTags: " + JSON.stringify(filterCategory, null, 2));
-                return filterCategory;
+                return filterCategory[0];
             }else{
                 let resultado = filterCategory.concat(filterTags);
                 let resultadoDef:any = [];
-                for (let i = 0; i < resultado.length; i++) {
-                    if(!resultadoDef.includes(resultado[i][0])){
-                        resultadoDef.push(resultado[i][0]);
+
+                // for (let i = 0; i < resultado.length; i++) {
+                //     if(!resultadoDef.includes(resultado[i][0])){ //para que no se repitan
+                //         resultadoDef.push(resultado[i][0]);
+                //     }
+                // }
+
+                console.log("resultado: " + JSON.stringify(resultado, null, 2));
+
+                //include the elements that are in both arrays
+                for (let i = 0; i < filterTags[0].length; i++) {
+                    for (let j = 0; j < filterCategory[0].length; j++) {
+                        if (filterTags[0][i] == filterCategory[0][j]){ // hacer un AND entre los dos filtros
+                            if(resultadoDef.includes(resultado[0][i])){ //para que no se repitan
+                                break;
+                            }
+                            resultadoDef.push(filterTags[0][i]);
+                        }
                     }
                 }
+
                 console.log("resultadoDef: " + JSON.stringify(resultadoDef, null, 2));
                 return resultadoDef;
             }

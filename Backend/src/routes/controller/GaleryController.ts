@@ -148,6 +148,22 @@ export const getFilteredContent : RequestHandler = async (req, res) => {
     //res.status(200).json({ message: 'Hello World' })
     const mainController = new MainController();
     const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("categoryNames") || !body.hasOwnProperty("tags")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(!Array.isArray(body.categoryNames) || !Array.isArray(body.tags)){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
      
     const contentPromise = mainController.getFilteredContent(body.categoryNames, body.tags);
     const content = await contentPromise; // Espera a que la promesa se resuelva
