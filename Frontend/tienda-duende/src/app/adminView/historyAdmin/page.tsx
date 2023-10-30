@@ -2,12 +2,12 @@
 "use client";
 import React from "react";
 import Navbar2 from "@/src/components/navbar2";
-import Footer from "../../components/footer";
+import Footer from "../../../components/footer";
 import axios from "axios";
 import { useEffect, useState, Fragment } from "react";
 import { BiMessageAdd } from "react-icons/bi";
-import Modal from "../../components/modal";
-import * as Routes from "../routes";
+import Modal from "../../../components/modal";
+import * as Routes from "../../routes";
 
 const baseURL = "https://mocki.io/v1/c1e66925-19a3-4338-a5a2-3ac53d8e5e04";
 

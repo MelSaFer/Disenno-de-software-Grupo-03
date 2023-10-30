@@ -1,14 +1,14 @@
 "use client";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "../../../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import profilePic from "../../../public/images/ProfilePic.png";
+import profilePic from "../../../../public/images/ProfilePic.png";
 import Navbar2 from "@/src/components/navbar2";
 import Footer from "@/src/components/footer";
-import { auth } from "../../firebase/config";
+import { auth } from "../../../firebase/config";
 import axios from "axios";
-import * as Routes from "../routes";
+import * as Routes from "../../routes";
 
 function Page(): JSX.Element {
   const { user, logOut } = useAuthContext() as {
@@ -18,7 +18,7 @@ function Page(): JSX.Element {
   const router = useRouter();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [authUser, setAuthUser] = useState({ uid: "", email: "" });
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState([]);
 
   useEffect(() => {
     if (user == null) {
@@ -55,14 +55,7 @@ function Page(): JSX.Element {
             data: { userId: user.uid },
           });
           setUserInfo(result.data);
-          console.log(result.data);
           console.log(result);
-
-          if (result.data.roleType == "NORMAL_USER") {
-            router.push("/mainPage");
-          } else {
-            router.push("/adminView/mainPageAdmin");
-          }
         } catch (error) {
           console.error("Error al obtener datos:", error);
         }

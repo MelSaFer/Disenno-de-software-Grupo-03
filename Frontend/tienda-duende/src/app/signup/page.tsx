@@ -1,13 +1,31 @@
 "use client";
 import signUp from "../../firebase/auth/signup";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
+import { auth } from "../../firebase/config";
+import * as Routes from "../routes";
 
 function Page(): JSX.Element {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [authUser, setAuthUser] = useState({ uid: "", email: "" });
+
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       setAuthUser({ uid: user.uid, email: user.email });
+  //       console.log(`El UID del usuario es ${user.uid} ${user.email}`);
+  //     } else {
+  //       console.log("No hay usuario iniciado sesión");
+  //     }
+  //   }, []);
+
+  //   // Detener la suscripción cuando el componente se desmonta
+  //   return () => unsubscribe();
+  // }, []);
 
   // Handle form submission
   const handleForm = async (event: { preventDefault: () => void }) => {
@@ -24,9 +42,35 @@ function Page(): JSX.Element {
 
     // Sign up successful
     console.log(result);
+    // console.log(result?.user.reloadUserInfo.localId);
+    if (email && password) {
+      const datos = {
+        userId: result?.user.reloadUserInfo.localId,
+        email: email,
+        roleType: "NORMAL_USER",
+        cart: [],
+      };
+
+      console.log("Estos son los datos:", datos);
+
+      const fetchData = async () => {
+        try {
+          const result = await axios.request({
+            method: "post",
+            url: Routes.addUser,
+            headers: { "Content-Type": "application/json" },
+            data: datos,
+          });
+          console.log(result);
+        } catch (error) {
+          console.error("Error al obtener datos:", error);
+        }
+      };
+      fetchData();
+    }
 
     // Redirect to the admin page
-    router.push("/admin");
+    router.push("/mainPage");
   };
 
   return (
