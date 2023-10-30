@@ -282,6 +282,7 @@ export class DAOContent implements DAO{
                 for (let i = 0; i < categoryNames.length; i++) {
                     filterCategory.push(contents.filter((content) => content.categoryName == categoryNames[i]));
                 } 
+                //console.log("filterCategory: " + JSON.stringify(filterCategory));
             }
 
             //----------------------------------------------------------------------------
@@ -293,6 +294,11 @@ export class DAOContent implements DAO{
                 //console.log("filterTags: " + JSON.stringify(filterTags));
             }
 
+            if(tags.length == 0 && categoryNames.length == 0){
+                let allContents = this.getAll();
+                return allContents;
+            }
+
             if (filterCategory.length == 0){
                 console.log("filterTags: " + JSON.stringify(filterTags));
                 return filterTags
@@ -301,12 +307,9 @@ export class DAOContent implements DAO{
                 return filterCategory;
             }else{
                 let resultado = filterCategory.concat(filterTags);
-                //console.log("resultado: " + JSON.stringify(resultado, null, 2));
-                //let uniqueIds = resultado.filter((content, index, self) => self.findIndex(c => c.contentId === content.contentId) === index).map((content) => content.contentId);
                 let resultadoDef:any = [];
                 for (let i = 0; i < resultado.length; i++) {
                     if(!resultadoDef.includes(resultado[i][0])){
-                        //console.log("resultado[i]: " + JSON.stringify(resultado[i][0], null, 2));
                         resultadoDef.push(resultado[i][0]);
                     }
                 }
