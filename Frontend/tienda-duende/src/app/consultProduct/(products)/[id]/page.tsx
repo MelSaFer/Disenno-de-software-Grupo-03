@@ -6,6 +6,7 @@ import Footer from "../../../../components/footer";
 import axios from "axios";
 import Navbar2 from "@/src/components/navbar2";
 import * as Routes from "../../../routes";
+import { auth } from "../../../../firebase/config";
 
 interface PageProps {
   params: { id: string };
@@ -14,6 +15,20 @@ interface PageProps {
 const ConsultProduct = ({ params }: PageProps) => {
   const [imageSrc, setImageSrc] = useState("");
   const [data, setData] = useState("");
+
+  //Firebase getCurrentUser
+  const [authUser, setAuthUser] = useState({ uid: "", email: "" });
+      useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setAuthUser({ uid: user.uid, email: user.email });
+        //console.log(`El UID del usuario es ${user.uid} ${user.email}`);
+      }
+    }, []);
+
+    // Detener la suscripción cuando el componente se desmonta
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,10 +52,28 @@ const ConsultProduct = ({ params }: PageProps) => {
 
   console.log("Este es el data:", data);
 
-  const handleSubmit = async (e) => {
-    // Agregar lógica de manejo de submit aquí
-    console.log("agregar al carrito");
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const requestBody = {
+  //     userId: authUser.uid, 
+  //     productId: params.id,
+  //     quantity: 1
+  //   };
+  //   try {
+  //     const result = await axios.request({
+  //       method: "post",
+  //       url: Routes.updateCart, 
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       },
+  //       data: requestBody
+  //     });
+  //     console.log(result.data);
+  //   } catch (error) {
+  //     console.error("Error al actualizar el carrito:", error); 
+  //   }
+  // };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -70,7 +103,7 @@ const ConsultProduct = ({ params }: PageProps) => {
             <button
               type="submit"
               className="bg-white hover:bg-gray-50 text-red-400 font-semibold rounded-full border border-red-400 px-4 py-2 mt-5 w-full"
-              onClick={handleSubmit}
+              // onClick={handleSubmit}
             >
               Agregar a carrito
             </button>

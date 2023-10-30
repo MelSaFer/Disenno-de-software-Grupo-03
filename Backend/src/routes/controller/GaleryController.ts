@@ -84,12 +84,12 @@ export const updateContent : RequestHandler = async (req, res) => {
     }
     //Verify if the body has the correct structure
     if(!body.hasOwnProperty("title") || !body.hasOwnProperty("description") || !body.hasOwnProperty("date") || !body.hasOwnProperty("imageId") || !body.hasOwnProperty("categoryName") || !body.hasOwnProperty("tags") || !body.hasOwnProperty("_id")){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "1-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
     if(typeof body.title != "string" || typeof body.description != "string" || typeof body.date != "string" || typeof body.imageId != "string" || typeof body.categoryName != "string" || typeof body._id != "string"){
-        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        res.status(400).json({msg: "2-Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the tags

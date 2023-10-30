@@ -7,6 +7,20 @@ import Navbar2 from "@/src/components/navbar2";
 import axios from "axios";
 import * as Routes from "../routes";
 
+//Firebase image upload
+import { firebaseStorageURL } from "../../firebase/config";
+import firebase_app from "../../firebase/config";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  deleteObject,
+} from "firebase/storage";
+
+// Subir imagen a firestore
+const storage = getStorage(firebase_app, firebaseStorageURL);
+
 const ShippingInfo = () => {
   const [provincia, setProvincia] = useState("");
   const [canton, setCanton] = useState("");
@@ -15,11 +29,22 @@ const ShippingInfo = () => {
   const [imagen, setImagen] = useState(null);
   const [imagenURL, setImagenURL] = useState("");
 
-  const [products, setProducts] = useState([]);
+  const [imageFile, setImageFile] = useState<File>();
+  const [downloadURL, setDownloadURL] = useState("");
 
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [costoTotal, setCostoTotal] = useState(0);
+  const [costoEnvio, setCostoEnvio] = useState(10);
+  const [costoTotalFinal, setCostoTotalFinal] = useState(0);
+
+  /*
+  receives the data of the products in the cart and calculates the total cost of the purchase
+  */
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = { userId: "1" };
+      const requestData = { userId: "1" }; // cambiar por el userId del usuario logueado
+      // obtains the products in the cart
       try {
         const result = await axios.request({
           method: "post",
@@ -27,15 +52,45 @@ const ShippingInfo = () => {
           headers: { "Content-Type": "application/json" },
           data: requestData,
         });
-        // const sorted = result.data.sort((a, b) => {
-        //   return b.purchaseId - a.purchaseId;
-        // });
-        setProducts(result.data);
+
+        // function to obtain additional data from each product
+        function fetchProductData(product) {
+          // make a request to the server to obtain the additional data
+          return axios
+            .post(Routes.getProductByName, { name: product.name })
+            .then((response) => {
+              // process the response
+              const productData = response.data;
+
+              // add the additional data to the product object
+              product.additionalData = productData;
+
+              return product;
+            })
+            .catch((error) => {
+              console.error(
+                `Error al obtener datos para ${product.name}: ${error.message}`
+              );
+              return product; // in case of error, return the product without additional data
+            });
+        }
+
+        Promise.all(result.data.map(fetchProductData))
+          .then((updatedData) => {
+            // console.log(updatedData);
+          })
+          .catch((err) => {
+            console.error(`Error en Promise.all: ${err}`);
+          })
+          .finally(() => {
+            setLoading(false);
+            setProducts(result.data);
+            calcularCostoTotal(result.data);
+          });
       } catch (error) {
         console.error("Error al obtener datos:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -48,25 +103,57 @@ const ShippingInfo = () => {
       // Construye los datos para enviar a la API
       const datos = { provincia, canton, distrito, direccion, imagen };
 
-      // Envía una solicitud a la API (sustituye la URL por la de tu API real)
-      try {
-        const response = await fetch("URL_DE_LA_API", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(datos),
-        });
+      const imageUrl = await handleUploadedFile();
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Respuesta de la API:", data);
-        } else {
-          console.error("Error al enviar la solicitud a la API");
+      const prueba = {
+        purchaseDetails: "Compra 1",
+        products: [
+          {
+            productId: "65394e623ecb4725cdfb99b3",
+            quantity: 1,
+          },
+          {
+            productId: "653952c03ecb4725cdfb99",
+            quantity: 1,
+          },
+        ],
+        voucherId:
+          "https://firebasestorage.googleapis.com/v0/b/proyectodisenno-7d92d.appspot.com/o/image%2Fwinter-4021090_1920.jpg?alt=media&token=3a9dabdd-e920-4011-b08d-d62317232516&_gl=1*7bzel4*_ga*MjAwMzg1MzIxOC4xNjk4NTQ1NjY0*_ga_CW55HF8NVT*MTY5ODU1NDA5MC4yLjEuMTY5ODU1Nzg0MS41NS4wLjA.",
+        aproxDeliveryDate: "2023-11-20",
+        shippingAddress: "San José / San Pedro",
+        shippingPrice: 10,
+        userId: "2",
+        state: "PENDING",
+      };
+
+      // Construye los datos para enviar a la API
+      const data = {
+        name: name,
+        description: description,
+        cuantityAvailable: parseInt(cuantity),
+        imageId: downloadURL,
+        price: parseFloat(price),
+      };
+      console.log(data);
+
+      // Sube imagen y forma url
+
+      const fetchData = async () => {
+        try {
+          const result = await axios.request({
+            method: "post",
+            url: Routes.addProduct,
+            headers: { "Content-Type": "application/json" },
+            data: datos,
+          });
+          console.log("fetch");
+          console.log(result);
+          router.push("/store");
+        } catch (error) {
+          console.error("Error al obtener datos:", error);
         }
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
-      }
+      };
+      fetchData();
     } else {
       alert("Por favor, complete todos los campos.");
     }
@@ -84,6 +171,101 @@ const ShippingInfo = () => {
     setImagenURL(imageURL);
   };
 
+  const handleSelectedFile = (files: any) => {
+    if (files && files[0].size < 10000000) {
+      setImageFile(files[0]);
+      console.log(files[0]);
+      setImagen(files[0]);
+      const imageURL = URL.createObjectURL(files[0]);
+      setImagenURL(imageURL);
+    } else {
+      MessageChannel.error("File size to large");
+    }
+  };
+
+  async function handleUploadedFile() {
+    if (imageFile) {
+      const name = imageFile.name;
+      const storageRef = ref(storage, `image/${name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          // setProgressUpload(progress); // to show progress upload
+
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          message.error(error.message);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            //url is download url of file
+            setDownloadURL(url);
+            console.log(url);
+            return url;
+          });
+        }
+      );
+    } else {
+      message.error("File not found");
+    }
+  }
+
+  function calcularCostoTotal(data) {
+    let total = 0;
+    for (const product of data) {
+      const ProductCost = product.quantity * product.additionalData.price;
+      total += ProductCost;
+    }
+    // return costoTotal;
+    setCostoTotal(total);
+    setCostoTotalFinal(total + costoEnvio);
+  }
+
+  async function deleteImageFromStorage() {
+    // Parsea el enlace para obtener la referencia al objeto en Storage
+    const imageURL =
+      "https://firebasestorage.googleapis.com/v0/b/proyectodisenno-7d92d.appspot.com/o/image%2Fgato.jpg?alt=media&token=3cfbe4d0-ef4f-4910-b5ea-35c6a9ed6d7b";
+    try {
+      // Crea un objeto URL a partir del URL proporcionado
+      const url = new URL(imageURL);
+
+      // Obtiene la parte del pathname que contiene el nombre del archivo
+      const pathname = url.pathname;
+
+      // Decodifica la parte del pathname y quita la parte "image/" del principio del nombre del archivo
+      const decodedFileName = decodeURIComponent(
+        pathname.substring(pathname.lastIndexOf("/") + 1)
+      ).replace(/^image\//, "");
+
+      console.log(
+        'Nombre del archivo de imagen sin "image/":',
+        decodedFileName
+      );
+
+      console.log("Nombre del archivo de imagen:", decodedFileName);
+      // Genera una referencia al objeto en Storage
+      const storageRef = ref(storage, `image/${decodedFileName}`); // Ruta completa al objeto
+
+      // Elimina el objeto de Storage
+      await deleteObject(storageRef);
+      console.log("Imagen eliminada con éxito.");
+    } catch (error) {
+      console.error("Error al eliminar la imagen:", error);
+    }
+  }
+
   return (
     <div>
       {/* Navbar component */}
@@ -100,7 +282,7 @@ const ShippingInfo = () => {
         {/* Page content */}
         <div className="flex justify-center items-start">
           {/* Left column */}
-          <div className="w-1/3 p-4">
+          <div className="w-1/4 p-4">
             <div className="bg-gray-50 p-4 border ">
               <h2 className="text-lg font-semibold text-black mb-8">
                 Detalles de facturación
@@ -164,7 +346,7 @@ const ShippingInfo = () => {
                     name="imagen"
                     className="w-full p-2 border rounded mb-5 mt-5"
                     accept="image/*"
-                    onChange={handleImageChange}
+                    onChange={(files) => handleSelectedFile(files.target.files)}
                   />
                   {imagenURL && (
                     <div>
@@ -181,7 +363,7 @@ const ShippingInfo = () => {
           </div>
 
           {/* Right column */}
-          <div className="w-1/3 p-4">
+          <div className="w-2/4 p-4">
             <div className="bg-white p-4 border ">
               <h2 className="text-lg font-semibold text-black">Tu pedido</h2>
               {/* internal columns */}
@@ -197,9 +379,9 @@ const ShippingInfo = () => {
                             {products.map((product) => (
                               <li key={product.name}>
                                 - {product.name}{" "}
-                                <t className="font-bold">
+                                <span className="font-bold">
                                   [{product.quantity}]
-                                </t>
+                                </span>
                               </li>
                             ))}
                           </ul>
@@ -220,10 +402,12 @@ const ShippingInfo = () => {
                 <div className="w-1/3 p-2">
                   <p className="font-bold text-2xl">Subtotal</p>
                   <div className="flex text-black p-2">
-                    <ul className="list-none font-light">
-                      <li>$40</li>
-                      <li>$45.05</li>
-                      <li>$10</li>
+                    <ul className=" list-none font-light">
+                      {products.map((product) => (
+                        <li key={product.name}>
+                          ${product.quantity * product.additionalData.price}{" "}
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -239,9 +423,9 @@ const ShippingInfo = () => {
                 </div>
                 {/* right column */}
                 <div className="w-1/2 p-2">
-                  <p>$85.05</p>
-                  <p>$5</p>
-                  <p>$95.05</p>
+                  <p>${costoTotal}</p>
+                  <p>${costoEnvio}</p>
+                  <p>${costoTotalFinal}</p>
                 </div>
               </div>
               {/* send button */}
@@ -252,6 +436,7 @@ const ShippingInfo = () => {
               >
                 Realizar pedido
               </button>
+              <button onClick={deleteImageFromStorage}>eliminar</button>
             </div>
           </div>
         </div>
