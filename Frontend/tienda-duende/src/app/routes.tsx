@@ -7,8 +7,12 @@ export const getProduct = `http://localhost:${port}/getProduct`;
 export const getProductByName = `http://localhost:${port}/getProductByName`;
 export const addProduct = `http://localhost:${port}/addProduct`;
 export const modifyProduct = `http://localhost:${port}/updateProduct`;
+
 // export const updateCart = `http://localhost:${port}/updateCart`;
 export const deleteProduct = `http://localhost:${port}/deleteProduct`;
+
+// FILTER
+export const getCategories = `http://localhost:${port}/getCategories`;
 
 // GALLERY
 export const getContent = `http://localhost:${port}/getContent`;

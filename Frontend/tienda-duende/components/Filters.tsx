@@ -4,12 +4,14 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from 'axios';
+import * as Routes from "../src/app/routes";
 
 const Filters = () => {
 
   const router = useRouter();
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [selectedSubs, setSelectedSubs] = useState({});
   // Estado de categorías seleccionadas 
   const [selectedCats, setSelectedCats] = useState([]); 
 
@@ -97,8 +99,12 @@ const Filters = () => {
   
     // Actualizar estado de subcategorías seleccionadas
     setSelectedSubs(updated);
-  
   }
+
+  useEffect(() => {
+    console.log("Estas son las sub seleccionadas:", selectedSubs);
+  }, [selectedSubs]);
+
 
   useEffect(() => {
     fetchCategories();
@@ -106,8 +112,9 @@ const Filters = () => {
   
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('https://mocki.io/v1/9d5299ba-9de8-4386-a06a-0cf43b229d3c');
+      const res = await axios.post(Routes.getCategories);
       setCategories(res.data);
+      console.log("estos son los datos de toda esta vara: ",res.data)
     } catch (err) {
       console.error('Error fetching categories', err);
     }
@@ -120,42 +127,43 @@ const Filters = () => {
         <h3 className="font-semibold mb-2">Categorias</h3>
         <ul>
           {categories.map(cat => (
-            <li key={cat.id}>
+            <li key={cat._id}>
               <input
                 type="checkbox" 
-                value={cat.name}
-                checked={selected[cat.name]}
+                value={cat.categoryName}
+                checked={selected[cat.Categoryname]}
                 onChange={handleChange}
               />
-              <span style={{paddingLeft:'5px'}}>{cat.name}</span>
+              <span style={{paddingLeft:'5px'}}>{cat.categoryName}</span>
             </li>
           ))}
         </ul>
         <hr className="my-4" />
         <h3 className="font-semibold mb-2">Subcategorias</h3>
         <div>
-          {Object.keys(selected).map(catName => {
-            const cat = categories.find(c => c.name === catName);
-            const subs = cat.subcategories;
+          {Object.keys(selected).map(categoryName => {
+            const category = categories.find(cat => cat.categoryName === categoryName);
+            console.log("Esto es lo que quiero vara:", category)
+            const subs = category.subcategories;
              return (
                <>      
-                 <h4 className="text-center" style={{marginTop:'5px'}}>{catName}</h4> 
+                 <h4 className="text-center" style={{marginTop:'5px'}}>{categoryName}</h4> 
                  <ul>
                    {subs.map(sub => (
-                     <li key={sub.name}>
+                     <li key={sub}>
                        <input
                          type="checkbox"
-                         value={sub.name}
+                         value={sub}
                          onChange={handleSubChange}
                          className="mx-5" 
                        />
-                       <span style={{paddingLeft:'5px'}}>{sub.name}</span>
+                       <span style={{paddingLeft:'5px'}}>{sub}</span>
                      </li>
                    ))}  
                  </ul>
                  {Object.keys(selected).length > 1 && <hr/>}
                </>
-             )
+             );
           })}
         </div>
       </div>
@@ -164,3 +172,15 @@ const Filters = () => {
 };
 
 export default Filters;
+
+/*
+const result = await axios.request({
+          method: "post",
+          url: Routes.getContent,
+          headers: { "Content-Type": "application/json" },
+          data: requestData,
+        });
+
+router.post("/getFilteredContent", galeryController.getFilteredContent);
+router.post("/getFilteredSubcategory", galeryController.getFilteredSubcontent);
+*/
