@@ -1,12 +1,12 @@
 // @ts-nocheck
 "use client";
 import React, { Fragment, useEffect, useState } from "react";
-import Footer from "../../../../components/footer";
+import Footer from "../../../../../components/footer";
 import axios from "axios";
-import Navbar2 from "@/src/components/navbar2";
-import * as Routes from "../../../routes";
-import Modal from "../../../../components/modal";
-import { auth } from "../../../../firebase/config";
+import NavbarAdmin from "@/src/components/navbarAdmin";
+import * as Routes from "../../../../routes";
+import Modal from "../../../../../components/modal";
+import { auth } from "../../../../../firebase/config";
 import { BiMessageAdd } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ const ConsultProductAdmin = ({ params }: PageProps) => {
 
   //Firebase getCurrentUser
   const [authUser, setAuthUser] = useState({ uid: "", email: "" });
-      useEffect(() => {
+  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setAuthUser({ uid: user.uid, email: user.email });
@@ -63,14 +63,14 @@ const ConsultProductAdmin = ({ params }: PageProps) => {
   //   e.preventDefault();
 
   //   const requestBody = {
-  //     userId: authUser.uid, 
+  //     userId: authUser.uid,
   //     productId: params.id,
   //     quantity: 1
   //   };
   //   try {
   //     const result = await axios.request({
   //       method: "post",
-  //       url: Routes.updateCart, 
+  //       url: Routes.updateCart,
   //       headers: {
   //         "Content-Type": "application/json"
   //       },
@@ -78,7 +78,7 @@ const ConsultProductAdmin = ({ params }: PageProps) => {
   //     });
   //     console.log(result.data);
   //   } catch (error) {
-  //     console.error("Error al actualizar el carrito:", error); 
+  //     console.error("Error al actualizar el carrito:", error);
   //   }
   // };
 
@@ -96,36 +96,35 @@ const ConsultProductAdmin = ({ params }: PageProps) => {
       if (result.status === 200) {
         // Realiza cualquier acción necesaria después de la eliminación
         // Puede ser redirigir a otra página o actualizar el estado de la aplicación, por ejemplo
-        router.push("/store");
+        router.push("/adminView/storeAdmin");
       } else {
         // Manejar errores o mostrar mensajes de error
-        console.error('Error al eliminar:', result);
+        console.error("Error al eliminar:", result);
       }
     } catch (error) {
       // Manejar errores de Axios
-      console.error('Error al eliminar:', error);
+      console.error("Error al eliminar:", error);
     }
   };
-  
 
   return (
     <Fragment>
-    <div className="flex flex-col min-h-screen">
-      <header>
-        <Navbar2 />
-        <hr className="border border-red-400 w-5/6 mx-auto my-4"></hr>
-      </header>
-      <main className="flex-grow">
-        <div className="flex h-full justify-center items-top">
-          {/* Columna izquierda con la imagen */}
-          <div className="flex justify-center items-center w-1/3 p-2 mr-4 border">
-            <img src={data.imageId} alt="Imagen" className="w-full h-auto" />
-          </div>
+      <div className="flex flex-col min-h-screen">
+        <header>
+          <NavbarAdmin />
+          <hr className="border border-red-400 w-5/6 mx-auto my-4"></hr>
+        </header>
+        <main className="flex-grow">
+          <div className="flex h-full justify-center items-top">
+            {/* Columna izquierda con la imagen */}
+            <div className="flex justify-center items-center w-1/3 p-2 mr-4 border">
+              <img src={data.imageId} alt="Imagen" className="w-full h-auto" />
+            </div>
 
-          {/* Columna derecha con el título y descripción */}
+            {/* Columna derecha con el título y descripción */}
 
-          <div className="w-1/3 p-5 border rounded-lg border-red-400 ml-4 text-yellow-900 flex flex-col justify-top">
-          <div className="flex justify-end items-end">
+            <div className="w-1/3 p-5 border rounded-lg border-red-400 ml-4 text-yellow-900 flex flex-col justify-top">
+              <div className="flex justify-end items-end">
                 <a
                   href="#!"
                   className=" text-neutral-800 dark:text-neutral-200"
@@ -133,38 +132,31 @@ const ConsultProductAdmin = ({ params }: PageProps) => {
                 >
                   <BsThreeDotsVertical className="w-6 h-6 text-yellow-900" />
                 </a>
+              </div>
+              <h1 className="font-bold text-2xl mb-4">{data.name}</h1>
+              <p className="mb-4">{data.description}</p>
+              <p className="mb-4">
+                <b>Precio: </b>
+                {data.price}
+              </p>
+              <p>
+                <b>Cantidad disponible: </b>
+                {data.cuantityAvailable}
+              </p>
             </div>
-            <h1 className="font-bold text-2xl mb-4">{data.name}</h1>
-            <p className="mb-4">{data.description}</p>
-            <p className="mb-4">
-              <b>Precio: </b>
-              {data.price}
-            </p>
-            <p>
-              <b>Cantidad disponible: </b>
-              {data.cuantityAvailable}
-            </p>
-            <button
-              type="submit"
-              className="bg-white hover:bg-gray-50 text-red-400 font-semibold rounded-full border border-red-400 px-4 py-2 mt-5 w-full"
-              // onClick={handleSubmit}
-            >
-              Agregar a carrito
-            </button>
           </div>
-        </div>
-      </main>
-      <footer>
-        <Footer />
-      </footer>
-    </div>
-    <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+        </main>
+        <footer>
+          <Footer />
+        </footer>
+      </div>
+      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
         <div className="p-2 flex flex-col justify-center items-center">
-            <Link href={`/modifyProduct/${params.id}`}>
-                <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mb-3">
-                    Modificar
-                </button>
-            </Link>
+          <Link href={`/adminView/modifyProduct/${params.id}`}>
+            <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mb-3">
+              Modificar
+            </button>
+          </Link>
           <button
             className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold"
             onClick={() => {
@@ -184,8 +176,9 @@ const ConsultProductAdmin = ({ params }: PageProps) => {
             <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mr-14">
               No
             </button>
-            <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold "
-            onClick={handleDelete}
+            <button
+              className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold "
+              onClick={handleDelete}
             >
               Si
             </button>

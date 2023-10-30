@@ -9,8 +9,25 @@ import { set } from "firebase/database";
 import * as Routes from "../../routes";
 import { useRouter } from "next/navigation";
 
+//Firebase image upload
+import { firebaseStorageURL } from "../../../firebase/config";
+import firebase_app from "../../../firebase/config";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+
+// Subir imagen a firestore
+const storage = getStorage(firebase_app, firebaseStorageURL);
+
 const AddContent = () => {
   const [imageSrc, setImageSrc] = useState("");
+  const [imageFile, setImageFile] = useState<File>();
+  const [downloadURL, setDownloadURL] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [progressUpload, setProgressUpload] = useState(0);
 
   // datos utilizados para el formulario
   const [name, setName] = useState("");
@@ -20,17 +37,69 @@ const AddContent = () => {
   const [imagenURL, setImagenURL] = useState("");
   const router = useRouter();
 
-  const handleImageChange = (e) => {
-    // Captura la imagen seleccionada por el usuario
-    const selectedImage = e.target.files[0];
-    setImagen(selectedImage);
-
-    // Crea una URL de objeto para la vista previa de la imagen
-    const imageURL = URL.createObjectURL(selectedImage);
-
-    setImagen(selectedImage);
-    setImagenURL(imageURL);
+  const handleSelectedFile = (files: any) => {
+    if (files && files[0].size < 10000000) {
+      setImageFile(files[0]);
+      console.log(files[0]);
+      setImagen(files[0]);
+      const imageURL = URL.createObjectURL(files[0]);
+      console.log(imageURL);
+      setImagenURL(imageURL);
+    } else {
+      MessageChannel.error("File size to large");
+    }
   };
+
+  // const handleImageChange = (e) => {
+  //   // Captura la imagen seleccionada por el usuario
+  //   const selectedImage = e.target.files[0];
+  //   setImagen(selectedImage);
+
+  //   // Crea una URL de objeto para la vista previa de la imagen
+  //   const imageURL = URL.createObjectURL(selectedImage);
+
+  //   setImagen(selectedImage);
+  //   setImagenURL(imageURL);
+  // };
+
+  async function handleUploadedFile() {
+    if (imageFile) {
+      const name = imageFile.name;
+      const storageRef = ref(storage, `image/${name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+          setProgressUpload(progress); // to show progress upload
+
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          message.error(error.message);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            //url is download url of file
+            setDownloadURL(url);
+            console.log(url);
+            return url;
+          });
+        }
+      );
+    } else {
+      message.error("File not found");
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,10 +126,12 @@ const AddContent = () => {
           title: name,
           description: description,
           date: formatedDate,
-          imageId: "imagen",
+          imageId: downloadURL,
           categoryName: "terror",
           tags: valTags,
         };
+
+        const imageUrl = await handleUploadedFile();
 
         // Enviar datos al backend
         const fetchData = async () => {
@@ -72,7 +143,7 @@ const AddContent = () => {
               data: datos,
             });
             console.log(result);
-            router.push("/gallery");
+            router.push("/adminView/galleryAdmin");
           } catch (error) {
             console.error("Error al obtener datos:", error);
           }
@@ -104,7 +175,7 @@ const AddContent = () => {
                 name="imagen"
                 className="w-full p-2 border rounded mb-5 mt-5"
                 accept="image/*"
-                onChange={handleImageChange}
+                onChange={(files) => handleSelectedFile(files.target.files)}
               />
               {imagenURL && (
                 <div>
@@ -185,7 +256,7 @@ const AddContent = () => {
                   type="button"
                   className="w-[150px] bg-red-400 text-white rounded-full px-3 py-2"
                 >
-                  <a href="/gallery" title="galeria">
+                  <a href="/adminView/galleryAdmin" title="galeria">
                     Cancelar
                   </a>
                 </button>

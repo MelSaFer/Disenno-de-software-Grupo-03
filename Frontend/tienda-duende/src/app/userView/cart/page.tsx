@@ -2,13 +2,13 @@
 "use client";
 
 import React from "react";
-import Footer from "../../components/footer";
+import Footer from "../../../components/footer";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Navbar2 from "@/src/components/navbar2";
-import * as Routes from "../routes";
-import { auth } from "../../firebase/config";
+import * as Routes from "../../routes";
+import { auth } from "../../../firebase/config";
 
 const Cart = () => {
   const [data, setData] = useState([]);

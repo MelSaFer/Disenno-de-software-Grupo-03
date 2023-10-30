@@ -20,7 +20,7 @@ const Footer = () => {
   };
   const abrirFacebook = () => {
     // Especifica la URL que deseas abrir en una nueva página
-    const url = "https://www.facebook.com/duenderfs/?";
+    const url = "https://www.facebook.com/duenderfs/";
 
     // Abre la URL en una nueva ventana o pestaña
     window.open(url, "_blank");
@@ -29,14 +29,26 @@ const Footer = () => {
   return (
     <footer className="flex flex-col items-center bg-neutral-200 text-center text-white dark:bg-yellow-900 mt-7">
       <div className="container pt-5">
-        <div className="mb-5 flex justify-center" onClick={abrirInstagram}>
-          <a href="#!" className="mr-9 text-neutral-800 dark:text-neutral-200">
+        <div className="mb-5 flex justify-center">
+          <a
+            href="#!"
+            className="mr-9 text-neutral-800 dark:text-neutral-200"
+            onClick={abrirInstagram}
+          >
             <AiOutlineInstagram className="w-6 h-6" />
           </a>
-          <a href="#!" className="mr-9 text-neutral-800 dark:text-neutral-200">
+          <a
+            href="#!"
+            className="mr-9 text-neutral-800 dark:text-neutral-200"
+            onClick={abrirTiktok}
+          >
             <FaTiktok className="w-6 h-6" />
           </a>
-          <a href="#!" className="mr-9 text-neutral-800 dark:text-neutral-200">
+          <a
+            href="#!"
+            className="mr-9 text-neutral-800 dark:text-neutral-200"
+            onClick={abrirFacebook}
+          >
             <AiFillFacebook className="w-6 h-6" />
           </a>
           <a href="#!" className="mr-9 text-neutral-800 dark:text-neutral-200">

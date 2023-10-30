@@ -3,20 +3,20 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ProductButton from "../../../components/ProductButtons";
-import ProductTile from "../../../components/ProductTile";
+import ProductButton from "../../../../components/ProductButtons";
+import ProductTile from "../../../../components/ProductTile";
 //import Filters from "../../../components/Filters";
 import Footer from "@/src/components/footer";
 import Navbar2 from "@/src/components/navbar2";
 import axios from "axios";
 import Link from "next/link";
-import * as Routes from "../routes";
+import * as Routes from "../../routes";
 
 const Page = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 15;
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
@@ -64,39 +64,39 @@ const Page = () => {
           </div>
 
           <div className="flex justify-center items-center pl">
-          <div className="grid grid-cols-5">
-            {/* <div className="col-span-1 mt-7">
+            <div className="grid grid-cols-5">
+              {/* <div className="col-span-1 mt-7">
               <Filters />
             </div> */}
 
-            <div className="col-span-5 mt-10 grid grid-cols-3 gap-8 sm:gap-4 lg:mt-7">
-              {itemsToDisplay.map((item) => (
-                <Link
-                  className="relative flex flex-col overflow-hidden border cursor-pointer"
-                  key={item.code}
-                  item={item}
-                  //href = '/consultProduct/'
-                  href={`/consultProduct/${item._id}`}
-                  onClick={() => {
-                    setSelectedItem(item);
-                  }}
-                  /*
+              <div className="col-span-5 mt-10 grid grid-cols-3 gap-8 sm:gap-4 lg:mt-7">
+                {itemsToDisplay.map((item) => (
+                  <Link
+                    className="relative flex flex-col overflow-hidden border cursor-pointer"
+                    key={item.code}
+                    item={item}
+                    //href = '/consultProduct/'
+                    href={`/userView/consultProduct/${item._id}`}
+                    onClick={() => {
+                      setSelectedItem(item);
+                    }}
+                    /*
                   onClick={() => {
                     //console.log("Es estes")
                     router.push(`/consultProduct?datas=${item._id}`)
                 }}
                 */
-                >
-                  {item.cuantityAv !== 0 ? (
-                    <div>
-                      <ProductTile item={item} />
-                      <ProductButton item={item} />
-                    </div>
-                  ) : null}
-                </Link>
-              ))}
+                  >
+                    {item.cuantityAv !== 0 ? (
+                      <div>
+                        <ProductTile item={item} />
+                        <ProductButton item={item} />
+                      </div>
+                    ) : null}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
           </div>
 
           <div className="pagination flex justify-center items-center mt-10 text-1xl">

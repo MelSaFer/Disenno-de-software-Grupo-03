@@ -2,11 +2,11 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import Footer from "../../../../components/footer";
+import Footer from "../../../../../components/footer";
 import axios from "axios";
 import Navbar2 from "@/src/components/navbar2";
-import * as Routes from "../../../routes";
-import { auth } from "../../../../firebase/config";
+import * as Routes from "../../../../routes";
+import { auth } from "../../../../../firebase/config";
 
 interface PageProps {
   params: { id: string };
@@ -18,7 +18,7 @@ const ConsultProduct = ({ params }: PageProps) => {
 
   //Firebase getCurrentUser
   const [authUser, setAuthUser] = useState({ uid: "", email: "" });
-      useEffect(() => {
+  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setAuthUser({ uid: user.uid, email: user.email });
@@ -56,14 +56,14 @@ const ConsultProduct = ({ params }: PageProps) => {
   //   e.preventDefault();
 
   //   const requestBody = {
-  //     userId: authUser.uid, 
+  //     userId: authUser.uid,
   //     productId: params.id,
   //     quantity: 1
   //   };
   //   try {
   //     const result = await axios.request({
   //       method: "post",
-  //       url: Routes.updateCart, 
+  //       url: Routes.updateCart,
   //       headers: {
   //         "Content-Type": "application/json"
   //       },
@@ -71,7 +71,7 @@ const ConsultProduct = ({ params }: PageProps) => {
   //     });
   //     console.log(result.data);
   //   } catch (error) {
-  //     console.error("Error al actualizar el carrito:", error); 
+  //     console.error("Error al actualizar el carrito:", error);
   //   }
   // };
 
