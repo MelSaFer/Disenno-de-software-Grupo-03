@@ -190,6 +190,16 @@ import { API_URL } from '../config';
         }   
     };
 
+    public async getFilteredContent(categoryNames: string[], tags: string[]){
+        try{
+            const adminContent = new AdminContent();
+            const result = adminContent.getFilteredContent(categoryNames, tags);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    }
+
     // -----------------------------
 
 
