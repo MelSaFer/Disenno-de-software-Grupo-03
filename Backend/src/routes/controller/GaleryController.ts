@@ -145,7 +145,13 @@ export const getContentById : RequestHandler = async (req, res) => {
 }
 
 export const getFilteredContent : RequestHandler = async (req, res) => {
-    res.status(200).json({ message: 'Hello World' })
+    //res.status(200).json({ message: 'Hello World' })
+    const mainController = new MainController();
+    const body = req.body;
+     
+    const contentPromise = mainController.getFilteredContent(body.categoryNames, body.tags);
+    const content = await contentPromise; // Espera a que la promesa se resuelva
+    res.status(200).json(content);
 }
 
 export const getFilteredSubcontent : RequestHandler = async (req, res) => {

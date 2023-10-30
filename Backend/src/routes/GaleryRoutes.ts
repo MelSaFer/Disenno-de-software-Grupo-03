@@ -8,8 +8,8 @@ router.delete("/deleteContent", galeryController.deleteContent);
 router.put("/updateContent", galeryController.updateContent);
 
 router.post("/getContent", galeryController.getContentById);
-router.get("/getFilteredCategory", galeryController.getFilteredContent);
-router.get("/getFilteredSubcategory", galeryController.getFilteredSubcontent);
+router.post("/getFilteredContent", galeryController.getFilteredContent);
+router.post("/getFilteredSubcategory", galeryController.getFilteredSubcontent);
 router.get("/getAllContent", galeryController.getAllContent);
 router.get("/getQuantity", galeryController.getContentQuantity);
 

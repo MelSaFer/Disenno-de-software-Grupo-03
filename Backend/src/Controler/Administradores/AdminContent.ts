@@ -60,4 +60,15 @@ export class AdminContent{
         }
         
     }
+
+    public async getFilteredContent(categoryNames: string[], tags: string[]){
+        try {
+            const daoContent = new DAOContent();
+            const content = daoContent.getAllWithFilters(categoryNames, tags);
+            return content;
+        } catch (error) {
+            console.log("Error", error);
+        }
+        
+    }
 }
