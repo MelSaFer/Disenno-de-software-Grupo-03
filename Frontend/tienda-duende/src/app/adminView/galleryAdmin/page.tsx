@@ -3,14 +3,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ProductButton from "../../../components/ProductButtons";
-import ContentTile from "../../../components/ContentTile";
-import Filters from "../../../components/Filters";
+import ProductButton from "../../../../components/ProductButtons";
+import ContentTile from "../../../../components/ContentTile";
+import Filters from "../../../../components/Filters";
 import Footer from "@/src/components/footer";
 import Navbar2 from "@/src/components/navbarAdminGallery";
 import axios from "axios";
 import Link from "next/link";
-import * as Routes from "../routes";
+import * as Routes from "../../routes";
 
 const Page = () => {
   const router = useRouter();
@@ -67,7 +67,7 @@ const Page = () => {
                   key={item.code}
                   item={item}
                   //href = '/consultProduct/'
-                  href={`/consultContent/${item._id}`}
+                  href={`/adminView/consultContent/${item._id}`}
                   onClick={() => {
                     setSelectedItem(item);
                   }}

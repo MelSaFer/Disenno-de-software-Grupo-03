@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import profilePic from "../../../../public/images/ProfilePic.png";
-import Navbar2 from "@/src/components/navbar2";
+import NavbarAdmin from "@/src/components/navbarAdmin";
 import Footer from "@/src/components/footer";
 import { auth } from "../../../firebase/config";
 import axios from "axios";
@@ -70,7 +70,7 @@ function Page(): JSX.Element {
   return (
     <div className="flex flex-col min-h-screen">
       <header>
-        <Navbar2 />
+        <NavbarAdmin />
       </header>
       <main className="flex-grow mt-10">
         <div className="grid w-full grid-cols-6 gap-16 ">

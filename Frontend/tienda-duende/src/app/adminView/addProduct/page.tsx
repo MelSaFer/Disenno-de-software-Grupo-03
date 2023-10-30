@@ -8,11 +8,11 @@ import axios from "axios";
 import { Handlee } from "next/font/google";
 import { Link } from "react-router-dom";
 import { useRouter } from "next/navigation";
-import * as Routes from "../routes";
+import * as Routes from "../../routes";
 
 //Firebase image upload
-import { firebaseStorageURL } from "../../firebase/config";
-import firebase_app from "../../firebase/config";
+import { firebaseStorageURL } from "../../../firebase/config";
+import firebase_app from "../../../firebase/config";
 import {
   getDownloadURL,
   getStorage,

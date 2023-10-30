@@ -2,14 +2,13 @@
 "use client";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
-import Footer from "../../../../components/footer";
+import Footer from "../../../../../components/footer";
 import axios from "axios";
 import Navbar2 from "@/src/components/navbar2";
-import * as Routes from "../../../routes";
-import Modal from "../../../../components/modal"; // overlay
+import * as Routes from "../../../../routes";
+import Modal from "../../../../../components/modal"; // overlay
 import { BiMessageAdd } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useRouter } from "next/navigation";
 
 interface PageProps {
   params: { id: string };
@@ -28,8 +27,6 @@ const ConsultProduct = ({ params }: PageProps) => {
   const [imageSrc, setImageSrc] = useState("");
   const [data, setData] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [showModal2, setShowModal2] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,31 +53,6 @@ const ConsultProduct = ({ params }: PageProps) => {
   const handleSubmit = async (e) => {
     // Agregar lógica de manejo de submit aquí
     console.log("agregar al carrito");
-  };
-
-  const handleDelete = async () => {
-    // Hacer la solicitud DELETE al servidor
-    try {
-      const requestData = { _id: params.id };
-      const result = await axios.request({
-        method: "delete",
-        url: Routes.deleteContent,
-        headers: { "Content-Type": "application/json" },
-        data: requestData,
-      });
-      // Si la solicitud DELETE se realizó con éxito
-      if (result.status === 200) {
-        // Realiza cualquier acción necesaria después de la eliminación
-        // Puede ser redirigir a otra página o actualizar el estado de la aplicación, por ejemplo
-        router.push("/gallery");
-      } else {
-        // Manejar errores o mostrar mensajes de error
-        console.error('Error al eliminar:', result);
-      }
-    } catch (error) {
-      // Manejar errores de Axios
-      console.error('Error al eliminar:', error);
-    }
   };
 
   return (
@@ -164,41 +136,11 @@ const ConsultProduct = ({ params }: PageProps) => {
         </footer>
       </div>
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-        <div className="p-2 flex flex-col justify-center items-center">
-          <Link href={`/modifyContent/${params.id}`}>
-            <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mb-3">
-              Modificar
-            </button>
-          </Link>
-          <button
-            className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold"
-            onClick={() => {
-              setShowModal2(true), setShowModal(false);
-            }}
-          >
-            Eliminar
+        <div className="p-6 flex justify-center items-center">
+          <button className="text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold flex items-center">
+            Enviar mensaje
+            <BiMessageAdd className="w-5 h-5 text-yellow-900 ml-2" />
           </button>
-        </div>
-      </Modal>
-      <Modal isVisible={showModal2} onClose={() => setShowModal2(false)}>
-        <div className="p-2 flex flex-col justify-center items-center">
-          <h1 className="mb-7 text-yellow-900">
-            ¿Está segura que desea eliminar la publicación?
-          </h1>
-          <div>
-            <button
-              className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mr-14"
-              onClick={() => setShowModal2(false)}
-            >
-              No
-            </button>{" "}
-            <button
-              className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold"
-              onClick={handleDelete}
-            >
-              Si
-            </button>
-          </div>
         </div>
       </Modal>
     </Fragment>

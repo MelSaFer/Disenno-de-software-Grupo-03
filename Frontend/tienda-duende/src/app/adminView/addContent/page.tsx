@@ -1,12 +1,12 @@
 // @ts-nocheck
 "use client";
 import React from "react";
-import Navbar2 from "@/src/components/navbar2";
+import NavbarAdmin from "@/src/components/navbarAdmin";
 import Footer from "@/src/components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
 import { set } from "firebase/database";
-import * as Routes from "../routes";
+import * as Routes from "../../routes";
 import { useRouter } from "next/navigation";
 
 const AddContent = () => {
@@ -90,7 +90,7 @@ const AddContent = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <header>
-        <Navbar2 />
+        <NavbarAdmin />
         <hr className="border border-red-400 w-5/6 mx-auto my-4"></hr>
       </header>
       <main className="flex-grow">

@@ -6,6 +6,7 @@ import { GrGallery } from "react-icons/gr";
 import { IoExitOutline } from "react-icons/io5";
 import { GoHistory } from "react-icons/go";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { BiMessageDetail } from "react-icons/bi";
 import { useAuthContext } from "../context/AuthContext";
 import Router from "next/router";
 
@@ -36,34 +37,47 @@ const NavbarAdminGallery = () => {
           <div className=" flex-grow basis-[100%] items-center justify-center lg:mt-0 lg:!flex lg:basis-auto">
             {/* <!-- Left links --> */}
             <ul className="list-style-none flex flex-col pl-0 lg:mt-1 lg:flex-row">
-              {/* <!-- Cart link --> */}
-              <li className="">
-                <a href="/cart" title="carrito de compra">
-                  <FiShoppingCart className="text-3xl mx-5" />
-                </a>
-              </li>
               {/* <!-- UserInfo link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/userInfo" title="información de usuario">
+                <a
+                  className=""
+                  href="/adminView/userInfo"
+                  title="información de usuario"
+                >
                   <AiOutlineUser className="text-3xl mr-5" />
                 </a>
               </li>
               {/* <!-- History link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/history" title="historial de pedidos">
-                  <GoHistory className="text-3xl" />
+                <a
+                  className=""
+                  href="/adminView/historyAdmin"
+                  title="historial de pedidos"
+                >
+                  <GoHistory className="text-3xl mr-5" />
+                </a>
+              </li>
+              {/* <!-- Message link --> */}
+              <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
+                <a className="" href="/addContent" title="añadir contenido">
+                  <BiMessageDetail className="text-3xl mr-5" />
                 </a>
               </li>
               {/* <!-- AddContent link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/addContent" title="añadir contenido">
+                <a
+                  className=""
+                  href="/adminView/addContent"
+                  title="añadir contenido"
+                >
                   <AiOutlinePlusCircle className="text-3xl" />
                 </a>
               </li>
+
               <li>
                 <a
                   className="text-3xl font-bold text-yellow-900 px-20"
-                  href="/mainPage"
+                  href="/adminView/mainPageAdmin"
                   title="Ir a la página de inicio"
                 >
                   TIENDA DUENDE
@@ -71,13 +85,13 @@ const NavbarAdminGallery = () => {
               </li>
               {/* <!-- Store link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/store" title="tienda">
+                <a className="" href="/adminView/storeAdmin" title="tienda">
                   <FaStore className="text-3xl mx-5" />
                 </a>
               </li>
               {/* <!-- Gallery link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/gallery" title="galería">
+                <a className="" href="/adminView/galleryAdmin" title="galería">
                   <GrGallery className="text-3xl mr-5" />
                 </a>
               </li>
