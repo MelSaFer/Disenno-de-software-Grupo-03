@@ -159,9 +159,11 @@ const ConsultProduct = ({ params }: PageProps) => {
       </div>
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
         <div className="p-2 flex flex-col justify-center items-center">
-          <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mb-3">
-            Modificar
-          </button>
+          <Link href={`/modifyContent/${params.id}`}>
+            <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mb-3">
+              Modificar
+            </button>
+          </Link>
           <button
             className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold"
             onClick={() => {
@@ -183,7 +185,7 @@ const ConsultProduct = ({ params }: PageProps) => {
               onClick={() => setShowModal2(false)}
             >
               No
-            </button>
+            </button>{" "}
             <button
               className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold"
               onClick={handleDelete}
