@@ -58,23 +58,29 @@ const ConsultProduct = ({ params }: PageProps) => {
     console.log("agregar al carrito");
   };
 
-  const handleDelete = async (e) => {
-    // Agregar lógica de manejo de submit aquí
-    console.log("eliminar");
-    // const requestData = { _id: params.id };
-    const requestData = { _id: 5 };
+  const handleDelete = async () => {
+    // Hacer la solicitud DELETE al servidor
     try {
+      const requestData = { _id: params.id };
       const result = await axios.request({
-        method: "post",
+        method: "delete",
         url: Routes.deleteContent,
         headers: { "Content-Type": "application/json" },
         data: requestData,
       });
-      console.log(result);
+      // Si la solicitud DELETE se realizó con éxito
+      if (result.status === 200) {
+        // Realiza cualquier acción necesaria después de la eliminación
+        // Puede ser redirigir a otra página o actualizar el estado de la aplicación, por ejemplo
+        router.push("/gallery");
+      } else {
+        // Manejar errores o mostrar mensajes de error
+        console.error('Error al eliminar:', result);
+      }
     } catch (error) {
-      console.error("Error al obtener datos:", error);
+      // Manejar errores de Axios
+      console.error('Error al eliminar:', error);
     }
-    router.push("/gallery");
   };
 
   return (

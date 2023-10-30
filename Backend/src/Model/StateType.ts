@@ -1,6 +1,7 @@
 export enum StateType{
     PENDING,
-    CHECKED,
+    APPROVED,
+    REJECTED,
     SEND,
     DELIVERED
 }

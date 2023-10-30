@@ -15,6 +15,8 @@ export const getContent = `http://localhost:${port}/getContent`;
 export const getGallery = `http://localhost:${port}/getAllContent`;
 export const addContent = `http://localhost:${port}/addContent`;
 export const modifyContent = `http://localhost:${port}/updateContent`;
+export const deleteContent = `http://localhost:${port}/deleteContent`;
+
 
 // USER
 export const getUserInfo = `http://localhost:${port}/infoUser`;
