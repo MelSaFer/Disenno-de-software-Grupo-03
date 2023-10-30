@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
 import Footer from "../../../../../components/footer";
 import axios from "axios";
-import Navbar2 from "@/src/components/navbar2";
+import NavbarAdmin from "@/src/components/navbarAdmin";
 import * as Routes from "../../../../routes";
 import Modal from "../../../../../components/modal"; // overlay
 import { BiMessageAdd } from "react-icons/bi";
@@ -72,7 +72,7 @@ const ConsultProduct = ({ params }: PageProps) => {
       if (result.status === 200) {
         // Realiza cualquier acción necesaria después de la eliminación
         // Puede ser redirigir a otra página o actualizar el estado de la aplicación, por ejemplo
-        router.push("/gallery");
+        router.push("/adminView/galleryAdmin");
       } else {
         // Manejar errores o mostrar mensajes de error
         console.error("Error al eliminar:", result);
@@ -87,7 +87,7 @@ const ConsultProduct = ({ params }: PageProps) => {
     <Fragment>
       <div className="flex flex-col min-h-screen">
         <header>
-          <Navbar2 />
+          <NavbarAdmin />
           <hr className="border border-red-400 w-5/6 mx-auto my-4"></hr>
         </header>
         <main className="flex-grow">
@@ -165,7 +165,7 @@ const ConsultProduct = ({ params }: PageProps) => {
       </div>
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
         <div className="p-2 flex flex-col justify-center items-center">
-          <Link href={`/modifyContent/${params.id}`}>
+          <Link href={`/adminView/modifyContent/${params.id}`}>
             <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mb-3">
               Modificar
             </button>

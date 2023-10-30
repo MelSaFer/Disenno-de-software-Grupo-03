@@ -37,26 +37,34 @@ const Navbar2 = () => {
             <ul className="list-style-none flex flex-col pl-0 lg:mt-1 lg:flex-row">
               {/* <!-- Cart link --> */}
               <li className="">
-                <a href="/cart" title="carrito de compra">
+                <a href="/userView/cart" title="carrito de compra">
                   <FiShoppingCart className="text-3xl mx-5" />
                 </a>
               </li>
               {/* <!-- UserInfo link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/userInfo" title="información de usuario">
+                <a
+                  className=""
+                  href="/userView/userInfo"
+                  title="información de usuario"
+                >
                   <AiOutlineUser className="text-3xl mr-5" />
                 </a>
               </li>
               {/* <!-- History link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/history" title="historial de pedidos">
+                <a
+                  className=""
+                  href="/userView/history"
+                  title="historial de pedidos"
+                >
                   <GoHistory className="text-3xl" />
                 </a>
               </li>
               <li>
                 <a
                   className="text-3xl font-bold text-yellow-900 px-20"
-                  href="/mainPage"
+                  href="/userView/mainPage"
                   title="Ir a la página de inicio"
                 >
                   TIENDA DUENDE
@@ -64,13 +72,13 @@ const Navbar2 = () => {
               </li>
               {/* <!-- Store link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/store" title="tienda">
+                <a className="" href="/userView/store" title="tienda">
                   <FaStore className="text-3xl mx-5" />
                 </a>
               </li>
               {/* <!-- Gallery link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/gallery" title="galería">
+                <a className="" href="/userView/gallery" title="galería">
                   <GrGallery className="text-3xl mr-5" />
                 </a>
               </li>

@@ -16,7 +16,8 @@ const Page = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const [selectedItem, setSelectedItem] = useState(null);
+  const itemsPerPage = 15;
 
   useEffect(() => {
     // Request data from API using axios
@@ -67,7 +68,7 @@ const Page = () => {
                   key={item.code}
                   item={item}
                   //href = '/consultProduct/'
-                  href={`/adminView/consultContent/${item._id}`}
+                  href={`/adminView/consultContentAdmin/${item._id}`}
                   onClick={() => {
                     setSelectedItem(item);
                   }}
@@ -89,14 +90,14 @@ const Page = () => {
             </div>
           </div>
 
-          <div className="pagination flex justify-center items-center mt-10 text-1xl">
+          <div className="pagination flex justify-center items-center mt-10 text-1xl ">
             {Array.from({ length: pageNumbers }, (_, index) => (
               <span
                 key={index}
                 onClick={() => handleClick(index + 1)}
                 className={`${
                   currentPage === index ? "active" : ""
-                } border border-black w-8 h-8 flex justify-center items-center`}
+                } border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center text-yellow-900 hover:bg-gray-200 cursor-pointer mx-1`}
               >
                 {index + 1}
               </span>

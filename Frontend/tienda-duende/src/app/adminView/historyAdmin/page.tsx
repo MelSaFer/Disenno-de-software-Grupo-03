@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 import React from "react";
-import Navbar2 from "@/src/components/navbar2";
+import NavbarAdmin from "@/src/components/navbarAdmin";
 import Footer from "../../../components/footer";
 import axios from "axios";
 import { useEffect, useState, Fragment } from "react";
@@ -41,7 +41,7 @@ const HistoryAdmin = () => {
     <Fragment>
       <div className="flex flex-col min-h-screen">
         <header>
-          <Navbar2 />
+          <NavbarAdmin />
         </header>
         <main className="flex-grow ml-12 mr-12">
           {history.map((item) => (

@@ -1,14 +1,14 @@
 "use client";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "../../../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import profilePic from "../../../public/images/ProfilePic.png";
+import profilePic from "../../../../public/images/ProfilePic.png";
 import Navbar2 from "@/src/components/navbar2";
 import Footer from "@/src/components/footer";
-import { auth } from "../../firebase/config";
+import { auth } from "../../../firebase/config";
 import axios from "axios";
-import * as Routes from "../routes";
+import * as Routes from "../../routes";
 
 function Page(): JSX.Element {
   const { user, logOut } = useAuthContext() as {
@@ -59,7 +59,7 @@ function Page(): JSX.Element {
           console.log(result);
 
           if (result.data.roleType == "NORMAL_USER") {
-            router.push("/mainPage");
+            router.push("/userView/mainPage");
           } else {
             router.push("/adminView/mainPageAdmin");
           }

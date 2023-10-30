@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 import React from "react";
-import Navbar2 from "@/src/components/navbar2";
+import NavbarAdmin from "@/src/components/navbarAdmin";
 import Footer from "@/src/components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
@@ -126,7 +126,7 @@ const AddProduct = () => {
           });
           console.log("fetch");
           console.log(result);
-          router.push("/store");
+          router.push("/adminView/storeAdmin");
         } catch (error) {
           console.error("Error al obtener datos:", error);
         }
@@ -142,7 +142,7 @@ const AddProduct = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <header>
-        <Navbar2 />
+        <NavbarAdmin />
         <hr className="border border-red-400 w-5/6 mx-auto my-4"></hr>
       </header>
       <main className="flex-grow">
@@ -237,7 +237,7 @@ const AddProduct = () => {
                   type="button"
                   className="bg-red-400 text-white rounded-full px-3 py-2"
                 >
-                  <a href="/store" title="tienda">
+                  <a href="/adminView/storeAdmin" title="tienda">
                     Cancelar
                   </a>
                 </button>

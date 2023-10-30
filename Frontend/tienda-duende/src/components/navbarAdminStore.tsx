@@ -39,26 +39,42 @@ const NavbarAdminGallery = () => {
             <ul className="list-style-none flex flex-col pl-0 lg:mt-1 lg:flex-row">
               {/* <!-- UserInfo link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/userInfo" title="información de usuario">
+                <a
+                  className=""
+                  href="/adminView/userInfo"
+                  title="información de usuario"
+                >
                   <AiOutlineUser className="text-3xl mr-5" />
                 </a>
               </li>
               {/* <!-- History link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/history" title="historial de pedidos">
+                <a
+                  className=""
+                  href="/adminView/historyAdmin"
+                  title="historial de pedidos"
+                >
                   <GoHistory className="text-3xl" />
                 </a>
               </li>
               {/* <!-- Message link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-3 lg:pr-1">
-                <a className="" href="/history" title="historial de pedidos">
-                  <BiMessageDetail className="text-3xl" />
+                <a
+                  className=""
+                  href="/adminView/historyAdmin"
+                  title="historial de pedidos"
+                >
+                  <BiMessageDetail className="text-3xl mr-3" />
                 </a>
               </li>
 
               {/* <!-- AddContent link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/addProduct" title="añadir producto">
+                <a
+                  className=""
+                  href="/adminView/addProduct"
+                  title="añadir producto"
+                >
                   <AiOutlinePlusCircle className="text-3xl" />
                 </a>
               </li>
@@ -73,13 +89,13 @@ const NavbarAdminGallery = () => {
               </li>
               {/* <!-- Store link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/store" title="tienda">
+                <a className="" href="/adminView/storeAdmin" title="tienda">
                   <FaStore className="text-3xl mx-5" />
                 </a>
               </li>
               {/* <!-- Gallery link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/gallery" title="galería">
+                <a className="" href="/adminView/galleryAdmin" title="galería">
                   <GrGallery className="text-3xl mr-5" />
                 </a>
               </li>

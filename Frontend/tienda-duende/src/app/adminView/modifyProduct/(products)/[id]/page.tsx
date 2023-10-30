@@ -1,22 +1,22 @@
 // @ts-nocheck
 "use client";
 import React from "react";
-import Navbar2 from "@/src/components/navbar2";
+import NavbarAdmin from "@/src/components/navbarAdmin";
 import Footer from "@/src/components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
 import { Handlee } from "next/font/google";
 import { Link } from "react-router-dom";
 import { useRouter } from "next/navigation";
-import * as Routes from "../../../routes";
+import * as Routes from "../../../../routes";
 
 interface PageProps {
   params: { id: string };
 }
 
 //Firebase image upload
-import { firebaseStorageURL } from "../../../../firebase/config";
-import firebase_app from "../../../../firebase/config";
+import { firebaseStorageURL } from "../../../../../firebase/config";
+import firebase_app from "../../../../../firebase/config";
 import {
   getDownloadURL,
   getStorage,
@@ -116,7 +116,7 @@ const ModifyProduct = ({ params }: PageProps) => {
             console.log("Nueva URL", url);
 
             // Guardar url en estado
-            setNewImageURL(url); 
+            setNewImageURL(url);
           });
         }
       );
@@ -129,7 +129,7 @@ const ModifyProduct = ({ params }: PageProps) => {
     e.preventDefault();
 
     // if(imagen != null) {
-    //   await handleUploadedFile(); 
+    //   await handleUploadedFile();
     // }
     if (name && description && price && imagenURL && cuantity) {
       if (price <= 0) {
@@ -143,10 +143,13 @@ const ModifyProduct = ({ params }: PageProps) => {
       if (imagen != null) {
         const newImageUrl = await handleUploadedFile();
       }
-      while(!newImageURL) {
-        await new Promise(resolve => setTimeout(resolve, 1000)); 
+      while (!newImageURL) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
-      console.log("Este es la nueva URL y que se envia en el put ", newImageURL);
+      console.log(
+        "Este es la nueva URL y que se envia en el put ",
+        newImageURL
+      );
       // Construye los datos para enviar a la API
       const datos = {
         productId: productId,
@@ -170,7 +173,7 @@ const ModifyProduct = ({ params }: PageProps) => {
           });
           console.log("fetch");
           console.log(result);
-          router.push("/store");
+          router.push("/adminView/storeAdmin");
         } catch (error) {
           console.error("Error al obtener datos:", error);
         }
@@ -186,7 +189,7 @@ const ModifyProduct = ({ params }: PageProps) => {
   return (
     <div className="flex flex-col min-h-screen">
       <header>
-        <Navbar2 />
+        <NavbarAdmin />
         <hr className="border border-red-400 w-5/6 mx-auto my-4"></hr>
       </header>
       <main className="flex-grow">
@@ -284,7 +287,7 @@ const ModifyProduct = ({ params }: PageProps) => {
                   type="button"
                   className="bg-red-400 text-white rounded-full px-3 py-2"
                 >
-                  <a href="/store" title="tienda">
+                  <a href="/adminView/storeAdmin" title="tienda">
                     Cancelar
                   </a>
                 </button>
