@@ -95,12 +95,6 @@ import { API_URL } from '../config';
     */
     public async updatePurchaseState(userId : number, purchaseId: number, state: string){
         try{
-            //Verify state is valid
-            if (state != "PENDING" && state != "CHECKED" && state != "DELIVERED" && state != "SEND"){
-                console.log("El estado ingresado no es válido");
-                return false;
-            }
-
             const adminUser = new AdminUser();
             const result = adminUser.updatePurchaseState(userId, purchaseId, state);
             return result;
