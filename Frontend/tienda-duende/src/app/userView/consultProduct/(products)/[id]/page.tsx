@@ -7,7 +7,7 @@ import axios from "axios";
 import Navbar2 from "@/src/components/navbar2";
 import * as Routes from "../../../../routes";
 import { auth } from "../../../../../firebase/config";
-
+import { useRouter } from "next/navigation";
 interface PageProps {
   params: { id: string };
 }
@@ -15,6 +15,7 @@ interface PageProps {
 const ConsultProduct = ({ params }: PageProps) => {
   const [imageSrc, setImageSrc] = useState("");
   const [data, setData] = useState("");
+  const router = useRouter();
 
   //Firebase getCurrentUser
   const [authUser, setAuthUser] = useState({ uid: "", email: "" });
@@ -52,28 +53,29 @@ const ConsultProduct = ({ params }: PageProps) => {
 
   console.log("Este es el data:", data);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  //   const requestBody = {
-  //     userId: authUser.uid,
-  //     productId: params.id,
-  //     quantity: 1
-  //   };
-  //   try {
-  //     const result = await axios.request({
-  //       method: "post",
-  //       url: Routes.updateCart,
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       },
-  //       data: requestBody
-  //     });
-  //     console.log(result.data);
-  //   } catch (error) {
-  //     console.error("Error al actualizar el carrito:", error);
-  //   }
-  // };
+    const requestBody = {
+      userId: authUser.uid,
+      productId: params.id,
+      quantity: 1,
+    };
+    try {
+      const result = await axios.request({
+        method: "post",
+        url: Routes.updateCart,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: requestBody,
+      });
+      console.log(result.data);
+      router.push("/userView/store");
+    } catch (error) {
+      console.error("Error al actualizar el carrito:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -103,7 +105,7 @@ const ConsultProduct = ({ params }: PageProps) => {
             <button
               type="submit"
               className="bg-white hover:bg-gray-50 text-red-400 font-semibold rounded-full border border-red-400 px-4 py-2 mt-5 w-full"
-              // onClick={handleSubmit}
+              onClick={handleSubmit}
             >
               Agregar a carrito
             </button>

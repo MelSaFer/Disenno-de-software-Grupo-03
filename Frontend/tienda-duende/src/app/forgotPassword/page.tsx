@@ -32,12 +32,12 @@ function ForgotPassword(): JSX.Element {
   };
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <div className="w-full max-w-xs">
+      <div className="w-96">
         <form
           onSubmit={handleForm}
           className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4"
         >
-          <h1 className="text-3xl font-bold mb-3 text-black">
+          <h1 className="text-3xl font-bold mb-3 text-yellow-900">
             Forgot your password?
           </h1>
           <div className="mb-4">

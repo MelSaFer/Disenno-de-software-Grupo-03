@@ -1,15 +1,17 @@
 // @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
-import Footer from "../../components/footer";
+import Footer from "../../../components/footer";
 import Navigation from "../../components/Navbar";
 import Navbar2 from "@/src/components/navbar2";
 import axios from "axios";
-import * as Routes from "../routes";
+import * as Routes from "../../routes";
+import { auth } from "../../../firebase/config";
+import { useRouter } from "next/navigation";
 
 //Firebase image upload
-import { firebaseStorageURL } from "../../firebase/config";
-import firebase_app from "../../firebase/config";
+import { firebaseStorageURL } from "../../../firebase/config";
+import firebase_app from "../../../firebase/config";
 import {
   getDownloadURL,
   getStorage,
@@ -37,13 +39,31 @@ const ShippingInfo = () => {
   const [costoTotal, setCostoTotal] = useState(0);
   const [costoEnvio, setCostoEnvio] = useState(10);
   const [costoTotalFinal, setCostoTotalFinal] = useState(0);
+  const router = useRouter();
+
+  const [authUser, setAuthUser] = useState({ uid: "", email: "" });
+
+  // obtains the user's uid and email
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setAuthUser({ uid: user.uid, email: user.email });
+        console.log(`El UID del usuario es ${user.uid} ${user.email}`);
+      } else {
+        console.log("No hay usuario iniciado sesión");
+      }
+    }, []);
+
+    // Detener la suscripción cuando el componente se desmonta
+    return () => unsubscribe();
+  }, []);
 
   /*
   receives the data of the products in the cart and calculates the total cost of the purchase
   */
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = { userId: "1" }; // cambiar por el userId del usuario logueado
+      const requestData = { userId: authUser.uid }; // cambiar por el userId del usuario logueado
       // obtains the products in the cart
       try {
         const result = await axios.request({
@@ -84,7 +104,12 @@ const ShippingInfo = () => {
           })
           .finally(() => {
             setLoading(false);
-            setProducts(result.data);
+            setProducts(
+              result.data.map((product) => ({
+                ...product,
+                productId: product.additionalData.productId, // Lleva la propiedad _id al primer nivel
+              }))
+            );
             calcularCostoTotal(result.data);
           });
       } catch (error) {
@@ -92,7 +117,7 @@ const ShippingInfo = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [authUser.uid]);
 
   console.log(products);
 
@@ -105,34 +130,25 @@ const ShippingInfo = () => {
 
       const imageUrl = await handleUploadedFile();
 
-      const prueba = {
-        purchaseDetails: "Compra 1",
-        products: [
-          {
-            productId: "65394e623ecb4725cdfb99b3",
-            quantity: 1,
-          },
-          {
-            productId: "653952c03ecb4725cdfb99",
-            quantity: 1,
-          },
-        ],
-        voucherId:
-          "https://firebasestorage.googleapis.com/v0/b/proyectodisenno-7d92d.appspot.com/o/image%2Fwinter-4021090_1920.jpg?alt=media&token=3a9dabdd-e920-4011-b08d-d62317232516&_gl=1*7bzel4*_ga*MjAwMzg1MzIxOC4xNjk4NTQ1NjY0*_ga_CW55HF8NVT*MTY5ODU1NDA5MC4yLjEuMTY5ODU1Nzg0MS41NS4wLjA.",
-        aproxDeliveryDate: "2023-11-20",
-        shippingAddress: "San José / San Pedro",
-        shippingPrice: 10,
-        userId: "2",
-        state: "PENDING",
-      };
+      // formar la fecha
+      const date = new Date();
+
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      const formatedDate = `${year}-${month}-${day}`;
 
       // Construye los datos para enviar a la API
       const data = {
-        name: name,
-        description: description,
-        cuantityAvailable: parseInt(cuantity),
-        imageId: downloadURL,
-        price: parseFloat(price),
+        purchaseDetails: "Compra",
+        products: products,
+        voucherId: downloadURL,
+        aproxDeliveryDate: formatedDate,
+        shippingAddress: `${provincia}, ${canton}, ${distrito}, ${direccion}`,
+        shippingPrice: costoTotalFinal,
+        userId: authUser.uid,
+        state: "PENDING",
       };
       console.log(data);
 
@@ -142,13 +158,13 @@ const ShippingInfo = () => {
         try {
           const result = await axios.request({
             method: "post",
-            url: Routes.addProduct,
+            url: Routes.makePurchase,
             headers: { "Content-Type": "application/json" },
-            data: datos,
+            data: data,
           });
           console.log("fetch");
           console.log(result);
-          router.push("/store");
+          router.push("/userView/store");
         } catch (error) {
           console.error("Error al obtener datos:", error);
         }

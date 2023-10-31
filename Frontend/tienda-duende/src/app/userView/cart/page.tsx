@@ -39,11 +39,11 @@ const Cart = () => {
   const reduceQuantity = async (product) => {
     try {
       const datosCart = {
-        userId: "1", // cambiar por el userId del usuario logueado
+        userId: authUser.uid, // cambiar por el userId del usuario logueado
         productId: product.additionalData.productId,
         quantity: parseInt(-1), // se resta uno
       };
-      // console.log(datosCart);
+      console.log(datosCart);
       const response = await axios.post(Routes.updateCart, datosCart);
 
       setQuantity(quantity - 1); // actualiza la ventana
@@ -63,11 +63,11 @@ const Cart = () => {
     }
     try {
       const datosCart = {
-        userId: "1", // cambiar por el userId del usuario logueado
+        userId: authUser.uid, // cambiar por el userId del usuario logueado
         productId: product.additionalData.productId,
         quantity: parseInt(1), // se suma uno
       };
-      // console.log(datosCart);
+      console.log(datosCart);
       const response = await axios.post(Routes.updateCart, datosCart);
 
       setQuantity(quantity + 1); // actualiza la ventana
@@ -94,8 +94,9 @@ const Cart = () => {
   */
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = { userId: "1" }; // cambiar por el userId del usuario logueado
+      const requestData = { userId: authUser.uid }; // cambiar por el userId del usuario logueado
       // obtains the products in the cart
+      console.log("Estos son los parametros:", requestData);
       try {
         const result = await axios.request({
           method: "post",
@@ -143,7 +144,7 @@ const Cart = () => {
       }
     };
     fetchData();
-  }, [quantity]);
+  }, [quantity, authUser.uid]);
 
   // console.log(data);
 
@@ -207,10 +208,10 @@ const Cart = () => {
                   </div>
                   <div className="w-2/3 text-black ">
                     <h1>
-                      <Link href="/shippingInfo">
+                      <Link href="/userView/shippingInfo">
                         <button
                           className="w-full text-red-500 bg-red-white border border-red-500  hover:bg-red-50 hover:border-gray-300 px-4 py-2 rounded-full"
-                          href="/shippingInfo"
+                          href="/userView/shippingInfo"
                         >
                           Finalizar compra
                         </button>

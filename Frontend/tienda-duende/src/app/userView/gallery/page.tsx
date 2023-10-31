@@ -17,6 +17,7 @@ const Page = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     // Request data from API using axios

@@ -18,6 +18,7 @@ function Page(): JSX.Element {
 
     if (error) {
       // Display and log any sign-in errors
+      alert("Error al iniciar sesion");
       console.log(error);
       return;
     }
@@ -33,12 +34,12 @@ function Page(): JSX.Element {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <div className="w-full max-w-xs">
+      <div className="w-96 ">
         <form
           onSubmit={handleForm}
-          className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white shadow-xl border border-gray-100 rounded px-8 pt-6 pb-8 mb-4 "
         >
-          <h1 className="text-3xl font-bold mb-6 text-black">Sign In</h1>
+          <h1 className="text-3xl font-bold mb-6 text-yellow-900">Sign In</h1>
           <div className="mb-4">
             <label
               htmlFor="email"
@@ -79,10 +80,13 @@ function Page(): JSX.Element {
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="w-full bg-yellow-900 text-white font-semibold py-2 rounded"
+              className="w-full bg-yellow-900 text-white font-semibold py-2 rounded mb-3"
             >
               Sign In
             </button>
+          </div>
+          <div className="flex items-end justify-center text-yellow-900 mb-3">
+            <Link href="/signup">Create account</Link>
           </div>
         </form>
       </div>

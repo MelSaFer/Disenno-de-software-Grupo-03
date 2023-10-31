@@ -126,7 +126,6 @@ const ConsultProductAdmin = ({ params }: PageProps) => {
             <div className="w-1/3 p-5 border rounded-lg border-red-400 ml-4 text-yellow-900 flex flex-col justify-top">
               <div className="flex justify-end items-end">
                 <a
-                  href="#!"
                   className=" text-neutral-800 dark:text-neutral-200"
                   onClick={() => setShowModal(true)}
                 >
@@ -136,8 +135,7 @@ const ConsultProductAdmin = ({ params }: PageProps) => {
               <h1 className="font-bold text-2xl mb-4">{data.name}</h1>
               <p className="mb-4">{data.description}</p>
               <p className="mb-4">
-                <b>Precio: </b>
-                {data.price}
+                <b>Precio: </b>${data.price}
               </p>
               <p>
                 <b>Cantidad disponible: </b>

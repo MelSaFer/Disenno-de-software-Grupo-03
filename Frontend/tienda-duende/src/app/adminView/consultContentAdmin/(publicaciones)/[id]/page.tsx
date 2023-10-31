@@ -101,7 +101,6 @@ const ConsultProduct = ({ params }: PageProps) => {
             <div className="w-1/3 p-5 border rounded-lg border-red-400 ml-4 text-yellow-900 flex flex-col justify-top">
               <div className="flex justify-end items-end">
                 <a
-                  href="#!"
                   className=" text-neutral-800 dark:text-neutral-200"
                   onClick={() => setShowModal(true)}
                 >

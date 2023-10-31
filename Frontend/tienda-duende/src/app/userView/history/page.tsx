@@ -28,7 +28,7 @@ const History = () => {
 
       const fetchData = async () => {
         // const requestData = { userId: user.uid };
-        const requestData = { userId: "2" };
+        const requestData = { userId: authUser.uid };
         try {
           const result = await axios.request({
             method: "post",
@@ -46,7 +46,7 @@ const History = () => {
     }, []);
 
     return () => unsubscribe();
-  }, []);
+  }, [authUser.uid]);
 
   console.log(history);
   return (
@@ -80,20 +80,27 @@ const History = () => {
                 <h2 className="mb-3">
                   <b>Fecha:</b> {item.aproxDeliveryDate}
                 </h2>
-                <button
+                <h2 className="mb-3">
+                  <b>Voucher:</b>
+                </h2>
+                {/* <button
                   className="text-white border bg-red-500 border-red-500 rounded-lg py-2 px-5 hover:bg-red-400"
                   onClick={() => setShowModal(true)}
                 >
                   Voucher
-                </button>
-                <Modal
+                </button> */}
+                <div className="w-[200px] ml-24">
+                  <img src={item.voucherId}></img>
+                </div>
+
+                {/* <Modal
                   isVisible={showModal}
                   onClose={() => setShowModal(false)}
                 >
                   <div className="p-6 w-[700px] flex justify-center items-center">
                     <img src={item.voucherId}></img>
                   </div>
-                </Modal>
+                </Modal> */}
               </div>
             </div>
           ))}
