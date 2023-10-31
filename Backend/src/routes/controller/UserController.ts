@@ -178,6 +178,11 @@ export const updatePurchaseState: RequestHandler = async (req, res) => {
         res.status(400).json({msg: "Bad Request: userId or purchaseId are not a valid string"});
         return;
     }
+    //Verify state is valid
+    if (body.state != "PENDING" && body.state != "APPROVED" && body.state != "DELIVERED" && body.state != "SEND" && body.state != "REJECTED"){
+        console.log("El estado ingresado no es válido");
+        return false;
+    }
 
     const userPromise = mainController.updatePurchaseState(body.userId, body.purchaseId, body.state);
     const user = await userPromise; // Espera a que la promesa se resuelva
@@ -220,7 +225,7 @@ export const makePurchase: RequestHandler = async (req, res) => {
         return;
     }
     //Verify state is valid
-    if (body.state != "PENDING" && body.state != "CHECKED" && body.state != "DELIVERED" && body.state != "SEND"){
+    if (body.state != "PENDING" && body.state != "APPROVED" && body.state != "DELIVERED" && body.state != "SEND" && body.state != "REJECTED"){
         console.log("El estado ingresado no es válido");
         return false;
     }
