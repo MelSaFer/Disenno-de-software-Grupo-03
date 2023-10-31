@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, PURCHASE_COLLECTION} from "../config";
 import { User } from "../../Model/User";
+import { DAOProduct } from "./DAOProduct";
+import { DAOUser } from "./DAOUser";
 
 /*-----------------------------------------------------------------------
 DAO PURCHASE
@@ -127,11 +129,37 @@ export class DAOPurchase implements DAO{
                 userId: object.userId,
                 state: object.state
             });
+
+            //Reduce the stock of the products in the purchase
+            const arrayProducts = object.products;
+            const daoProduct = new DAOProduct();
+            for (let i = 0; i < arrayProducts.length; i++) {
+                let product = await daoProduct.getObject(arrayProducts[i].productId);
+                console.log("product: " + JSON.stringify(product, null, 2));
+                //Verify existence of the product
+                if (!product || !('cuantityAvailable' in product)){
+                    return {"name": "El producto " + arrayProducts[i].productId + " no existe"};
+                }
+                //Verify there's enough stock
+                if (product.cuantityAvailable < arrayProducts[i].quantity){
+                    return {"name": "No hay stock suficiente del producto " + product.name};
+                }
+                product.cuantityAvailable = product.cuantityAvailable - arrayProducts[i].quantity;
+                await daoProduct.update(product);
+            }
+
             
             //Insert the purchase in the database, convert it to JSON and parse it
             const newPurchaseJson = JSON.stringify(newPurchase);
             const newPurchaseParsed = JSON.parse(newPurchaseJson);
             await collection.insertOne(newPurchaseParsed);
+
+
+            //Empty user cart
+            const daoUser = new DAOUser();
+            const user = await daoUser.getObject(object.userId);
+            user.cart = [];
+            await daoUser.update(user);
 
             //console.log("Se insertó: " + newPurchaseJson);
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
@@ -139,7 +167,7 @@ export class DAOPurchase implements DAO{
             
         }catch(err){
             //console.log(err);
-            return {"name": "No se insertó la compra"};
+            return {"name": "No se insertó la compra u ocurrió otro error"};
         }
     };
 
@@ -175,19 +203,35 @@ export class DAOPurchase implements DAO{
         - ok message if the purchase was updated
         - error message if the purchase was not updated
     */
-    async updatePurchaseState(userId_: number, purchaseId_: number, state_: string){
+    async updatePurchaseState(userId_: number, purchaseId_: any, state_: string){
         try{
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(PURCHASE_COLLECTION);
 
             //Verify existence of the product history
-            const purchase = await collection.findOne({ purchaseId: purchaseId_, userId: userId_ });
+            const purchase = await collection.findOne({ _id: purchaseId_, userId: userId_ });
             if (!purchase){
                 return {"name": "La compra no existe"};
             }
+
+            //If state is REJECTED, return the stock of the products
+            if (state_ == "REJECTED"){
+                const arrayProducts = purchase.products;
+                const daoProduct = new DAOProduct();
+                for (let i = 0; i < arrayProducts.length; i++) {
+                    let product = await daoProduct.getObject(arrayProducts[i].productId);
+                    //Verify existence of the product
+                    if (!product || !('cuantityAvailable' in product)){
+                        return {"name": "El producto " + arrayProducts[i].productId + " no existe"};
+                    }
+                    product.cuantityAvailable = product.cuantityAvailable + arrayProducts[i].quantity;
+                    await daoProduct.update(product);
+                }
+            }
+
             //Update the product in the database
-            const result = await collection.updateOne({ purchaseId: purchaseId_ }, { $set: { state: state_ } });
+            const result = await collection.updateOne({ _id: purchaseId_ }, { $set: { state: state_ } });
             
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             //Check if the product was updated
