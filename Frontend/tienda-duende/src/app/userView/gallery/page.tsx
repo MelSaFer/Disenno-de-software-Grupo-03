@@ -11,12 +11,19 @@ import Navbar2 from "@/src/components/navbar2";
 import axios from "axios";
 import Link from "next/link";
 import * as Routes from "../../routes";
+import { useSearchParams } from 'next/navigation';
 
 const Page = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
+  //const searchParams = useSearchParams();
+  //const filters = searchParams.get('filters'); // selectedCats
+
+  const handleSelectedCatsChange = (newSelectedCats) => {
+    setSelectedCats(newSelectedCats);
+  };
 
   useEffect(() => {
     // Request data from API using axios
@@ -29,6 +36,10 @@ const Page = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
+
+  // useEffect(() => {
+  //   console.log("1.1.1. Estas son las categorias seleccionadas:", filters);
+  // }, [filters]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -57,7 +68,7 @@ const Page = () => {
 
           <div className="grid grid-cols-5">
             <div className="col-span-1 mt-7">
-              <Filters />
+                <Filters/>
             </div>
 
             <div className="col-span-4 mt-10 grid grid-cols-3 gap-8 sm:gap-4 lg:mt-7">
