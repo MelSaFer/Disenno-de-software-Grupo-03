@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SingletonMongo = void 0;
 // Importa el paquete mongodb
 const mongodb_1 = require("mongodb");
-const config_1 = require("./config");
+const config_1 = require("../config");
 class SingletonMongo {
     // Define el constructor como privado para evitar instancias externas
     constructor() {
@@ -45,9 +45,19 @@ class SingletonMongo {
     }
     disconnect_() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.client) {
-                yield this.client.close();
+            try {
+                //await this.client.close();
+                //console.log("Disconnected from MongoDB Atlas");
             }
+            catch (err) {
+                // Maneja los posibles errores
+                console.error("Error disconnecting from MongoDB Atlas: " + err);
+            }
+            /*
+            if(this.client) {
+              await this.client.close();
+              console.log("Disconnected from MongoDB Atlas");
+            }*/
         });
     }
     // Define el método getDatabase que devuelve la base de datos deseada

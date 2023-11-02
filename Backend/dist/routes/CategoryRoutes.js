@@ -23,17 +23,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//import { validateSchema } from "../middlewares/validateSchema.middleware";
-//import { CreateVideoSchema } from "../schema/video.schema";
 const express_1 = require("express");
 const router = (0, express_1.Router)();
-const userController = __importStar(require("./controller/UserController"));
-//router.get('/profile', userController.getInfo)
-router.post("/infoUser", userController.getInfoUser);
-router.post("/getCart", userController.getCart);
-router.post("/getPurchaseHistory", userController.getPurchaseHistory);
-router.post("/addUser", userController.addUser);
-router.post("/updateCart", userController.updateCart);
-router.put("/updatePurchaseState", userController.updatePurchaseState);
-router.post("/makePurchase", userController.makePurchase);
+const categoryController = __importStar(require("./controller/CategoryController"));
+router.post("/addCategory", categoryController.addCategory);
+router.delete("/deleteCategory", categoryController.deleteCategory);
+router.put("/updateCategory", categoryController.updateCategory);
+router.post("/getCategory", categoryController.getCategory);
+router.get("/getSubcategories", categoryController.getSubCategories);
+router.get("/getSubcategory", categoryController.getSubcategory);
+router.post("/addSubcategory", categoryController.addSubCategory);
+router.delete("/deleteSubcategory", categoryController.deleteSubCategory);
+router.put("/updateSubcategory", categoryController.updateSubCategory);
+router.post("/getCategories", categoryController.getCategories);
 exports.default = router;

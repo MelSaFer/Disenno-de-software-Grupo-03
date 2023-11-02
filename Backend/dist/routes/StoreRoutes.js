@@ -23,17 +23,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//import { validateSchema } from "../middlewares/validateSchema.middleware";
-//import { CreateVideoSchema } from "../schema/video.schema";
 const express_1 = require("express");
 const router = (0, express_1.Router)();
-const userController = __importStar(require("./controller/UserController"));
-//router.get('/profile', userController.getInfo)
-router.post("/infoUser", userController.getInfoUser);
-router.post("/getCart", userController.getCart);
-router.post("/getPurchaseHistory", userController.getPurchaseHistory);
-router.post("/addUser", userController.addUser);
-router.post("/updateCart", userController.updateCart);
-router.put("/updatePurchaseState", userController.updatePurchaseState);
-router.post("/makePurchase", userController.makePurchase);
+const StoreController = __importStar(require("./controller/StoreController"));
+//Add products to the store
+router.get("/getCatalogue", StoreController.getCatalogue);
+//Update a product from the store
+router.put("/updateProduct", StoreController.updateProduct);
+//Consult a product from the store
+router.post("/getProduct", StoreController.getProduct);
+//Delete a product from the store
+router.delete("/deleteProduct", StoreController.deleteProduct);
+//Create a new product in the store
+router.post("/addProduct", StoreController.addProduct);
+//Consult a product from the store by the name of the product
+router.post("/getProductByName", StoreController.getProductByName);
 exports.default = router;

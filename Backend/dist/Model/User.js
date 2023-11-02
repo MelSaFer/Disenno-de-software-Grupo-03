@@ -9,14 +9,10 @@ class User {
     //-------------------------------
     constructor(id, name, email, password, roleType, purchaseHistory, cart) {
         this.id = 0;
-        this.name = "";
         this.email = "";
-        this.password = "";
         this.roleType = 0;
         this.id = id;
-        this.name = name;
         this.email = email;
-        this.password = password;
         this.roleType = roleType;
         this.purchaseHistory = purchaseHistory;
         this.cart = cart;
@@ -29,25 +25,11 @@ class User {
         this.id = id;
     }
     //-------------------------------
-    getName() {
-        return this.name;
-    }
-    setName(name) {
-        this.name = name;
-    }
-    //-------------------------------
     getEmail() {
         return this.email;
     }
     setEmail(email) {
         this.email = email;
-    }
-    //-------------------------------
-    getPassword() {
-        return this.password;
-    }
-    setPassword(password) {
-        this.password = password;
     }
     //-------------------------------
     getRoleType() {

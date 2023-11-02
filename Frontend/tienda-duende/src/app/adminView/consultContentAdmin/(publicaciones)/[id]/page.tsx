@@ -17,11 +17,17 @@ interface PageProps {
 
 function formatDate(isoDate) {
   const date = new Date(isoDate);
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const year = date.getFullYear().toString().slice(-2);
 
-  return `${day}/${month}/${year}`;
+  // Establece la zona horaria a la que deseas convertir la fecha
+  const options = {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+  const formattedDate = date.toLocaleString(undefined, options);
+
+  return formattedDate;
 }
 
 const ConsultProduct = ({ params }: PageProps) => {

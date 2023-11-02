@@ -23,17 +23,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//import { validateSchema } from "../middlewares/validateSchema.middleware";
-//import { CreateVideoSchema } from "../schema/video.schema";
 const express_1 = require("express");
 const router = (0, express_1.Router)();
-const userController = __importStar(require("./controller/UserController"));
-//router.get('/profile', userController.getInfo)
-router.post("/infoUser", userController.getInfoUser);
-router.post("/getCart", userController.getCart);
-router.post("/getPurchaseHistory", userController.getPurchaseHistory);
-router.post("/addUser", userController.addUser);
-router.post("/updateCart", userController.updateCart);
-router.put("/updatePurchaseState", userController.updatePurchaseState);
-router.post("/makePurchase", userController.makePurchase);
+const galeryController = __importStar(require("./controller/GaleryController"));
+router.post("/addContent", galeryController.addContent);
+router.delete("/deleteContent", galeryController.deleteContent);
+router.put("/updateContent", galeryController.updateContent);
+router.post("/getContent", galeryController.getContentById);
+router.post("/getFilteredContent", galeryController.getFilteredContent);
+router.post("/getFilteredSubcategory", galeryController.getFilteredSubcontent);
+router.get("/getAllContent", galeryController.getAllContent);
+router.get("/getQuantity", galeryController.getContentQuantity);
 exports.default = router;

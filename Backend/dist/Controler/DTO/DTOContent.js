@@ -1,35 +1,41 @@
 "use strict";
+/*
+Class Content
+
+*/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Content = void 0;
-class Content {
+exports.DTOContent = void 0;
+class DTOContent {
     //-------------------------------
-    constructor(id, name, description, date, image, category, tags) {
-        this.id = 0;
-        this.name = "";
+    constructor(contentId, title, description, date, imageId, categoryId, tags) {
+        this.contentId = 0;
+        this.title = "";
         this.description = "";
         this.date = new Date();
+        this.imageId = "";
+        this.categoryId = null;
         this.tags = [];
-        this.id = id;
-        this.name = name;
+        this.contentId = contentId;
+        this.title = title;
         this.description = description;
         this.date = date;
-        this.imageId = image;
-        this.categoryId = category;
+        this.imageId = imageId;
+        this.categoryId = categoryId;
         this.tags = tags;
     }
     //-------------------------------
     getId() {
-        return this.id;
+        return this.contentId;
     }
-    setId(id) {
-        this.id = id;
+    setId(contentId) {
+        this.contentId = contentId;
     }
     //-------------------------------
     getName() {
-        return this.name;
+        return this.title;
     }
-    setName(name) {
-        this.name = name;
+    setName(title) {
+        this.title = title;
     }
     //-------------------------------
     getDescription() {
@@ -49,15 +55,15 @@ class Content {
     getImage() {
         return this.imageId;
     }
-    setImage(image) {
-        this.imageId = image;
+    setImage(imageId) {
+        this.imageId = imageId;
     }
     //-------------------------------
     getCategory() {
         return this.categoryId;
     }
-    setCategory(category) {
-        this.categoryId = category;
+    setCategory(categoryId) {
+        this.categoryId = categoryId;
     }
     //-------------------------------
     getTags() {
@@ -67,4 +73,4 @@ class Content {
         this.tags = tags;
     }
 }
-exports.Content = Content;
+exports.DTOContent = DTOContent;

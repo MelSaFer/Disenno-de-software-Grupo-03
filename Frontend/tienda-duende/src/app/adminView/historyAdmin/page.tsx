@@ -183,14 +183,6 @@ const HistoryAdmin = () => {
                     <h1 className="text-red-400 font-semibold text-2xl pb-10">
                       Estado: {item.state}
                     </h1>
-                    <div className="flex flex-col justify-center items-end">
-                      <button
-                        className="bg-red-500 text-white p-2 border rounded-full w-[200px] mb-2 hover:bg-red-400"
-                        onClick={() => handleStatusChange(item, "PENDING")}
-                      >
-                        Reiniciar
-                      </button>
-                    </div>
                   </div>
                 ) : null}
                 {/* SEND CASE */}
@@ -216,14 +208,6 @@ const HistoryAdmin = () => {
                     <h1 className="text-red-400 font-semibold text-2xl pb-10">
                       Estado: {item.state}
                     </h1>
-                    <div className="flex flex-col justify-center items-end">
-                      <button
-                        className="bg-red-500 text-white p-2 border rounded-full w-[200px] mb-2 hover:bg-red-400"
-                        onClick={() => handleStatusChange(item, "PENDING")}
-                      >
-                        Reiniciar
-                      </button>
-                    </div>
                   </div>
                 ) : null}
               </div>

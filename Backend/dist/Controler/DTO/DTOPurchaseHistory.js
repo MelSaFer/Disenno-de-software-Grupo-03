@@ -4,11 +4,11 @@ Class PurchaseHistory
 
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PurchaseHistory = void 0;
-class PurchaseHistory {
+exports.DTOPurchaseHistory = void 0;
+class DTOPurchaseHistory {
     constructor(history) {
         this.history = [];
         this.history = history;
     }
 }
-exports.PurchaseHistory = PurchaseHistory;
+exports.DTOPurchaseHistory = DTOPurchaseHistory;

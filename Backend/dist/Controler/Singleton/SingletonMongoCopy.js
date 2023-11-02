@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SingletonMongoO = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const config_1 = require("./config");
+const config_1 = require("../config");
 //import { async } from '@firebase/util';
 dotenv_1.default.config(); //reading env var
 class SingletonMongoO {

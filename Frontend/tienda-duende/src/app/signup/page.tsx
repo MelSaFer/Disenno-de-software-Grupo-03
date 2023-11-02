@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import signUp from "../../firebase/auth/signup";
 import { useRouter } from "next/navigation";

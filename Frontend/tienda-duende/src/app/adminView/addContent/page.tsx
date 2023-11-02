@@ -109,10 +109,11 @@ const AddContent = () => {
       const date = new Date();
 
       const day = date.getDate();
+      const formattedDay = day < 10 ? `0${day}` : day.toString();
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
 
-      const formatedDate = `${year}-${month}-${day}T00:00:00.000Z`;
+      const formatedDate = `${year}-${month}-${formattedDay}T00:00:00.000Z`;
 
       // validar los tags
       const regex = /#\w+/g; // Modificamos el regex para que coincida con una sola etiqueta a la vez.
@@ -130,6 +131,8 @@ const AddContent = () => {
           categoryName: "terror",
           tags: valTags,
         };
+
+        console.log("Estos son los datos:", datos);
 
         const imageUrl = await handleUploadedFile();
 
