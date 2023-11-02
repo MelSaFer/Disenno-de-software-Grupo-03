@@ -21,7 +21,6 @@ export const addContent = `http://localhost:${port}/addContent`;
 export const modifyContent = `http://localhost:${port}/updateContent`;
 export const deleteContent = `http://localhost:${port}/deleteContent`;
 
-
 // USER
 export const getUserInfo = `http://localhost:${port}/infoUser`;
 export const getHistory = `http://localhost:${port}/getPurchaseHistory`;
@@ -29,5 +28,6 @@ export const getCart = `http://localhost:${port}/getCart`;
 export const updateCart = `http://localhost:${port}/updateCart`;
 export const makePurchase = `http://localhost:${port}/makePurchase`;
 export const addUser = `http://localhost:${port}/addUser`;
+export const updatePurchaseState = `http://localhost:${port}/updatePurchaseState`;
 
 // USER ROUTES

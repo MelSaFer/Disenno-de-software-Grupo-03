@@ -95,8 +95,7 @@ const ConsultProduct = ({ params }: PageProps) => {
             <h1 className="font-bold text-2xl mb-4">{data.name}</h1>
             <p className="mb-4">{data.description}</p>
             <p className="mb-4">
-              <b>Precio: </b>
-              {data.price}
+              <b>Precio: </b>${data.price}
             </p>
             <p>
               <b>Cantidad disponible: </b>
