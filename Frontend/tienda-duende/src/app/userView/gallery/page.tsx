@@ -11,6 +11,7 @@ import Navbar2 from "@/src/components/navbar2";
 import axios from "axios";
 import Link from "next/link";
 import * as Routes from "../../routes";
+import { useSearchParams } from "next/navigation";
 
 const Page = () => {
   const router = useRouter();
@@ -30,6 +31,10 @@ const Page = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
+
+  // useEffect(() => {
+  //   console.log("1.1.1. Estas son las categorias seleccionadas:", filters);
+  // }, [filters]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
