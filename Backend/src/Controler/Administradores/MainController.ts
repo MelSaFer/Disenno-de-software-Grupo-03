@@ -6,6 +6,7 @@ import { AdminUser } from "./AdminUser";
 import { AdminProduct } from "./AdminProduct";
 import { AdminCategory } from "./AdminCategory";
 import { AdminContent } from "./AdminContent";
+import { AdminCalendar } from "./AdminCalendar";
 //import axios from "axios";
 import { API_URL } from '../config';
 
@@ -359,6 +360,67 @@ import { API_URL } from '../config';
         } catch(err){
             console.log("Error al cargar las categorias", err);
         }   
+    }
+
+    //CALENDAR------------------------------------------------------
+    public async getCalendar(){
+        try{
+            const adminCalendar = new AdminCalendar();
+            const result = await adminCalendar.getCalendar();
+            return result;
+        } catch(err){
+            console.log("Error al cargar el calendario", err);
+        }
+    }
+
+    public async filterCalendar(object: any){
+        try{
+            const adminCalendar = new AdminCalendar();
+            const result = await adminCalendar.filterCalendar(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar el calendario", err);
+        }
+    }
+
+    public async createEvent(object: any){
+        try{
+            const adminCalendar = new AdminCalendar();
+            const result = await adminCalendar.createEvent(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar el calendario", err);
+        }
+    }
+
+    public async getEvent(object: any){
+        try{
+            const adminCalendar = new AdminCalendar();
+            const result = await adminCalendar.getEvent(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar el calendario", err);
+        }
+    }
+
+    public async updateEvent(object: any){
+        try{
+            const adminCalendar = new AdminCalendar();
+            const result = await adminCalendar.updateEvent(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar el calendario", err);
+        }
+    }
+
+    public async deleteEvent(object: any){
+        try{
+            const adminCalendar = new AdminCalendar();
+            const result = await adminCalendar.deleteEvent(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar el calendario", err);
+        }
     }
 
  }
