@@ -1,4 +1,5 @@
 // Importa el paquete mongodb
+import exp from "constants";
 import mongoose from "mongoose";
 
 //USER SCHEMA------------------------------------------------------------------------------------------------------------------------------
@@ -63,3 +64,23 @@ export const SubcategorySchema = new mongoose.Schema({
     //subcategoryId: { type: Number, required: true },
     subcategoryName: { type: String, required: true },
 });
+
+
+//CALENDAR SCHEMA------------------------------------------------------------------------------------------------------------------------------
+export const CalendarSchema = new mongoose.Schema({
+    events: { type: Array, required: true }
+});
+
+//EVENT SCHEMA------------------------------------------------------------------------------------------------------------------------------
+export const EventSchema = new mongoose.Schema({        
+    //eventId: { type: String, required: true },
+    name: { type: String, required: true },
+    description : { type: String, required: true },
+    startTime: { type: Date, required: true },
+    endTime: { type: Date, required: true },
+    date: { type: Date, required: true }
+});
+
+//MAKEUP SCHEMA------------------------------------------------------------------------------------------------------------------------------
+
+//DELIVERY SCHEMA------------------------------------------------------------------------------------------------------------------------------
