@@ -23,6 +23,7 @@ export const ROLETYPE_COLLECTION = "RoleType";
 export const PURCHASE_COLLECTION = "Purchase";
 export const IMAGETYPE_COLLECTION = "ImageType";
 export const IMAGE_COLLECTION = "Image";
+export const CALENDAR_COLLECTION = "Calendar";
 //export const DB_NAME= "publicaciones"
 
 //Firebase
