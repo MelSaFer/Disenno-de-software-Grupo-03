@@ -49,11 +49,13 @@ export class DAOCalendar implements DAO{
             const Event = mongoose.model('Event', EventSchema);
 
             let newEvent = new Event({
+                userId: object.userId,
                 name: object.name,
                 description: object.description,
                 startTime: object.startTime,
                 endTime: object.endTime,
-                date: object.date
+                date: object.date,
+                eventType: object.eventType
             });
 
             //Insert the product in the database, convert it to JSON and parse it

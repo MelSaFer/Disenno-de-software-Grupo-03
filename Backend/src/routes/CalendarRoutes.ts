@@ -4,7 +4,7 @@ const router = Router();
 import * as CalendarController from "./controller/CalendarController";
 
 
-router.post("/getCategories", CalendarController.getCalendar);
+router.post("/getCalendar", CalendarController.getCalendar);
 router.post("/filterCalendar", CalendarController.filterCalendar);
 router.post("/createEvent", CalendarController.createEvent);
 router.post("/getEvent", CalendarController.getEvent);

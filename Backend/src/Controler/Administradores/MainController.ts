@@ -118,6 +118,20 @@ import { API_URL } from '../config';
         }   
     };
 
+    /*
+    METHOD GET NOTIFICATIONS
+    PARAMS: userId
+    */
+    public async getNotifications(userId : number){
+        try{
+            const adminUser = new AdminUser();
+            const result = adminUser.getNotifications(userId);
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }   
+    };
+
     // -----------------------------
 
     /*

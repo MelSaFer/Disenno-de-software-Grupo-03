@@ -103,4 +103,18 @@ export class AdminUser {
       console.log("Error", error);
     }
   }
+
+  /*
+    METHOD GET NOTIFICATIONS
+    PARAMS: userId
+    */
+  getNotifications(userId: number) {
+    try {
+      const daoUser = new DAOUser();
+      const notifications = daoUser.getNotifications(userId);
+      return notifications;
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
 }
