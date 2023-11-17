@@ -32,7 +32,7 @@ export const filterCalendar: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(body.filter.length == 0 || (body.filter !== "Week" && body.filter !== "Day" && body.filter !== "Month")){
+    if(body.filter.length == 0 || (body.filter !== "Week" && body.filter !== "Year" && body.filter !== "Month")){
         res.status(400).json({msg: "Bad Request: filter is not a valid filter"});
         return;
     }
