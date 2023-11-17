@@ -11,6 +11,7 @@ import galeryRoutes from "./routes/GaleryRoutes";
 import categoryRoutes from "./routes/CategoryRoutes";
 //import cartRoutes from "./routes/CartRoutes"
 import storeRoutes from "./routes/StoreRoutes";
+import calendarRoutes from "./routes/CalendarRoutes";
 
 const app = express();
 const bp = require("body-parser");
@@ -26,6 +27,7 @@ app.use(galeryRoutes);
 app.use(categoryRoutes);
 //app.use(cartRoutes)
 app.use(storeRoutes);
+app.use(calendarRoutes);
 
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));

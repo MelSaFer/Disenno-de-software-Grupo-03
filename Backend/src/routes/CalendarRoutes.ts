@@ -10,3 +10,5 @@ router.post("/createEvent", CalendarController.createEvent);
 router.post("/getEvent", CalendarController.getEvent);
 router.post("/updateEvent", CalendarController.updateEvent);
 router.post("/deleteEvent", CalendarController.deleteEvent);
+
+export default router;

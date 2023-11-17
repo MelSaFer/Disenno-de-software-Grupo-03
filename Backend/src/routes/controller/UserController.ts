@@ -1,6 +1,10 @@
 import { RequestHandler } from "express";
 import { MainController } from "../../Controler/Administradores/MainController";
 
+export const test: RequestHandler = async (req, res) => {
+    console.log(new Date());
+}
+
 /*
 METHOD GET INFO USER
 */

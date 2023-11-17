@@ -18,4 +18,6 @@ router.post("/makePurchase", userController.makePurchase);
 
 router.post("/getNotifications", userController.getNotifications);
 
+router.post("/test", userController.test);
+
 export default router;
