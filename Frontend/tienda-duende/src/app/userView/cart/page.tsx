@@ -178,7 +178,7 @@ const Cart = () => {
                       <h1 className="text-2xl font-bold mb-3">{item.name}</h1>
                       <p className="mb-2">{item.additionalData.description}</p>
                       <p>
-                        <b>Precio:</b> ${item.additionalData.price}
+                        <b>Precio:</b> ${item.additionalData.price.toFixed(2)}
                       </p>
                       <p className="mb-3">
                         <b>Cantidad:</b>{" "}

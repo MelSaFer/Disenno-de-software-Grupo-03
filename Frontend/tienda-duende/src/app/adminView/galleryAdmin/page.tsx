@@ -48,14 +48,6 @@ const Page = () => {
       </header>
       <section className="bg-white py-12 sm:py-16 flex-grow">
         <div className="mx-auto max-w-screen-1xl px-4 sm:px-6 lg:px-8">
-          <div className="form-control flex items-center mx-auto justify-center mb-8">
-            <input
-              name="search"
-              placeholder="Search"
-              className="input input-bordered rounded-md border border-gray-300 w-[300px] min-w-[100px]"
-            />
-          </div>
-
           <div className="grid grid-cols-5">
             <div className="col-span-1 mt-7">
               <Filters />

@@ -93,7 +93,7 @@ const HistoryAdmin = () => {
               <div className="flex">
                 <div className="w-1/2 text-left">
                   <h1 className="text-2xl font-semibold text-red-400 mb-2">
-                    Compra {item.purchaseId}
+                    Compra {item._id}
                   </h1>
                   <div className="pl-8">
                     <h2 className="font-bold">Productos:</h2>
@@ -105,7 +105,7 @@ const HistoryAdmin = () => {
                       ))}
                     </ul>
                     <h2 className="mb-3">
-                      <b>Total:</b> ${item.shippingPrice}
+                      <b>Total:</b> ${item.shippingPrice.toFixed(2)}
                     </h2>
                     <h2 className="mb-3">
                       <b>Direccion:</b> {item.shippingAddress}

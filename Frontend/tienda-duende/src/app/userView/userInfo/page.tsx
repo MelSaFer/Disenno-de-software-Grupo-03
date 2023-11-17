@@ -50,6 +50,7 @@ const UserInfo = () => {
         <Navbar2 />
       </header>
       <main className="flex-grow">
+        <hr className="border border-red-400 w-4/6 mx-auto my-4"></hr>
         <div className="flex flex-col items-center justify-center text-yellow-900 mb-10">
           <h1 className="font-bold text-2xl">Correo electrónico:</h1>
           <p>{email}</p>

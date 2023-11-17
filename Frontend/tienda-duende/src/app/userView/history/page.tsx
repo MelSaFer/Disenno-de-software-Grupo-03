@@ -59,9 +59,7 @@ const History = () => {
           {history.map((item) => (
             <div key={item._id} className="text-yellow-900">
               <hr className="border border-red-400 w-6/6 mx-auto my-4"></hr>
-              <h1 className="text-2xl text-red-400 mb-2">
-                Compra {item.purchaseId}
-              </h1>
+              <h1 className="text-2xl text-red-400 mb-2">Compra {item._id}</h1>
               <div className="pl-8">
                 <h2 className="font-bold">Productos:</h2>
                 <ul className="list-disc ml-8 mb-4">
@@ -72,13 +70,16 @@ const History = () => {
                   ))}
                 </ul>
                 <h2 className="mb-3">
-                  <b>Total:</b> ${item.shippingPrice}
+                  <b>Total:</b> ${item.shippingPrice.toFixed(2)}
                 </h2>
                 <h2 className="mb-3">
                   <b>Direccion:</b> {item.shippingAddress}
                 </h2>
                 <h2 className="mb-3">
                   <b>Fecha:</b> {item.aproxDeliveryDate}
+                </h2>
+                <h2 className="mb-3">
+                  <b>Estado:</b> {item.state}
                 </h2>
                 <h2 className="mb-3">
                   <b>Voucher:</b>

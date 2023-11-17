@@ -2,12 +2,14 @@ import React from "react";
 import { FaStore } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { FiShoppingCart } from "react-icons/fi";
+import { TbNotebook } from "react-icons/tb";
 import { GrGallery } from "react-icons/gr";
 import { IoExitOutline } from "react-icons/io5";
 import { GoHistory } from "react-icons/go";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { BiMessageDetail } from "react-icons/bi";
 import { useAuthContext } from "../context/AuthContext";
+import { MdOutlineNotifications } from "react-icons/md";
 import Router from "next/router";
 
 const NavbarAdminGallery = () => {
@@ -57,10 +59,10 @@ const NavbarAdminGallery = () => {
                   <GoHistory className="text-3xl mr-5" />
                 </a>
               </li>
-              {/* <!-- Message link --> */}
+              {/* <!-- Calendar link --> */}
               <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
-                <a className="" href="/addContent" title="añadir contenido">
-                  <BiMessageDetail className="text-3xl mr-5" />
+                <a className="" href="/adminView/calendar" title="agenda">
+                  <TbNotebook className="text-3xl mr-5" />
                 </a>
               </li>
               {/* <!-- AddContent link --> */}
@@ -81,6 +83,16 @@ const NavbarAdminGallery = () => {
                   title="Ir a la página de inicio"
                 >
                   TIENDA DUENDE
+                </a>
+              </li>
+              {/* <!-- Notifications link --> */}
+              <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
+                <a
+                  className=""
+                  href="/adminView/notificationCenterAdmin"
+                  title="centro de notificaciones"
+                >
+                  <MdOutlineNotifications className="text-3xl" />
                 </a>
               </li>
               {/* <!-- Store link --> */}

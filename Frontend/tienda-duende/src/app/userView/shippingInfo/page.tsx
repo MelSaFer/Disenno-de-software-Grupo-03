@@ -439,9 +439,9 @@ const ShippingInfo = () => {
                 </div>
                 {/* right column */}
                 <div className="w-1/2 p-2">
-                  <p>${costoTotal}</p>
-                  <p>${costoEnvio}</p>
-                  <p>${costoTotalFinal}</p>
+                  <p>${costoTotal.toFixed(2)}</p>
+                  <p>${costoEnvio.toFixed(2)}</p>
+                  <p>${costoTotalFinal.toFixed(2)}</p>
                 </div>
               </div>
               {/* send button */}

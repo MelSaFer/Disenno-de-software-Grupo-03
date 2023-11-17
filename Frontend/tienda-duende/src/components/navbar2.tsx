@@ -5,6 +5,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { GrGallery } from "react-icons/gr";
 import { IoExitOutline } from "react-icons/io5";
 import { GoHistory } from "react-icons/go";
+import { MdOutlineNotifications } from "react-icons/md";
 import { useAuthContext } from "../context/AuthContext";
 import Router from "next/router";
 
@@ -58,7 +59,17 @@ const Navbar2 = () => {
                   href="/userView/history"
                   title="historial de pedidos"
                 >
-                  <GoHistory className="text-3xl" />
+                  <GoHistory className="text-3xl mr-5" />
+                </a>
+              </li>
+              {/* <!-- Notifications link --> */}
+              <li className="mb-4 pl-2 lg:mb-0 lg:pl-0 lg:pr-1">
+                <a
+                  className=""
+                  href="/userView/notificationCenter"
+                  title="centro de notificaciones"
+                >
+                  <MdOutlineNotifications className="text-3xl" />
                 </a>
               </li>
               <li>
