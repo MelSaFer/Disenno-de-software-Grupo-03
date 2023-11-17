@@ -8,6 +8,18 @@ import { DAOUser } from "./DAOUser";
 
 var parseISO = require('date-fns/parseISO')
 
+/*
+DAO CALENDAR
+Class that implements the DAO interface, this class is in charge of the the CRUD and more operations related to the calendar
+METHODS:
+        * getAll(): Gets all the events from the database
+        * getObject(idEvent_: any): Gets an event from the database, using the code
+        * create(object: any): Creates an event in the database
+        * update(object: any): Updates an event in the database
+        * delete(code: any): Deletes an event from the database
+        * filterCalendar(object: any): Filters the calendar by week, day or month
+        * verifyOverlap(): Verifies if there is an overlap between events
+*/
 export class DAOCalendar implements DAO{
     constructor(){}
 
@@ -37,9 +49,9 @@ export class DAOCalendar implements DAO{
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CALENDAR_COLLECTION);
-
+            console.log("idEvent_: ", idEvent_)
             //Get the event from the database, using the code
-            const event = await collection.findOne({ _id: idEvent_ });
+            const event = await collection.findOne({ _id: idEvent_._id });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the event was found, return it, else return error message
             if (event) {
@@ -77,7 +89,7 @@ export class DAOCalendar implements DAO{
 
             //Verify if he userId is valid
             const daoUser = new DAOUser();
-            const user = await daoUser.getObject(newEvent.userId);
+            const user = await daoUser.getObject({"_id": newEvent.userId});
             if(user.name == "No se encontró el usuario"){
                 return {"name": "No se encontró el usuario"};
             }
@@ -113,11 +125,10 @@ export class DAOCalendar implements DAO{
                 date: object.date,
                 eventType: object.eventType
             });
-            console.log("updatedEvent: ", updatedEvent)
 
             //Verify if the event exists
             const daoCalendar = new DAOCalendar();
-            const event = await daoCalendar.getObject(updatedEvent._id);
+            const event = await daoCalendar.getObject({"_id": object._id});
             if(event.name == "No se encontró el evento"){
                 return {"name": "No se encontró el evento"};
             }
@@ -133,7 +144,7 @@ export class DAOCalendar implements DAO{
                     eventType: updatedEvent.eventType
                 }
             };
-            const result = await collection.updateOne({ _id: updatedEvent._id }, InfoToUpdate);
+            const result = await collection.updateOne({ _id: object._id }, InfoToUpdate);
             console.log("Se actualizó el evento: " + updatedEvent.name);
             if(result.modifiedCount > 0){
                 return {"name": "Se actualizó el evento"};
@@ -146,12 +157,27 @@ export class DAOCalendar implements DAO{
         }
     }
 
-    async delete(code: unknown){
+    async delete(code: any){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CALENDAR_COLLECTION);
+            const Event = mongoose.model('Event', EventSchema);
+            //Verify if the event exists
+            const daoCalendar = new DAOCalendar();
+            const event = await daoCalendar.getObject(code);
+            if(event.name == "No se encontró el evento"){
+                return {"name": "No se encontró el evento"};
+            }
+             
+            const result = await collection.deleteOne(code);
+            if(result.deletedCount > 0){
+                return {"name": "Se eliminó el evento"};
+            } else {
+                return {"name": "No se eliminó el evento"};
+            }
+
         } catch(err){
             console.log("Error al eliminar el evento");
         }
@@ -212,8 +238,20 @@ export class DAOCalendar implements DAO{
         
     }
 
-    verifyOverlap(){
+    async verifyOverlap(object: any){
         //logica
+        try{
+            //Get the database instance from the singleton and connect to it
+            SingletonMongo.getInstance().connect();
+            const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+            const collection = db.collection(CALENDAR_COLLECTION);
+
+            let events = await collection.find().toArray();
+
+        } catch(err){
+            console.log("Error al verificar la superposición de eventos: ", err)
+        }
+
         if(true){
             return true;
         } else {

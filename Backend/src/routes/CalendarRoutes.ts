@@ -10,5 +10,6 @@ router.post("/createEvent", CalendarController.createEvent);
 router.post("/getEvent", CalendarController.getEvent);
 router.put("/updateEvent", CalendarController.updateEvent);
 router.delete("/deleteEvent", CalendarController.deleteEvent);
+router.post("/verifyOverlap", CalendarController.verifyOverlap);
 
 export default router;

@@ -437,4 +437,14 @@ import { API_URL } from '../config';
         }
     }
 
+    public async verifyOverlap(object: any){
+        try{
+            const adminCalendar = new AdminCalendar();
+            const result = await adminCalendar.verifyOverlap(object);
+            return result;
+        } catch(err){
+            console.log("Error al cargar el calendario", err);
+        }   
+    }
+
  }

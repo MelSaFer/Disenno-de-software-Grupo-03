@@ -68,4 +68,14 @@ export class AdminCalendar{
             console.log("Error al eliminar el evento", err);
         }
     }
+
+    async verifyOverlap(object: any){
+        try{
+            const daoCalendar = new DAOCalendar();
+            const result = await daoCalendar.verifyOverlap(object);
+            return result;
+        }   catch(err){
+            console.log("Error al verificar la superposicion de eventos", err);
+        }
+    }
 }

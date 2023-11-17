@@ -188,3 +188,11 @@ export const deleteEvent: RequestHandler = async (req, res) => {
     const events = await eventsPromise;
     res.status(200).json(events);
 }
+
+export const verifyOverlap: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const body = req.body;
+    const eventsPromise = mainController.verifyOverlap(req.body);
+    const events = await eventsPromise;
+    res.status(200).json(events);
+}
