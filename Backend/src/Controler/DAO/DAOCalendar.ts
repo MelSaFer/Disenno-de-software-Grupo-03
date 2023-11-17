@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CALENDAR_COLLECTION} from "../config";
 import { startOfWeek, addDays, format, differenceInWeeks } from 'date-fns';
+import { DAOUser } from "./DAOUser";
 
 var parseISO = require('date-fns/parseISO')
 
@@ -30,7 +31,7 @@ export class DAOCalendar implements DAO{
 
     }
     
-    async getObject(idEvent_: unknown){
+    async getObject(idEvent_: any){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
@@ -38,7 +39,7 @@ export class DAOCalendar implements DAO{
             const collection = db.collection(CALENDAR_COLLECTION);
 
             //Get the event from the database, using the code
-            const event = await collection.findOne({ eventId: idEvent_ });
+            const event = await collection.findOne({ _id: idEvent_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the event was found, return it, else return error message
             if (event) {
@@ -74,12 +75,19 @@ export class DAOCalendar implements DAO{
                 eventType: object.eventType
             });
 
+            //Verify if he userId is valid
+            const daoUser = new DAOUser();
+            const user = await daoUser.getObject(newEvent.userId);
+            if(user.name == "No se encontró el usuario"){
+                return {"name": "No se encontró el usuario"};
+            }
+
             //Insert the product in the database, convert it to JSON and parse it
             const newEventJson = JSON.stringify(newEvent);
             const newEventparsed = JSON.parse(newEventJson);
             await collection.insertOne(newEventparsed);
             //console.log("Se inserto: " + newEventJson);
-            return {"name": "Se inserto la categoria" + newEvent.name};
+            return {"name": "Se insertó el evento" + newEvent.name};
         } catch(err){
             console.log("Error al crear el evento", err);
         }       
@@ -87,12 +95,52 @@ export class DAOCalendar implements DAO{
     }
     
     
-    async update(object: unknown){
+    async update(object: any){
         try{
             //Get the database instance from the singleton and connect to it
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CALENDAR_COLLECTION);
+            const Event = mongoose.model('Event', EventSchema);
+
+            let updatedEvent = new Event({
+                _id: object._id,
+                userId: object.userId,
+                name: object.name,
+                description: object.description,
+                startTime: object.startTime,
+                endTime: object.endTime,
+                date: object.date,
+                eventType: object.eventType
+            });
+            console.log("updatedEvent: ", updatedEvent)
+
+            //Verify if the event exists
+            const daoCalendar = new DAOCalendar();
+            const event = await daoCalendar.getObject(updatedEvent._id);
+            if(event.name == "No se encontró el evento"){
+                return {"name": "No se encontró el evento"};
+            }
+            
+            const InfoToUpdate = {
+                $set: {
+                    userId: updatedEvent.userId,
+                    name: updatedEvent.name,
+                    description: updatedEvent.description,
+                    startTime: updatedEvent.startTime,
+                    endTime: updatedEvent.endTime,
+                    date: updatedEvent.date,
+                    eventType: updatedEvent.eventType
+                }
+            };
+            const result = await collection.updateOne({ _id: updatedEvent._id }, InfoToUpdate);
+            console.log("Se actualizó el evento: " + updatedEvent.name);
+            if(result.modifiedCount > 0){
+                return {"name": "Se actualizó el evento"};
+            } else {
+                return {"name": "No se actualizó el evento"};
+            }
+
         } catch(err){
             console.log("Error al actualizar el evento");
         }

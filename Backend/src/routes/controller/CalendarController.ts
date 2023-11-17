@@ -95,17 +95,17 @@ export const getEvent: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if (!body.hasOwnProperty("eventId")) {
+    if (!body.hasOwnProperty("_id")) {
         res.status(400).json({"name": "Error en el body"});
         return;
     }
     //Verify if the body has the correct data types
-    if (typeof body.eventId !== "string") {
+    if (typeof body._id !== "string") {
         res.status(400).json({ name: "Error en el body" });
         return;
     }
     //Verify if the body has the correct structure
-    if(body.eventId.length == 0){
+    if(body._id.length == 0){
         res.status(400).json({msg: "Bad Request: eventId is not a valid id"});
         return;
     }
@@ -125,30 +125,31 @@ export const updateEvent: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if (!body.hasOwnProperty("userId") || !body.hasOwnProperty("eventId") || !body.hasOwnProperty("name") || !body.hasOwnProperty("description") || !body.hasOwnProperty("startTime") || !body.hasOwnProperty("endTime") || !body.hasOwnProperty("date") || !body.hasOwnProperty("eventType") || !body.hasOwnProperty("eventId")) {
+    if (!body.hasOwnProperty("userId") || !body.hasOwnProperty("_id") || !body.hasOwnProperty("name") || !body.hasOwnProperty("description") || !body.hasOwnProperty("startTime") || !body.hasOwnProperty("endTime") || !body.hasOwnProperty("date") || !body.hasOwnProperty("eventType") || !body.hasOwnProperty("_id")) {
         res.status(400).json({"name": "Error en el body"});
         return;
     }
     //Verify if the body has the correct data types
-    if (
-        typeof body.userId !== "string" ||
-        typeof body.name !== "string" ||
-        typeof body.description !== "string" ||
+    /* if (
+        typeof body._id != "string" ||
+        typeof body.name != "string" ||
+        typeof body.description != "string" ||
         !(body.startTime instanceof Date) ||
         !(body.endTime instanceof Date) ||
         !(body.date instanceof Date) ||
-        typeof body.eventType !== "string"
+        typeof body.eventType != "string"
     ) {
-        res.status(400).json({ name: "Error en el body" });
+        res.status(400).json({ name: "1. Error en el body" });
         return;
-    }
+    } */
+    
     //Verify event type
-    if(body.eventType !== "Makeup" && body.eventType !== "Product"){
-        res.status(400).json({ name: "Error en el body" });
+    if(body.eventType !== "Makeup" && body.eventType != "Product"){
+        res.status(400).json({ name: "2. Error en el body" });
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId.length == 0 || body.eventId.length == 0){
+    if(body.userId.length == 0 || body._id.length == 0){
         res.status(400).json({msg: "Bad Request: userId or eventId is not a valid id"});
         return;
     }
@@ -168,17 +169,17 @@ export const deleteEvent: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if (!body.hasOwnProperty("eventId")) {
+    if (!body.hasOwnProperty("_id")) {
         res.status(400).json({"name": "Error en el body"});
         return;
     }
     //Verify if the body has the correct data types
-    if (typeof body.eventId !== "string") {
+    if (typeof body._id != "string") {
         res.status(400).json({ name: "Error en el body" });
         return;
     }
     //Verify if the body has the correct structure
-    if(body.eventId.length == 0){
+    if(body._id.length == 0){
         res.status(400).json({msg: "Bad Request: eventId is not a valid id"});
         return;
     }
