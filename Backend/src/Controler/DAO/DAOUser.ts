@@ -453,4 +453,40 @@ export class DAOUser implements DAO{
             }
             //return ok message;
         };
+
+        /*
+        -----------------------------------------------------------------------
+        GET NOTIFICATIONS METHOD
+        Gets the notifications of a user
+        PARAMS:
+            - userId: number, the id of the user to get the notifications
+        RETURNS:
+            - notifications: array of notifications
+        */
+        async getNotifications(userId: unknown){
+            try{
+                //Get the database instance from the singleton and connect to it
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const user_collection = db.collection(USER_COLLECTION);
+                
+                //Get the user from the database, using the code
+                const user = await user_collection.findOne({ userId: userId });
+                SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+                // If the user was found, return it, else return error
+                if (user) {
+                    //console.log("Se encontró: " + JSON.stringify(user, null, 2));
+                    //If the roletype is admin get all the purchase history
+                    let notifications = user.notifications;
+                    return notifications;
+                } else {
+                    //console.log("No se encontró el user con el código: " + userId);
+                    return {"name": "No se encontró el usuario"}; 
+                }
+            } catch(err){
+                //console.log(err);
+                return {"name": "Error al obtener las notificaciones"};
+            }
+        };
+
 }

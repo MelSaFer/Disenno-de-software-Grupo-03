@@ -1,6 +1,10 @@
 import { RequestHandler } from "express";
 import { MainController } from "../../Controler/Administradores/MainController";
 
+export const test: RequestHandler = async (req, res) => {
+    console.log(new Date());
+}
+
 /*
 METHOD GET INFO USER
 */
@@ -276,6 +280,42 @@ export const addUser: RequestHandler = async (req, res) => {
 
     console.log("This is user: "+ user);
     res.status(200).json(user);
+}
+
+/*
+METHOD GET NOTIFICATIONS
+*/
+
+export const getNotifications: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({msg: "Bad Request: Body is empty"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("userId")){
+        res.status(400).json({msg: "Bad Request: Body is not correct"});
+        return;
+    }
+    //Verify type of the content
+    if(typeof body.userId != "string"){
+        res.status(400).json({msg: "Bad Request: userId is not a number"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.userId.length == 0){
+        res.status(400).json({msg: "Bad Request: userId is not a valid id"});
+        return;
+    }
+
+    const purchaseHistoryPromise = mainController.getNotifications(body.userId);
+    const purchaseHistory = await purchaseHistoryPromise; // Espera a que la promesa se resuelva
+
+    console.log("This is purchase history: "+ purchaseHistory);
+    res.status(200).json(purchaseHistory);
 }
 
 
