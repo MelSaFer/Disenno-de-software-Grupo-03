@@ -71,6 +71,8 @@ export const CalendarSchema = new mongoose.Schema({
     events: { type: Array, required: true }
 });
 
+
+
 //EVENT SCHEMA------------------------------------------------------------------------------------------------------------------------------
 export const EventSchema = new mongoose.Schema({        
     //eventId: { type: String, required: true },
@@ -83,6 +85,3 @@ export const EventSchema = new mongoose.Schema({
     eventType: { type: String, required: true }
 });
 
-//MAKEUP SCHEMA------------------------------------------------------------------------------------------------------------------------------
-
-//DELIVERY SCHEMA------------------------------------------------------------------------------------------------------------------------------
