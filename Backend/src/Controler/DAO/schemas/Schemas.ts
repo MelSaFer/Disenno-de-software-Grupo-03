@@ -71,18 +71,18 @@ export const CalendarSchema = new mongoose.Schema({
     events: { type: Array, required: true }
 });
 
+
+
 //EVENT SCHEMA------------------------------------------------------------------------------------------------------------------------------
 export const EventSchema = new mongoose.Schema({        
     //eventId: { type: String, required: true },
     userId: { type: String, required: true },
     name: { type: String, required: true },
     description : { type: String, required: true },
+    location : { type: String, required: false },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     date: { type: Date, required: true },
     eventType: { type: String, required: true }
 });
 
-//MAKEUP SCHEMA------------------------------------------------------------------------------------------------------------------------------
-
-//DELIVERY SCHEMA------------------------------------------------------------------------------------------------------------------------------
