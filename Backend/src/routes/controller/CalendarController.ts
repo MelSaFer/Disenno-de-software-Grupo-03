@@ -52,7 +52,7 @@ export const createEvent: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if (!body.hasOwnProperty("userId")  || !body.hasOwnProperty("name") || !body.hasOwnProperty("description") || !body.hasOwnProperty("startTime") || !body.hasOwnProperty("endTime") || !body.hasOwnProperty("date") || !body.hasOwnProperty("eventType")) {
+    if (!body.hasOwnProperty("userId")  || !body.hasOwnProperty("name") || !body.hasOwnProperty("description") || !body.hasOwnProperty("location") || !body.hasOwnProperty("startTime") || !body.hasOwnProperty("endTime") || !body.hasOwnProperty("date") || !body.hasOwnProperty("eventType")) {
         res.status(400).json({"name": "Error en el body"});
         return;
     }
@@ -61,6 +61,7 @@ export const createEvent: RequestHandler = async (req, res) => {
         typeof body.userId !== "string" ||
         typeof body.name !== "string" ||
         typeof body.description !== "string" ||
+        typeof body.location !== "string" ||
         /*!(body.startTime instanceof "string") ||
         !(body.endTime instanceof "string") ||
         !(body.date instanceof "string") ||*/
@@ -125,7 +126,7 @@ export const updateEvent: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if (!body.hasOwnProperty("userId") || !body.hasOwnProperty("_id") || !body.hasOwnProperty("name") || !body.hasOwnProperty("description") || !body.hasOwnProperty("startTime") || !body.hasOwnProperty("endTime") || !body.hasOwnProperty("date") || !body.hasOwnProperty("eventType") || !body.hasOwnProperty("_id")) {
+    if (!body.hasOwnProperty("userId") || !body.hasOwnProperty("_id") || !body.hasOwnProperty("name") || !body.hasOwnProperty("description") || !body.hasOwnProperty("location") || !body.hasOwnProperty("startTime") || !body.hasOwnProperty("endTime") || !body.hasOwnProperty("date") || !body.hasOwnProperty("eventType") || !body.hasOwnProperty("_id")) {
         res.status(400).json({"name": "Error en el body"});
         return;
     }
@@ -142,6 +143,16 @@ export const updateEvent: RequestHandler = async (req, res) => {
         res.status(400).json({ name: "1. Error en el body" });
         return;
     } */
+    if (
+        typeof body._id != "string" ||
+        typeof body.name != "string" ||
+        typeof body.description != "string" ||
+        typeof body.location != "string" ||
+        typeof body.eventType != "string"
+    ) {
+        res.status(400).json({ name: "1. Error en el body" });
+        return;
+    }
     
     //Verify event type
     if(body.eventType !== "Makeup" && body.eventType != "Product"){

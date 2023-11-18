@@ -88,6 +88,7 @@ export class DAOCalendar implements DAO{
                 userId: object.userId,
                 name: object.name,
                 description: object.description,
+                location: object.location,
                 startTime: object.startTime,
                 endTime: object.endTime,
                 date: object.date,
@@ -96,7 +97,9 @@ export class DAOCalendar implements DAO{
 
             //Verify if he userId is valid
             const daoUser = new DAOUser();
-            const user = await daoUser.getObject({"_id": newEvent.userId});
+            console.log("newEvent.userId: ", newEvent.userId)
+            const user = await daoUser.getObject(newEvent.userId);
+            console.log("user: ", user)
             if(user.name == "No se encontró el usuario"){
                 return {"name": "No se encontró el usuario"};
             }
@@ -127,6 +130,7 @@ export class DAOCalendar implements DAO{
                 userId: object.userId,
                 name: object.name,
                 description: object.description,
+                location: object.location,
                 startTime: object.startTime,
                 endTime: object.endTime,
                 date: object.date,
@@ -145,6 +149,7 @@ export class DAOCalendar implements DAO{
                     userId: updatedEvent.userId,
                     name: updatedEvent.name,
                     description: updatedEvent.description,
+                    location: updatedEvent.location,
                     startTime: updatedEvent.startTime,
                     endTime: updatedEvent.endTime,
                     date: updatedEvent.date,
