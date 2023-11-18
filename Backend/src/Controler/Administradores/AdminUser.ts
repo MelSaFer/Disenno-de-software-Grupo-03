@@ -117,4 +117,14 @@ export class AdminUser {
       console.log("Error", error);
     }
   }
+
+  async getAllUsers(){
+    try {
+      const daoUser = new DAOUser();
+      const users = await daoUser.getAll();
+      return users;
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
 }

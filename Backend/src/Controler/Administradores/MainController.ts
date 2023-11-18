@@ -59,6 +59,16 @@ import { API_URL } from '../config';
         }   
     };
 
+    public async getAllUsers(){
+        try{
+            const adminUser = new AdminUser();
+            const result = await adminUser.getAllUsers();
+            return result;
+        } catch(err){
+            console.log("Error al cargar la info del usuario", err);
+        }
+    }
+
 
     // -----------------------------
 

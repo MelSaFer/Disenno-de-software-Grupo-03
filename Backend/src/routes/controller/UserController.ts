@@ -318,4 +318,10 @@ export const getNotifications: RequestHandler = async (req, res) => {
     res.status(200).json(purchaseHistory);
 }
 
+export const getAllUsers: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const users = await mainController.getAllUsers();
+    res.status(200).json(users);
+}
+
 
