@@ -29,5 +29,8 @@ export const updateCart = `http://localhost:${port}/updateCart`;
 export const makePurchase = `http://localhost:${port}/makePurchase`;
 export const addUser = `http://localhost:${port}/addUser`;
 export const updatePurchaseState = `http://localhost:${port}/updatePurchaseState`;
+export const getNotifications = `http://localhost:${port}/getNotifications`;
+export const updateNotificationState = `http://localhost:${port}/updateNotificationState`;
+export const isUnread = `http://localhost:${port}/isUnread`;
 
 // USER ROUTES

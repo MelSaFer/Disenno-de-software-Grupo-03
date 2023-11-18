@@ -1,4 +1,5 @@
-import React from "react";
+// @ts-nocheck
+import React, { useEffect, useState } from "react";
 import { FaStore } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
 import { FiShoppingCart } from "react-icons/fi";
@@ -10,9 +11,16 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { BiMessageDetail } from "react-icons/bi";
 import { useAuthContext } from "../context/AuthContext";
 import { MdOutlineNotifications } from "react-icons/md";
+import { MdOutlineNotificationsActive } from "react-icons/md";
+import axios from "axios";
+import { auth } from "../firebase/config";
+import * as Routes from "../app/routes";
 import Router from "next/router";
 
 const NavbarAdminGallery = () => {
+  const [authUser, setAuthUser] = useState({ uid: "", email: "" });
+  const [unread, setUnread] = useState(false);
+
   const { user, logOut } = useAuthContext() as {
     user: any;
     logOut: () => Promise<void>;
@@ -27,6 +35,37 @@ const NavbarAdminGallery = () => {
       console.error("Error al cerrar sesión: ", error);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setAuthUser({ uid: user.uid, email: user.email });
+        console.log(`El UID del usuario es ${user.uid} ${user.email}`);
+      } else {
+        console.log("No hay usuario iniciado sesión");
+      }
+
+      const fetchData = async () => {
+        // const requestData = { userId: user.uid };
+        const requestData = { userId: authUser.uid };
+        try {
+          const result = await axios.request({
+            method: "post",
+            url: Routes.isUnread,
+            headers: { "Content-Type": "application/json" },
+            // data: requestData,
+            data: { userId: "PFNnWVVK3cOSxci6oGkmxDqrc1n1" },
+          });
+          console.log(result.data);
+          setUnread(result.data);
+        } catch (error) {
+          console.error("Error al obtener datos:", error);
+        }
+      };
+      fetchData();
+    }, []);
+    return () => unsubscribe();
+  }, [authUser.uid, unread]);
 
   return (
     <div className="mb-7">
@@ -92,7 +131,11 @@ const NavbarAdminGallery = () => {
                   href="/adminView/notificationCenterAdmin"
                   title="centro de notificaciones"
                 >
-                  <MdOutlineNotifications className="text-3xl" />
+                  {unread ? (
+                    <MdOutlineNotificationsActive className="text-3xl" />
+                  ) : (
+                    <MdOutlineNotifications className="text-3xl" />
+                  )}
                 </a>
               </li>
               {/* <!-- Store link --> */}
