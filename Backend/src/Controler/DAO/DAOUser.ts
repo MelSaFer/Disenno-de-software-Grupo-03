@@ -565,7 +565,7 @@ export class DAOUser implements DAO{
 
                 //Check if there are unread notifications
                 for (let i = 0; i < notifications.length; i++) {
-                    if (notifications[i].read == false){
+                    if (notifications[i].state == false){
                         return true;
                     }
                 }
@@ -578,4 +578,72 @@ export class DAOUser implements DAO{
             //return ok message;
         };
 
+        /*
+        -----------------------------------------------------------------------
+        ADD NOTIFICATION
+        Adds a notification to a user
+        PARAMS:
+            - userId: number, the id of the user to add the notification
+            - notification: string, the notification to add
+        RETURNS:
+            - ok message if the notification was added
+            - error if the notification was not added
+        */
+        async addNotification(notification: any){
+            try{
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const user_collection = db.collection(USER_COLLECTION);
+
+                const User = mongoose.model('User', UserSchema);
+
+                const user = await user_collection.findOne({ userId: notification.userId });
+                if (!user){
+                    //console.log("El usuario " +  userId + " no existe");
+                    return {"name": "El usuario no existe"};
+                }
+
+                //Get notifications from user
+                const notifications = user.notifications;
+
+                
+
+                //Validate notification JSON structure
+                if (notification.length == 0){
+                    //console.log("No se encontraron notificaciones");
+                    return {"name": "No se encontraron notificaciones"};
+                }
+                if(!notification.hasOwnProperty("notificationId") || !notification.hasOwnProperty("purchaseId") || !notification.hasOwnProperty("deliveryDate") || !notification.hasOwnProperty("notificationTime") || !notification.hasOwnProperty("state") || !notification.hasOwnProperty("notificationType")){
+                    //console.log("La notificación no tiene la estructura correcta");
+                    return {"name": "1. La notificación no tiene la estructura correcta"};
+                }
+                // if(notification.notificationId != "string" || notification.purchaseId != "string" || notification.deliveryDate != "string" || notification.notificationTime != "string" || notification.state != "boolean" || notification.notificationType != "string"){
+                //     //console.log("La notificación no tiene la estructura correcta");
+                //     return {"name": "La notificación no tiene la estructura correcta"};
+                // }
+
+                // delete userId from notifications JSON
+                const newNotification = {
+                                        notificationId: notification.notificationId,
+                                        purchaseId: notification.purchaseId,
+                                        notificationTime: notification.notificationTime,
+                                        deliveryTime: notification.deliveryTime,
+                                        notificationType: notification.notificationType,
+                                        state: notification.state
+                                        }
+
+                //Add notification
+                notifications.push(notification);
+                //Update notifications in the database
+                const result = await user_collection.updateOne({ userId: user.userId }, { $set: { notifications: notifications } });
+                
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+                return {"name": "Se agregó la notificación"};
+
+            } catch(err){
+                //console.log(err);
+                return {"name": "No se pudo agregar la notificación"};
+            }
+            //return ok message;
+        };
 }

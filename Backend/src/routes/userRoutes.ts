@@ -19,6 +19,7 @@ router.post("/makePurchase", userController.makePurchase);
 
 // Notifications
 router.post("/getNotifications", userController.getNotifications);
+router.post("/addNotification", userController.addNotification);
 router.put("/updateNotificationState", userController.updateNotificationState);
 router.post("/isUnread", userController.isUnread);
 

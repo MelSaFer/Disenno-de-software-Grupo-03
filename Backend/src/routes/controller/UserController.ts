@@ -384,4 +384,13 @@ export const getAllUsers: RequestHandler = async (req, res) => {
     res.status(200).json(users);
 }
 
+export const addNotification: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const body = req.body;
+
+    const eventsPromise = mainController.addNotification(body);
+    const events = await eventsPromise;
+    res.status(200).json(events);
+}
+
 

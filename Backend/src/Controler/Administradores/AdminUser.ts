@@ -147,5 +147,15 @@ export class AdminUser {
       console.log("Error", error);
     }
   }
+
+  async addNotification(notification_: any){
+    try {
+      const daoUser = new DAOUser();
+      const notification = await daoUser.addNotification(notification_);
+      return notification;
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
   
 }
