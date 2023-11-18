@@ -127,4 +127,25 @@ export class AdminUser {
       console.log("Error", error);
     }
   }
+
+  async updateNotificationState(userId: number){
+    try {
+      const daoUser = new DAOUser();
+      const notification = await daoUser.updateNotificationState(userId);
+      return notification;
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
+  async isUnread(userId: number){
+    try {
+      const daoUser = new DAOUser();
+      const unread = await daoUser.isUnread(userId);
+      return unread;
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+  
 }

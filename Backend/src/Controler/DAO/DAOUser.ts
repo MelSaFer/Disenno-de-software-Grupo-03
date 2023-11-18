@@ -489,4 +489,93 @@ export class DAOUser implements DAO{
             }
         };
 
+        /*
+        -----------------------------------------------------------------------
+        UPDATE NOTIFICATIONS METHOD
+        Updates the notifications of a user to read
+        PARAMS:
+            - userId: number, the id of the user to update the notifications
+        RETURNS:
+            - ok message if the notifications were updated
+            - error if the notifications were not updated
+        */
+        async updateNotificationState(userId: any){
+            try{
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const user_collection = db.collection(USER_COLLECTION);
+                const User = mongoose.model('User', UserSchema);
+
+                const user = await user_collection.findOne({ userId: userId });
+                if (!user){
+                    //console.log("El usuario " +  userId + " no existe");
+                    return {"name": "El usuario no existe"};
+                }
+
+                //Get notifications from user
+                const notifications = user.notifications;
+                
+                //Update notifications to read
+                for (let i = 0; i < notifications.length; i++) {
+                    // if (notifications[i].read == true){
+                    //     break;
+                    // }
+                    notifications[i].state = true;
+                }
+
+                //Update notifications in the database
+                const result = await user_collection.updateOne({ userId: user.userId }, { $set: { notifications: notifications } });
+                
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+                return {"name": "Se actualizaron las notificaciones"};
+
+            } catch(err){
+                //console.log(err);
+                return {"name": "No se pudieron actualizar las notificaciones"};
+            }
+            //return ok message;
+        };
+
+        /*
+        -----------------------------------------------------------------------
+        IS UNREAD METHOD
+        Checks if there are unread notifications
+        PARAMS:
+            - userId: number, the id of the user to check the notifications
+        RETURNS:
+            - true if there are unread notifications
+            - false if there are no unread notifications
+        */
+        async isUnread(userId: any){
+            try{
+                SingletonMongo.getInstance().connect();
+                const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
+                const user_collection = db.collection(USER_COLLECTION);
+
+                const User = mongoose.model('User', UserSchema);
+
+                const user = await user_collection.findOne({ userId: userId });
+                if (!user){
+                    //console.log("El usuario " +  userId + " no existe");
+                    return {"name": "El usuario no existe"};
+                }
+
+                //Get notifications from user
+                const notifications = user.notifications;
+
+                //Check if there are unread notifications
+                for (let i = 0; i < notifications.length; i++) {
+                    if (notifications[i].read == false){
+                        return true;
+                    }
+                }
+                return false;
+
+            } catch(err){
+                //console.log(err);
+                return {"name": "No se pudo verificar si hay notificaciones sin leer"};
+            }
+            //return ok message;
+        };
+
 }

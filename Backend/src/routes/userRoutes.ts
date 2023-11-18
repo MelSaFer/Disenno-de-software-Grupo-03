@@ -17,7 +17,10 @@ router.post("/updateCart", userController.updateCart);
 router.put("/updatePurchaseState", userController.updatePurchaseState);
 router.post("/makePurchase", userController.makePurchase);
 
+// Notifications
 router.post("/getNotifications", userController.getNotifications);
+router.put("/updateNotificationState", userController.updateNotificationState);
+router.post("/isUnread", userController.isUnread);
 
 router.post("/test", userController.test);
 

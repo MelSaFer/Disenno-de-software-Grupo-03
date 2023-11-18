@@ -69,6 +69,26 @@ import { API_URL } from '../config';
         }
     }
 
+    public async updateNotificationState(userId: number){
+        try{
+            const adminUser = new AdminUser();
+            const result = await adminUser.updateNotificationState(userId);
+            return result;
+        } catch(err){
+            console.log("Error al cargar las notificaciones del usuario", err);
+        }
+    }
+
+    public async isUnread(userId: number){
+        try{
+            const adminUser = new AdminUser();
+            const result = await adminUser.isUnread(userId);
+            return result;
+        } catch(err){
+            console.log("Error al cargar las notificaciones del usuario", err);
+        }
+    }
+
 
     // -----------------------------
 

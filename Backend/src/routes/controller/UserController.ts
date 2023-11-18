@@ -314,8 +314,68 @@ export const getNotifications: RequestHandler = async (req, res) => {
     const purchaseHistoryPromise = mainController.getNotifications(body.userId);
     const purchaseHistory = await purchaseHistoryPromise; // Espera a que la promesa se resuelva
 
-    console.log("This is purchase history: "+ purchaseHistory);
+    console.log("This is notifications: "+ purchaseHistory);
     res.status(200).json(purchaseHistory);
+}
+
+export const updateNotificationState: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({"name": "Error en el body"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("userId")){
+        res.status(400).json({"name": "Error en el body"});
+        return;
+    }
+    //Verify if the body has the correct data types
+    if(typeof body.userId !== "string"){
+        res.status(400).json({ name: "Error en el body" });
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.userId.length == 0){
+        res.status(400).json({msg: "Bad Request: notificationId or userId are not a valid id"});
+        return;
+    }
+
+    const eventsPromise = mainController.updateNotificationState(body.userId);
+    const events = await eventsPromise;
+    res.status(200).json(events);
+}
+
+export const isUnread: RequestHandler = async (req, res) => {
+    const mainController = new MainController();
+    const body = req.body;
+
+    //Verify if the body is empty
+    if(Object.keys(body).length == 0){
+        res.status(400).json({"name": "Error en el body"});
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(!body.hasOwnProperty("userId")){
+        res.status(400).json({"name": "Error en el body"});
+        return;
+    }
+    //Verify if the body has the correct data types
+    if(typeof body.userId !== "string"){
+        res.status(400).json({ name: "Error en el body" });
+        return;
+    }
+    //Verify if the body has the correct structure
+    if(body.userId.length == 0){
+        res.status(400).json({msg: "Bad Request: userId are not a valid id"});
+        return;
+    }
+
+    const eventsPromise = mainController.isUnread(body.userId);
+    const events = await eventsPromise;
+    res.status(200).json(events);
 }
 
 export const getAllUsers: RequestHandler = async (req, res) => {
