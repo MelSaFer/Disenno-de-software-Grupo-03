@@ -179,8 +179,9 @@ export const updatePurchaseState: RequestHandler = async (req, res) => {
         return;
     }
     //Verify state is valid
-    if (body.state != "PENDING" && body.state != "APPROVED" && body.state != "DELIVERED" && body.state != "SEND" && body.state != "REJECTED"){
+    if (body.state != "PENDING" && body.state != "ACCEPTED" && body.state != "REJECTED"){
         console.log("El estado ingresado no es válido");
+        res.status(400).json({msg: "Bad Request: userId or purchaseId are not a valid string"});
         return false;
     }
 

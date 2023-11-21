@@ -32,32 +32,27 @@ async function main() {
   //console.log(m.schedule());
   //console.log(d.schedule());
 
-  interface RangoHora {
-    inicio: Date;
-    fin: Date;
-  }
-  
-  function hayOverlap(rango1: RangoHora, rango2: RangoHora): boolean {
-    return rango1.inicio <= rango2.fin && rango1.fin >= rango2.inicio;
-  }
-  // Ejemplo de uso:
-  const rango1: RangoHora = {
-    inicio: new Date('2023-11-20T08:00:00'),
-    fin: new Date('2023-11-20T12:00:00'),
-  };
+  const fechaActual = new Date("12/12/2023");
 
-  const rango2: RangoHora = {
-    inicio: new Date('2023-11-20T10:00:00'),
-    fin: new Date('2023-11-20T14:00:00'),
-  };
+  // Opción 1: Obtén el nombre del día de la semana en español
+  const nombreDiaSemana = fechaActual.toLocaleDateString('es-ES', { weekday: 'long' });
 
-  if (hayOverlap(rango1, rango2)) {
-    console.log('¡Hay overlap entre los rangos de horas!');
-  } else {
-    console.log('No hay overlap entre los rangos de horas.');
-  }
+  // Opción 2: Obtén el nombre del día de la semana en el idioma del navegador
+  //const nombreDiaSemana = fechaActual.toLocaleDateString(undefined, { weekday: 'long' });
 
-    
+  // Imprime el resultado
+  console.log('Hoy es ' + nombreDiaSemana);
+
+
+    // Obtén la fecha actual
+    let currentDate = new Date();
+
+    let daysUntilShippingDate = (6  - currentDate.getDay() + 7) % 7;
+
+
+    console.log(currentDate.setDate(currentDate.getDate() + daysUntilShippingDate));
+    console.log(currentDate);
+
   //console.log(dao.create(daoUser));
 }
 
