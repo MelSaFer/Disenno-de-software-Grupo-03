@@ -5,7 +5,6 @@ const router = Router();
 
 import * as userController from "./controller/UserController";
 
-//router.get('/profile', userController.getInfo)
 router.get("/getAllUsers", userController.getAllUsers);
 router.post("/infoUser", userController.getInfoUser);
 router.post("/getCart", userController.getCart);
@@ -22,7 +21,5 @@ router.post("/getNotifications", userController.getNotifications);
 router.post("/addNotification", userController.addNotification);
 router.put("/updateNotificationState", userController.updateNotificationState);
 router.post("/isUnread", userController.isUnread);
-
-router.post("/test", userController.test);
 
 export default router;
