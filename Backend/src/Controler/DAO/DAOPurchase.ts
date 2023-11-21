@@ -312,11 +312,11 @@ export class DAOPurchase implements DAO {
         let bestShippingDay = 0;
         //compares the days and sets the best shipping day  
         if(ShippingDay1 < ShippingDay2 && ShippingDay1 < ShippingDay3){
-            bestShippingDay = ShippingDays.Day1;
+            bestShippingDay = ShippingDay1;
         }else if(ShippingDay2<ShippingDay1 && ShippingDay2<ShippingDay3){
-            bestShippingDay = ShippingDays.Day2;
+            bestShippingDay = ShippingDay2;
         } else{
-            bestShippingDay = ShippingDays.Day3;
+            bestShippingDay = ShippingDay3;
         }
         //sets the aprox delivery date
         currentDate.setDate(currentDate.getDate() + bestShippingDay);
