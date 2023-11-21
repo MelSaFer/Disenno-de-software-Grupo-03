@@ -86,7 +86,8 @@ export class DAOPurchase implements DAO {
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(PURCHASE_COLLECTION);
             //Get the Purchase from the database, using the code
-            const purchase = await collection.findOne({ purchaseId: purchaseId_ });
+            // @ts-expect-error
+            const purchase = await collection.findOne({ _id: purchaseId_ });
             SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
             // If the product history was found, return it, else return error message
             if (purchase) {

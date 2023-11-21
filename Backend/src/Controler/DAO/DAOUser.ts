@@ -597,6 +597,7 @@ export class DAOUser implements DAO{
 
                 const User = mongoose.model('User', UserSchema);
 
+                // Verify userId is in the notification json
                 if(!notification.hasOwnProperty("userId") || typeof notification.userId != "string"){
                     //console.log("La notificación no tiene la estructura correcta");
                     return {"name": "El body no tiene la estructura correcta"};
@@ -613,33 +614,40 @@ export class DAOUser implements DAO{
 
                 
 
-                //Validate notification JSON structure
-                if (notification.length == 0){
-                    //console.log("No se encontraron notificaciones");
-                    return {"name": "No se encontraron notificaciones"};
-                }
-                if(!notification.hasOwnProperty("purchaseId") || !notification.hasOwnProperty("deliveryDate") || !notification.hasOwnProperty("notificationTime") || !notification.hasOwnProperty("state") || !notification.hasOwnProperty("notificationType")){
-                    //console.log("La notificación no tiene la estructura correcta");
-                    return {"name": "1. La notificación no tiene la estructura correcta"};
-                }
-                if(typeof notification.purchaseId != "string" || typeof notification.deliveryDate != "string" || typeof notification.notificationTime != "string" || typeof notification.state != "boolean" || typeof notification.notificationType != "string"){
-                    //console.log("La notificación no tiene la estructura correcta");
-                    return {"name": "La notificación no tiene la estructura correcta"};
-                }
+                // //Validate notification JSON structure
+                // if (notification.length == 0){
+                //     //console.log("No se encontraron notificaciones");
+                //     return {"name": "No se encontraron notificaciones"};
+                // }
+                // if(!notification.hasOwnProperty("purchaseId") || !notification.hasOwnProperty("deliveryDate") || !notification.hasOwnProperty("notificationTime") || !notification.hasOwnProperty("state") || !notification.hasOwnProperty("notificationType")){
+                //     //console.log("La notificación no tiene la estructura correcta");
+                //     return {"name": "1. La notificación no tiene la estructura correcta"};
+                // }
+                // if(typeof notification.purchaseId != "string" || typeof notification.deliveryDate != "string" || typeof notification.notificationTime != "string" || typeof notification.state != "boolean" || typeof notification.notificationType != "string"){
+                //     //console.log("La notificación no tiene la estructura correcta");
+                //     return {"name": "La notificación no tiene la estructura correcta"};
+                // }
 
                 // delete userId from notifications JSON
+                console.log(notification);
+                
+                delete notification.userId;
                 const id = notifications.length + 1;
-                const newNotification = {
-                                        notificationId: id.toString(),
-                                        purchaseId: notification.purchaseId,
-                                        notificationTime: notification.notificationTime,
-                                        deliveryDate: notification.deliveryTime,
-                                        notificationType: notification.notificationType,
-                                        state: notification.state
-                                        }
+                // const newNotification = {
+                //                         notificationId: id.toString(),
+                //                         purchaseId: notification.purchaseId,
+                //                         notificationTime: notification.notificationTime,
+                //                         deliveryDate: notification.deliveryDate,
+                //                         notificationType: notification.notificationType,
+                //                         state: notification.state
+                //                         }
+
+                Object.assign(notification, {notificationId: id.toString()});
+
+                console.log(notification);
 
                 //Add notification
-                notifications.push(newNotification);
+                notifications.push(notification);
                 //Update notifications in the database
                 const result = await user_collection.updateOne({ userId: user.userId }, { $set: { notifications: notifications } });
                 

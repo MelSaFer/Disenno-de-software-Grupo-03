@@ -103,9 +103,12 @@ export class AdminUser implements Subject{
         purchaseId,
         state
       );
-      if (purchase == state && state == "APPROVED"){
+
+      // Notificar a los observadores
+      if (purchase == state && state == "ACCEPTED"){
         this.notify({ userId: userId, purchaseId: purchaseId});
       }
+      
       return purchase;
     } catch (error) {
       console.log("Error", error);

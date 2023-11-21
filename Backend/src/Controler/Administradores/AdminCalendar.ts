@@ -55,7 +55,7 @@ export class AdminCalendar implements Subject{
             const daoCalendar = new DAOCalendar();
             const result = await daoCalendar.create(object);
             if(result == "Makeup"){
-                this.notify({userId: object.userId, purchaseId: object.purchaseId});
+                this.notify({userId: object.userId, purchaseId: object.purchaseId, deliveryDate: object.date});
             }
             return result;
         } catch(err){

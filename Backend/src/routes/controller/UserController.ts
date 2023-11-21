@@ -226,7 +226,7 @@ export const makePurchase: RequestHandler = async (req, res) => {
         return;
     }
     //Verify state is valid
-    if (body.state != "PENDING" && body.state != "APPROVED" && body.state != "DELIVERED" && body.state != "SEND" && body.state != "REJECTED"){
+    if (body.state != "PENDING" && body.state != "ACCEPTED" && body.state != "DELIVERED" && body.state != "SEND" && body.state != "REJECTED"){
         console.log("El estado ingresado no es válido");
         return false;
     }
