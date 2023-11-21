@@ -597,6 +597,11 @@ export class DAOUser implements DAO{
 
                 const User = mongoose.model('User', UserSchema);
 
+                if(!notification.hasOwnProperty("userId") || typeof notification.userId != "string"){
+                    //console.log("La notificación no tiene la estructura correcta");
+                    return {"name": "El body no tiene la estructura correcta"};
+                }
+
                 const user = await user_collection.findOne({ userId: notification.userId });
                 if (!user){
                     //console.log("El usuario " +  userId + " no existe");
@@ -613,27 +618,28 @@ export class DAOUser implements DAO{
                     //console.log("No se encontraron notificaciones");
                     return {"name": "No se encontraron notificaciones"};
                 }
-                if(!notification.hasOwnProperty("notificationId") || !notification.hasOwnProperty("purchaseId") || !notification.hasOwnProperty("deliveryDate") || !notification.hasOwnProperty("notificationTime") || !notification.hasOwnProperty("state") || !notification.hasOwnProperty("notificationType")){
+                if(!notification.hasOwnProperty("purchaseId") || !notification.hasOwnProperty("deliveryDate") || !notification.hasOwnProperty("notificationTime") || !notification.hasOwnProperty("state") || !notification.hasOwnProperty("notificationType")){
                     //console.log("La notificación no tiene la estructura correcta");
                     return {"name": "1. La notificación no tiene la estructura correcta"};
                 }
-                // if(notification.notificationId != "string" || notification.purchaseId != "string" || notification.deliveryDate != "string" || notification.notificationTime != "string" || notification.state != "boolean" || notification.notificationType != "string"){
-                //     //console.log("La notificación no tiene la estructura correcta");
-                //     return {"name": "La notificación no tiene la estructura correcta"};
-                // }
+                if(typeof notification.purchaseId != "string" || typeof notification.deliveryDate != "string" || typeof notification.notificationTime != "string" || typeof notification.state != "boolean" || typeof notification.notificationType != "string"){
+                    //console.log("La notificación no tiene la estructura correcta");
+                    return {"name": "La notificación no tiene la estructura correcta"};
+                }
 
                 // delete userId from notifications JSON
+                const id = notifications.length + 1;
                 const newNotification = {
-                                        notificationId: notification.notificationId,
+                                        notificationId: id.toString(),
                                         purchaseId: notification.purchaseId,
                                         notificationTime: notification.notificationTime,
-                                        deliveryTime: notification.deliveryTime,
+                                        deliveryDate: notification.deliveryTime,
                                         notificationType: notification.notificationType,
                                         state: notification.state
                                         }
 
                 //Add notification
-                notifications.push(notification);
+                notifications.push(newNotification);
                 //Update notifications in the database
                 const result = await user_collection.updateOne({ userId: user.userId }, { $set: { notifications: notifications } });
                 

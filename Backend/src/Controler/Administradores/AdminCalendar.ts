@@ -1,12 +1,33 @@
 import { API_URL } from '../config';
 import { DAOCalendar } from '../DAO/DAOCalendar';
+import { Observer } from '../Observer/Observer';
+import { Subject } from '../Observer/Subject';
+import { NotificationCenter } from './NotificationCenter';
 
 
-export class AdminCalendar{
+export class AdminCalendar implements Subject{
+    private observers: Observer[] = [];
     calendar = [];
 
     constructor(){
-        this.calendar = [];
+        this.observers[0] = new NotificationCenter();
+    }
+
+    attach(observer: Observer): void {
+        this.observers.push(observer);
+    }
+
+    detach(observer: Observer): void {
+        const index = this.observers.indexOf(observer);
+        if(index > -1){
+            this.observers.splice(index, 1);
+        }
+    }
+
+    notify(body: any): void {
+        for(const observer of this.observers){
+            observer.update(this, body);
+        }
     }
 
     async getCalendar(){
@@ -33,6 +54,9 @@ export class AdminCalendar{
         try{
             const daoCalendar = new DAOCalendar();
             const result = await daoCalendar.create(object);
+            if(result == "Makeup"){
+                this.notify({userId: object.userId, purchaseId: object.purchaseId});
+            }
             return result;
         } catch(err){
             console.log("Error al crear el evento", err);
