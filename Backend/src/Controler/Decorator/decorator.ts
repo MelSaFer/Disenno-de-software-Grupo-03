@@ -11,4 +11,10 @@ export class Decorator implements Component{
         return "schedule"
     }
 
+    getComponent(): Component | undefined {
+        return this.component;
+    }
+
+   
+
 }

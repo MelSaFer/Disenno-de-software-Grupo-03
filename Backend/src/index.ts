@@ -29,10 +29,35 @@ async function main() {
   const e = new Event(eventId, userId, description, startTime, endTime, date);
   const m = new MakeupEvent(e);
   const d = new DeliveryEvent(e);
-  console.log(m.schedule());
-  console.log(d.schedule());
+  //console.log(m.schedule());
+  //console.log(d.schedule());
 
+  interface RangoHora {
+    inicio: Date;
+    fin: Date;
+  }
   
+  function hayOverlap(rango1: RangoHora, rango2: RangoHora): boolean {
+    return rango1.inicio <= rango2.fin && rango1.fin >= rango2.inicio;
+  }
+  // Ejemplo de uso:
+  const rango1: RangoHora = {
+    inicio: new Date('2023-11-20T08:00:00'),
+    fin: new Date('2023-11-20T12:00:00'),
+  };
+
+  const rango2: RangoHora = {
+    inicio: new Date('2023-11-20T10:00:00'),
+    fin: new Date('2023-11-20T14:00:00'),
+  };
+
+  if (hayOverlap(rango1, rango2)) {
+    console.log('¡Hay overlap entre los rangos de horas!');
+  } else {
+    console.log('No hay overlap entre los rangos de horas.');
+  }
+
+    
   //console.log(dao.create(daoUser));
 }
 

@@ -351,18 +351,34 @@ export class DAOCalendar implements DAO{
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CALENDAR_COLLECTION);
+            const Event = mongoose.model('Event', EventSchema);
+
+            let theEvent = new Event({
+                startTime: object.startTime,
+                endTime: object.endTime,
+            });
 
             let events = await collection.find().toArray();
+            for(let i = 0; i < events.length; i++){
+                const thisEventRange = {
+                    startTime: new Date(events[i].startTime),
+                    endTime: new Date(events[i].endTime)
+                }
+                //verifies if there is an overlap between events
+                if( thisEventRange.startTime <= theEvent.startTime && theEvent.startTime <= thisEventRange.endTime){
+                    console.log("Hay superposición de eventos")
+                    return true;
+                } else if(theEvent.startTime <= thisEventRange.endTime && thisEventRange.endTime <= theEvent.endTime){
+                    console.log("Hay superposición de eventos")
+                    return true;
+                }
 
+            }
+            return false;
         } catch(err){
             console.log("Error al verificar la superposición de eventos: ", err)
         }
 
-        if(true){
-            return true;
-        } else {
-            return false;
-        }
     }
         
 

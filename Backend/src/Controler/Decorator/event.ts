@@ -21,4 +21,25 @@ export class Event implements Component{
     schedule(): string {
         return `Event ${this.eventId} scheduled for ${this.date} from ${this.startTime} to ${this.endTime} with description ${this.description}`;
     }
+
+    getEventId(): String {
+        return this.eventId;
+    }
+
+    getUserId(): String {
+        return this.userId;
+    }
+
+    getDescription(): String {
+        return this.description;
+    }
+
+    getStartTime(): Date {
+        return this.startTime;
+    }
+
+    getEndTime(): Date {
+        return this.endTime;
+    }
+    
 }
