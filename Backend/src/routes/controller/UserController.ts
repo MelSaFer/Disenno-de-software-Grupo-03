@@ -385,6 +385,20 @@ export const addNotification: RequestHandler = async (req, res) => {
     const mainController = new MainController();
     const body = req.body;
 
+    //Validate notification JSON structure
+    if (body.length == 0){
+        //console.log("No se encontraron notificaciones");
+        return {"name": "No se encontraron notificaciones"};
+    }
+    if(!body.hasOwnProperty("purchaseId") || !body.hasOwnProperty("deliveryDate") || !body.hasOwnProperty("notificationTime") || !body.hasOwnProperty("state") || !body.hasOwnProperty("notificationType") || !body.hasOwnProperty("userId")){
+        //console.log("La notificación no tiene la estructura correcta");
+        return {"name": "1. La notificación no tiene la estructura correcta"};
+    }
+    if(typeof body.purchaseId != "string" || typeof body.deliveryDate != "string" || typeof body.notificationTime != "string" || typeof body.state != "boolean" || typeof body.notificationType != "string" || typeof body.userId != "string"){
+        //console.log("La notificación no tiene la estructura correcta");
+        return {"name": "La notificación no tiene la estructura correcta"};
+    }
+
     const eventsPromise = mainController.addNotification(body);
     const events = await eventsPromise;
     res.status(200).json(events);

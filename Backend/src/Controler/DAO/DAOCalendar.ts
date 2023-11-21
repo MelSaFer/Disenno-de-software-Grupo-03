@@ -109,7 +109,8 @@ export class DAOCalendar implements DAO{
             const newEventparsed = JSON.parse(newEventJson);
             await collection.insertOne(newEventparsed);
             //console.log("Se inserto: " + newEventJson);
-            return {"name": "Se insertó el evento" + newEvent.name};
+            return object.eventType;
+            //return {"name": "Se insertó el evento" + newEvent.name};
         } catch(err){
             console.log("Error al crear el evento", err);
         }       

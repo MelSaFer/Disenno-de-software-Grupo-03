@@ -1,12 +1,12 @@
 
 import app from "./app";
-//import { PORT } from "./Controler/config";
+import { PORT } from "./Controler/config";
 import { MakeupEvent } from "./Controler/Decorator/makeupEvent";
 import { DeliveryEvent } from "./Controler/Decorator/deliveryEvent";
 import {Event} from "./Controler/Decorator/event";
 
 
-//require("dotenv").config();
+require("dotenv").config();
 
 
 
@@ -14,8 +14,8 @@ import {Event} from "./Controler/Decorator/event";
 async function main() {
   
 
-  //app.listen(PORT);
-  //console.log("Server on port ", PORT);
+  app.listen(PORT);
+  console.log("Server on port ", PORT);
 
   //const decorator1 = new ConcreteDecoratorA(simple);
   //const decorator2 = new ConcreteDecoratorB(decorator1);

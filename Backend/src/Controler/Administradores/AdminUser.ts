@@ -2,9 +2,28 @@ import { API_URL } from "../config";
 import { DTOUser } from "../DTO/DTOUser";
 import { DAOUser } from "../DAO/DAOUser";
 import { DAOPurchase } from "../DAO/DAOPurchase";
+import { Subject } from "../Observer/Subject";
+import { Observer } from "../Observer/Observer";
+import { NotificationCenter } from "./NotificationCenter";
 
-export class AdminUser {
-  constructor() {}
+export class AdminUser implements Subject{
+  private observers: Observer[] = [];
+  constructor() {
+    this.observers[0] = new NotificationCenter();
+  }
+
+  attach(observer: Observer): void {
+    this.observers.push(observer);
+  }
+
+  detach(observer: Observer): void {
+    const index = this.observers.indexOf(observer);
+    if (index !== -1) this.observers.splice(index, 1);
+  }
+
+  notify(body: any): void {
+    for (const observer of this.observers) observer.update(this, body);
+  }
 
   /*
     METHOD ADD USER
@@ -76,14 +95,17 @@ export class AdminUser {
     METHOD UPDATE STATE PURCHASE HISTORY
     PARAMS: userId, purchaseId, state
     */
-  updatePurchaseState(userId: number, purchaseId: number, state: string) {
+  async updatePurchaseState(userId: number, purchaseId: number, state: string) {
     try {
       const daoPurchase = new DAOPurchase();
-      const purchase = daoPurchase.updatePurchaseState(
+      const purchase = await daoPurchase.updatePurchaseState(
         userId,
         purchaseId,
         state
       );
+      if (purchase == state && state == "APPROVED"){
+        this.notify({ userId: userId, purchaseId: purchaseId});
+      }
       return purchase;
     } catch (error) {
       console.log("Error", error);
