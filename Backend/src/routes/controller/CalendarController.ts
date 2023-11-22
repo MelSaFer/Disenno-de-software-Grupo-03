@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { MainController } from "../../Controler/Administradores/MainController";
 import exp from "constants";
+import { EVENT_TYPE } from "../../Controler/Decorator/EVENT_TYPE";
 
 
 
@@ -71,7 +72,7 @@ export const createEvent: RequestHandler = async (req, res) => {
         return;
     }
     //Verify event type
-    if(body.eventType !== "Makeup" && body.eventType !== "Product"){
+    if(body.eventType !== EVENT_TYPE.MAKEUP && body.eventType !== EVENT_TYPE.DELIVERY){
         res.status(400).json({ name: "Error en el body" });
         return;
     }

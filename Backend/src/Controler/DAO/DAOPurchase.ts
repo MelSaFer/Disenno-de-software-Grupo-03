@@ -2,7 +2,7 @@ import { DAO } from "./DAO"
 import { PurchaseSchema } from "./schemas/Schemas"
 import mongoose from "mongoose";
 import { SingletonMongo } from "../Singleton/SingletonMongo";
-import { DATABASE_NAME, PURCHASE_COLLECTION } from "../config";
+import { ACCEPTED_STATE, DECLINED_STATE, PENDING_STATE, DATABASE_NAME, PURCHASE_COLLECTION } from "../config";
 import { User } from "../../Model/User";
 import { DAOProduct } from "./DAOProduct";
 import { DAOUser } from "./DAOUser";
@@ -243,12 +243,12 @@ export class DAOPurchase implements DAO {
                 return { "name": "La compra no existe" };
             }
 
-            /* if(purchase.state != "PENDING" ){
+            /* if(purchase.state != PENDING_STATE ){
                 return { "name": "El estado no se puede modificar" };
             } */
 
             //If state is REJECTED, return the stock of the products
-            if (state_ == "REJECTED") {
+            if (state_ == DECLINED_STATE) {
                 const arrayProducts = purchase.products;
                 const daoProduct = new DAOProduct();
                 for (let i = 0; i < arrayProducts.length; i++) {
@@ -260,7 +260,7 @@ export class DAOPurchase implements DAO {
                     product.cuantityAvailable = product.cuantityAvailable + arrayProducts[i].quantity;
                     await daoProduct.update(product);
                 }
-            } else if (state_ == "ACCEPTED") {
+            } else if (state_ == ACCEPTED_STATE) {
                 //If state is ACCEPTED, set the aprox delivery date
                 purchase.aproxDeliveryDate = this.setAproxDeliveryDate();
                 console.log("aproxDeliveryDate: " + purchase.aproxDeliveryDate);
@@ -307,7 +307,8 @@ export class DAOPurchase implements DAO {
                 //console.log("La compra se actualizó con éxito");
                 //return {"name": "La compra se actualizó con éxito"};
                 //return theEvent
-                return state_;
+                return { "name": state_ }
+                //return state_;
             } else {
                 return { "name": "No se encontró la compra a actualizar" };
             }

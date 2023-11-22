@@ -104,8 +104,9 @@ export class DAOCalendar implements DAO{
 
             // set the new event with the decorator
             //console.log("object.eventType: ", object.component.eventType)
-            if (object.eventType == "Makeup") {
+            if (object.eventType == EVENT_TYPE.MAKEUP) {
                 let theNewEvent = daoCalendar.createEvent();
+                theNewEvent.setEventType(object.eventType);
                 let theEvent = new MakeupEvent(theNewEvent);
                 newEvent.eventType = theNewEvent.getEventType();
             } 

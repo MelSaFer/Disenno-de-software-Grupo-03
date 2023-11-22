@@ -1,5 +1,6 @@
 import { API_URL } from '../config';
 import { DAOCalendar } from '../DAO/DAOCalendar';
+import { EVENT_TYPE } from '../Decorator/EVENT_TYPE';
 import { Observer } from '../Observer/Observer';
 import { Subject } from '../Observer/Subject';
 import { NotificationCenter } from './NotificationCenter';
@@ -53,8 +54,9 @@ export class AdminCalendar implements Subject{
     async createEvent(object: any){
         try{
             const daoCalendar = new DAOCalendar();
+            console.log("object", object);
             const result = await daoCalendar.create(object);
-            if(result == "Makeup"){
+            if(result == EVENT_TYPE.MAKEUP){
                 this.notify({userId: object.userId, purchaseId: object.purchaseId, deliveryDate: object.date});
             }
             return result;
