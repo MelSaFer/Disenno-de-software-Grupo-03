@@ -124,10 +124,10 @@ import { API_URL } from '../config';
     METHOD PUT PURCHASE STATE
     PARAMS: userId, purchaseId, state
     */
-    public async updatePurchaseState(userId : number, purchaseId: number, state: string){
+    public async updatePurchaseState(userId : number, purchaseId: number, state: string, location: string){
         try{
             const adminUser = new AdminUser();
-            const result = adminUser.updatePurchaseState(userId, purchaseId, state);
+            const result = adminUser.updatePurchaseState(userId, purchaseId, state, location);
             return result;
         } catch(err){
             console.log("Error al cargar la info del usuario", err);

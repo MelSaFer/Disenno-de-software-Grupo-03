@@ -185,10 +185,10 @@ export const updatePurchaseState: RequestHandler = async (req, res) => {
         return false;
     }
 
-    const userPromise = mainController.updatePurchaseState(body.userId, body.purchaseId, body.state);
+    const userPromise = mainController.updatePurchaseState(body.userId, body.purchaseId, body.state, body.location);
     const user = await userPromise; // Espera a que la promesa se resuelva
 
-    console.log("This is user: "+ user);
+    //console.log("This is user: "+ user);
     res.status(200).json(user);
 }
 

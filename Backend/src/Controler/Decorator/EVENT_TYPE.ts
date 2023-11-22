@@ -1,0 +1,5 @@
+export enum EVENT_TYPE {
+    MAKEUP = "MAKEUP EVENT",
+    DELIVERY = "DELIVERY EVENT",
+    OTHER = "OTHER EVENT"
+}

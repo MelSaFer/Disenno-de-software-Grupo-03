@@ -24,7 +24,7 @@ export class NotificationCenter implements Observer {
             Object.assign(notification, {purchaseId: body.purchaseId}); // Agregar id de compra
 
             const purchase: any = await daoPurchase.getObject(body.purchaseId);
-            console.log('Purchase: ', purchase);
+            //console.log('Purchase: ', purchase);
             Object.assign(notification, {deliveryDate: purchase.aproxDeliveryDate}); // Agregar fecha de entrega
         }
         else{
@@ -34,6 +34,6 @@ export class NotificationCenter implements Observer {
 
         // Agregar notificacion al usuario en la base de datos 
         const response = userDAO.addNotification(notification);
-        console.log('Notification Center: ', observable);
+        //console.log('Notification Center: ', observable);
     }
 }
