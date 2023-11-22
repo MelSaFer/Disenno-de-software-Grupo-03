@@ -250,9 +250,14 @@ export class DAOPurchase implements DAO {
                 const daoCalendar = new DAOCalendar();
                 
                 let newEvent = daoCalendar.createEvent();
+                newEvent.setUserId(userId_.toString());
+                newEvent.setDescription("Delivery of purchase " + purchaseId_);
+                newEvent.setDate(purchase.aproxDeliveryDate);
+                newEvent.setEventId(purchaseId_.toString());
 
                 //newEvent = new DeliveryEvent(newEvent);
                 let theEvent = new DeliveryEvent(newEvent);
+
                 console.log("theEvent: " + theEvent.schedule());
             }
             //Create the update object for updating the content
