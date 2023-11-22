@@ -12,6 +12,7 @@ import { Event } from "../Decorator/event";
 import { DeliveryEvent } from "../Decorator/deliveryEvent";
 import { DAOCalendar } from "./DAOCalendar";
 import { user } from "firebase-functions/v1/auth";
+import { SHIPPING_PRICE } from "../config";
 
 /*-----------------------------------------------------------------------
 DAO PURCHASE
@@ -131,7 +132,7 @@ export class DAOPurchase implements DAO {
                 products: object.products,
                 voucherId: object.voucherId,
                 aproxDeliveryDate: object.aproxDeliveryDate,
-                shippingAddress: object.shippingAddress,
+                shippingAddress: this.calculateShippingPrice(/*object.products*/),
                 shippingPrice: object.shippingPrice,
                 userId: object.userId,
                 state: object.state
@@ -177,6 +178,24 @@ export class DAOPurchase implements DAO {
             return { "name": "No se insertó la compra u ocurrió otro error" };
         }
     };
+
+    /*
+    -----------------------------------------------------------------------
+    CALCULATE SHIPPING PRICE
+    Calculate the shipping price of a purchase
+    PARAMS:
+        - products : array
+    RETURNS:
+        - shippingPrice: number
+    */
+    calculateShippingPrice(/*products: any*/) {
+        let shippingPrice = SHIPPING_PRICE;
+        // for (let i = 0; i < products.length; i++) {
+        //     shippingPrice = shippingPrice + products[i].quantity * products[i].price;
+        // }
+        return shippingPrice;
+    }
+
 
     /*
     -----------------------------------------------------------------------

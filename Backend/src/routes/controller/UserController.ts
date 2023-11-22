@@ -206,12 +206,12 @@ export const makePurchase: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("purchaseDetails") || !body.hasOwnProperty("products") || !body.hasOwnProperty("voucherId") || !body.hasOwnProperty("aproxDeliveryDate") || !body.hasOwnProperty("shippingAddress") || !body.hasOwnProperty("shippingPrice") || !body.hasOwnProperty("userId") || !body.hasOwnProperty("state")){
+    if(!body.hasOwnProperty("purchaseDetails") || !body.hasOwnProperty("products") || !body.hasOwnProperty("voucherId") || !body.hasOwnProperty("aproxDeliveryDate") /*|| !body.hasOwnProperty("shippingAddress")*/ || !body.hasOwnProperty("shippingPrice") || !body.hasOwnProperty("userId") || !body.hasOwnProperty("state")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.purchaseDetails != "string" || typeof body.voucherId != "string" || typeof body.aproxDeliveryDate != "string" || typeof body.shippingAddress != "string" || typeof body.shippingPrice != "number" || typeof body.userId != "string" || typeof body.state != "string"){
+    if(typeof body.purchaseDetails != "string" || typeof body.voucherId != "string" || typeof body.aproxDeliveryDate != "string" || typeof body.shippingAddress != "string" /*|| typeof body.shippingPrice != "number" */ || typeof body.userId != "string" || typeof body.state != "string"){
         res.status(400).json({msg: "Bad Request: purchaseId, purchaseDetails, voucherId, aproxDeliveryDate, shippingAdress, shippingPrice, userId or state are not a number"});
         return;
     }
@@ -221,7 +221,7 @@ export const makePurchase: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(body.shippingPrice <= 0 || body.userId.length == 0 || body.voucherId.length == 0){
+    if(/*body.shippingPrice <= 0 ||*/ body.userId.length == 0 || body.voucherId.length == 0){
         res.status(400).json({msg: "Bad Request: voucherId, purchaseId, shippingPrice or userId are not a valid string/number"});
         return;
     }

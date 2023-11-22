@@ -36,3 +36,5 @@ export const FIREBASE_CONFIG = {
   appId: "1:365378457858:web:6e46e6e6651e39e789b21b",
   measurementId: "G-MTMEGJ579Z",
 };
+
+export const SHIPPING_PRICE = 7.99;
