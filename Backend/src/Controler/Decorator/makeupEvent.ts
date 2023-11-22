@@ -9,7 +9,7 @@ export class MakeupEvent extends Decorator{
     }
 
     public schedule(): any {
-        return this.component?.schedule() + "of makeup";        
+        return this.component?.schedule() + " of makeup";        
         //return `Makeup Event(${super.schedule()})`;
     }
 

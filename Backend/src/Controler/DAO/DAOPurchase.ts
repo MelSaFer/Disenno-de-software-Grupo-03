@@ -248,12 +248,7 @@ export class DAOPurchase implements DAO {
                 //const newEvent = Event()
 
                 const daoCalendar = new DAOCalendar();
-                const eventId = "1";
-                const userId = "mqwjsoiqjsio";
-                const description = "Reunión de equipo";
-                const startTime = new Date("2023-11-17T09:00:00");
-                const endTime = new Date("2023-11-17T10:30:00");
-                const date = new Date("2023-11-17");
+                
                 let newEvent = daoCalendar.createEvent();
 
                 //newEvent = new DeliveryEvent(newEvent);
