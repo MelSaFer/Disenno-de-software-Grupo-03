@@ -8,6 +8,10 @@ import { DAOProduct } from "./DAOProduct";
 import { DAOUser } from "./DAOUser";
 import {ShippingDays} from "./ShippingDays";
 import { getDay } from "date-fns";
+import { Event } from "../Decorator/event";
+import { DeliveryEvent } from "../Decorator/deliveryEvent";
+import { DAOCalendar } from "./DAOCalendar";
+import { user } from "firebase-functions/v1/auth";
 
 /*-----------------------------------------------------------------------
 DAO PURCHASE
@@ -239,6 +243,22 @@ export class DAOPurchase implements DAO {
                 //If state is ACCEPTED, set the aprox delivery date
                 purchase.aproxDeliveryDate = this.setAproxDeliveryDate();
                 console.log("aproxDeliveryDate: " + purchase.aproxDeliveryDate);
+
+                //CREATES THE EVENT
+                //const newEvent = Event()
+
+                const daoCalendar = new DAOCalendar();
+                const eventId = "1";
+                const userId = "mqwjsoiqjsio";
+                const description = "Reunión de equipo";
+                const startTime = new Date("2023-11-17T09:00:00");
+                const endTime = new Date("2023-11-17T10:30:00");
+                const date = new Date("2023-11-17");
+                let newEvent = daoCalendar.createEvent();
+
+                //newEvent = new DeliveryEvent(newEvent);
+                let theEvent = new DeliveryEvent(newEvent);
+                console.log("theEvent: " + theEvent.schedule());
             }
             //Create the update object for updating the content
             const InfoToUpdate = {
