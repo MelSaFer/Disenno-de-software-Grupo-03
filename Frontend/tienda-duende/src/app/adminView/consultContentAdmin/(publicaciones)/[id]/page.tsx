@@ -65,7 +65,6 @@ const ConsultProduct = ({ params }: PageProps) => {
   };
 
   const handleDelete = async () => {
-    // Hacer la solicitud DELETE al servidor
     try {
       const requestData = { _id: params.id };
       const result = await axios.request({
@@ -74,17 +73,12 @@ const ConsultProduct = ({ params }: PageProps) => {
         headers: { "Content-Type": "application/json" },
         data: requestData,
       });
-      // Si la solicitud DELETE se realizó con éxito
       if (result.status === 200) {
-        // Realiza cualquier acción necesaria después de la eliminación
-        // Puede ser redirigir a otra página o actualizar el estado de la aplicación, por ejemplo
         router.push("/adminView/galleryAdmin");
       } else {
-        // Manejar errores o mostrar mensajes de error
         console.error("Error al eliminar:", result);
       }
     } catch (error) {
-      // Manejar errores de Axios
       console.error("Error al eliminar:", error);
     }
   };

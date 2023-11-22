@@ -8,6 +8,7 @@ import { useEffect, useState, Fragment } from "react";
 import { BiMessageAdd } from "react-icons/bi";
 import Modal from "../../../components/modal";
 import { auth } from "../../../firebase/config";
+import ImageLink from "@/src/components/ImageLink";
 import * as Routes from "../../routes";
 
 const baseURL = "https://mocki.io/v1/c1e66925-19a3-4338-a5a2-3ac53d8e5e04";
@@ -116,14 +117,15 @@ const HistoryAdmin = () => {
                     <h2 className="mb-3">
                       <b>Cliente:</b> {item.userId}
                     </h2>
-                    <button
+                    {/* <button
                       className="bg-red-500 text-white p-2 border rounded-full hover:bg-red-400"
                       onClick={() => setShowModal(true)}
                     >
                       Ver comprobante de pago
-                    </button>
+                    </button> */}
+                    <ImageLink imageUrl={item.voucherId} />
                   </div>
-                  <Modal
+                  {/* <Modal
                     isVisible={showModal}
                     onClose={() => setShowModal(false)}
                   >
@@ -134,7 +136,7 @@ const HistoryAdmin = () => {
                         className="w-[400px] h-auto"
                       />
                     </div>
-                  </Modal>
+                  </Modal> */}
                 </div>
                 {/* Depending on the item state the user can modify the state */}
                 {/* PENDING CASE */}
