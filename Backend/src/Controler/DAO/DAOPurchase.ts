@@ -295,6 +295,7 @@ export class DAOPurchase implements DAO {
             if (result.modifiedCount > 0) {
                 //console.log("La compra se actualizó con éxito");
                 //return {"name": "La compra se actualizó con éxito"};
+                //return theEvent
                 return state_;
             } else {
                 return { "name": "No se encontró la compra a actualizar" };

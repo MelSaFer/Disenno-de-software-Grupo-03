@@ -101,6 +101,12 @@ export class DAOCalendar implements DAO{
                 
             let theNewEvent = daoCalendar.createEvent();
 
+            // set the new event with the decorator
+            theNewEvent.setUserId(object.userId_.toString());
+            theNewEvent.setDescription("Date of makeup " + object.deliveryDate);
+            theNewEvent.setDate(object.deliveryDate);
+            theNewEvent.setEventId(object.purchaseId_.toString());
+
             //newEvent = new DeliveryEvent(newEvent);
             let theEvent = new MakeupEvent(theNewEvent);
             console.log("theEvent: " + theEvent.schedule());
@@ -119,6 +125,8 @@ export class DAOCalendar implements DAO{
             const newEventparsed = JSON.parse(newEventJson);
             await collection.insertOne(newEventparsed);
             //console.log("Se inserto: " + newEventJson);
+
+            //return theEvent
             return object.eventType;
             //return {"name": "Se insertó el evento" + newEvent.name};
         } catch(err){
