@@ -21,7 +21,7 @@ export class AdminPurchase {
         if (index !== -1) this.observers.splice(index, 1);
     }
 
-    notify(): void {
-        for (const observer of this.observers) observer.update(this);
+    notify(body: any): void {
+        for (const observer of this.observers) observer.update(this, body);
     }
 }
