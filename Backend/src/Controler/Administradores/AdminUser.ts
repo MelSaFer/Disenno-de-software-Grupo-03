@@ -95,7 +95,7 @@ export class AdminUser implements Subject{
     METHOD UPDATE STATE PURCHASE HISTORY
     PARAMS: userId, purchaseId, state
     */
-  async updatePurchaseState(userId: number, purchaseId: number, state: string) {
+  async updatePurchaseState(userId: number, purchaseId: number, state: string, ) {
     try {
       const daoPurchase = new DAOPurchase();
       const purchase = await daoPurchase.updatePurchaseState(
