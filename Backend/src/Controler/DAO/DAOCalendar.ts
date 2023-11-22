@@ -7,6 +7,7 @@ import { parseISO, differenceInCalendarISOWeeks, differenceInCalendarMonths, dif
 import { DAOUser } from "./DAOUser";
 import { Event } from "../Decorator/event";
 import { MakeupEvent } from "../Decorator/makeupEvent";
+import { EVENT_TYPE } from "../Decorator/EVENT_TYPE";
 
 // var parseISO = require('date-fns/parseISO')
 // var differenceInCalendarISOWeeks = require('date-fns/differenceInCalendarISOWeeks')
@@ -87,6 +88,7 @@ export class DAOCalendar implements DAO{
             const Event = mongoose.model('Event', EventSchema);
 
             let newEvent = new Event({
+                purchaseId: object.purchaseId,
                 userId: object.userId,
                 name: object.name,
                 description: object.description,
@@ -99,17 +101,14 @@ export class DAOCalendar implements DAO{
 
             const daoCalendar = new DAOCalendar();
                 
-            let theNewEvent = daoCalendar.createEvent();
 
             // set the new event with the decorator
-            theNewEvent.setUserId(object.userId_.toString());
-            theNewEvent.setDescription("Date of makeup " + object.deliveryDate);
-            theNewEvent.setDate(object.deliveryDate);
-            theNewEvent.setEventId(object.purchaseId_.toString());
-
-            //newEvent = new DeliveryEvent(newEvent);
-            let theEvent = new MakeupEvent(theNewEvent);
-            console.log("theEvent: " + theEvent.schedule());
+            //console.log("object.eventType: ", object.component.eventType)
+            if (object.eventType == "Makeup") {
+                let theNewEvent = daoCalendar.createEvent();
+                let theEvent = new MakeupEvent(theNewEvent);
+                newEvent.eventType = theNewEvent.getEventType();
+            } 
 
             //Verify if he userId is valid
             const daoUser = new DAOUser();

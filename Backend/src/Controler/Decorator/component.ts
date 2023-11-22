@@ -1,4 +1,5 @@
+import { EVENT_TYPE } from "./EVENT_TYPE";
 
 export interface Component {
-    schedule(): string;
+    schedule(EventType : EVENT_TYPE): string;
 }

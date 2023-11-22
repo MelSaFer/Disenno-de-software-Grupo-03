@@ -76,6 +76,7 @@ export const CalendarSchema = new mongoose.Schema({
 //EVENT SCHEMA------------------------------------------------------------------------------------------------------------------------------
 export const EventSchema = new mongoose.Schema({        
     //eventId: { type: String, required: true },
+    purchaseId: { type: String, required: true },
     userId: { type: String, required: true },
     name: { type: String, required: true },
     description : { type: String, required: true },

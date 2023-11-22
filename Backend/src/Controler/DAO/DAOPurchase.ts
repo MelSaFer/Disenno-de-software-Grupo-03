@@ -13,6 +13,8 @@ import { DeliveryEvent } from "../Decorator/deliveryEvent";
 import { DAOCalendar } from "./DAOCalendar";
 import { user } from "firebase-functions/v1/auth";
 import { SHIPPING_PRICE } from "../config";
+import { EVENT_TYPE } from "../Decorator/EVENT_TYPE";
+import { da } from "date-fns/locale";
 
 /*-----------------------------------------------------------------------
 DAO PURCHASE
@@ -229,7 +231,7 @@ export class DAOPurchase implements DAO {
         - ok message if the purchase was updated
         - error message if the purchase was not updated
     */
-    async updatePurchaseState(userId_: number, purchaseId_: any, state_: string) {
+    async updatePurchaseState(userId_: number, purchaseId_: any, state_: string, location_: string) {
         try {
             SingletonMongo.getInstance().connect();
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
@@ -273,11 +275,20 @@ export class DAOPurchase implements DAO {
                 newEvent.setDescription("Delivery of purchase " + purchaseId_);
                 newEvent.setDate(purchase.aproxDeliveryDate);
                 newEvent.setEventId(purchaseId_.toString());
+                newEvent.setLocation(location_);
 
                 //newEvent = new DeliveryEvent(newEvent);
                 let theEvent = new DeliveryEvent(newEvent);
 
-                console.log("theEvent: " + theEvent.schedule());
+                console.log("theEvent: " + theEvent.schedule(EVENT_TYPE.DELIVERY));
+                console.log("the NEW Event: " + JSON.stringify(newEvent, null, 2));
+
+                //Insert the purchase in the database, convert it to JSON and parse it
+                const newEventJson = JSON.stringify(newEvent);
+                const newEventParsed = JSON.parse(newEventJson);
+                daoCalendar.create(newEventParsed);
+
+                
             }
             //Create the update object for updating the content
             const InfoToUpdate = {

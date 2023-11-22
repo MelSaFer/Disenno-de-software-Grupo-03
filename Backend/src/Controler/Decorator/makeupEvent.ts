@@ -1,3 +1,4 @@
+import { EVENT_TYPE } from "./EVENT_TYPE";
 import { Component } from "./component";
 import { Decorator } from "./decorator";
 
@@ -8,8 +9,8 @@ export class MakeupEvent extends Decorator{
         super(component);
     }
 
-    public schedule(): any {
-        return this.component?.schedule() + " of makeup";        
+    public schedule(eventType:EVENT_TYPE): any {
+        return this.component?.schedule(EVENT_TYPE.MAKEUP) + " of makeup";        
         //return `Makeup Event(${super.schedule()})`;
     }
 

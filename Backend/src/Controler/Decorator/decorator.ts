@@ -1,3 +1,4 @@
+import { EVENT_TYPE } from "./EVENT_TYPE";
 import { Component } from "./component";
 
 export abstract class Decorator implements Component{
@@ -7,7 +8,7 @@ export abstract class Decorator implements Component{
         this.component = component;
     }
 
-    abstract schedule(): any;
+    abstract schedule(eventType: EVENT_TYPE): any;
 
     getComponent(): Component | undefined {
         return this.component;
