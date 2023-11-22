@@ -111,13 +111,13 @@ export class DAOCalendar implements DAO{
             } 
 
             //Verify if he userId is valid
-            const daoUser = new DAOUser();
-            console.log("newEvent.userId: ", newEvent.userId)
-            const user = await daoUser.getObject(newEvent.userId);
-            console.log("user: ", user)
-            if(user.name == "No se encontró el usuario"){
-                return {"name": "No se encontró el usuario"};
-            }
+            //const daoUser = new DAOUser();
+            //console.log("newEvent.userId: ", newEvent.userId)
+            //const user = await daoUser.getObject(newEvent.userId);
+            //console.log("user: ", user)
+            //if(user.name == "No se encontró el usuario"){
+            //    return {"name": "No se encontró el usuario"};
+            //}
 
             //Insert the product in the database, convert it to JSON and parse it
             const newEventJson = JSON.stringify(newEvent);

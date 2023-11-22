@@ -63,6 +63,7 @@ const HistoryAdmin = () => {
       purchaseId: item._id,
       userId: item.userId,
       state: newStatus,
+      location: item.shippingAddress !== "" ? item.shippingAddress : "NONE",
     };
     console.log(requestData);
     try {
@@ -78,6 +79,22 @@ const HistoryAdmin = () => {
     } catch (error) {
       console.error("Error al obtener datos:", error);
     }
+  };
+
+  // function that returns a formatted date in string format
+  const formatearFecha = (cadenaTiempo) => {
+    const fecha = new Date(cadenaTiempo);
+
+    const dia = fecha.getDate();
+    const mes = fecha.getMonth() + 1; // Nota: los meses comienzan desde 0
+    const año = fecha.getFullYear();
+
+    // Agrega ceros a la izquierda si es necesario
+    const diaFormateado = dia < 10 ? `0${dia}` : dia;
+    const mesFormateado = mes < 10 ? `0${mes}` : mes;
+    const añoFormateado = año;
+
+    return `${diaFormateado}/${mesFormateado}/${añoFormateado}`;
   };
 
   return (
@@ -112,7 +129,7 @@ const HistoryAdmin = () => {
                       <b>Direccion:</b> {item.shippingAddress}
                     </h2>
                     <h2 className="mb-3">
-                      <b>Fecha:</b> {item.aproxDeliveryDate}
+                      <b>Fecha:</b> {formatearFecha(item.aproxDeliveryDate)}
                     </h2>
                     <h2 className="mb-3">
                       <b>Cliente:</b> {item.userId}
@@ -149,7 +166,7 @@ const HistoryAdmin = () => {
                     <div className="flex flex-col justify-center items-end">
                       <button
                         className="bg-red-500 text-white p-2 border rounded-full w-[200px] mb-2 hover:bg-red-400"
-                        onClick={() => handleStatusChange(item, "APPROVED")}
+                        onClick={() => handleStatusChange(item, "ACCEPTED")}
                       >
                         Aprobar pedido
                       </button>
@@ -163,23 +180,23 @@ const HistoryAdmin = () => {
                   </div>
                 ) : null}
                 {/* APPROVED CASE */}
-                {item.state === "APPROVED" ? (
+                {item.state === "ACCEPTED" ? (
                   <div className="w-1/2 text-right pr-10">
                     <h1 className="text-red-400 font-semibold text-2xl pb-10">
                       Estado: {item.state}
                     </h1>
 
-                    <div className="flex flex-col justify-center items-end">
+                    {/* <div className="flex flex-col justify-center items-end">
                       <button
                         className="bg-red-500 text-white p-2 border rounded-full w-[200px] mb-2 hover:bg-red-400"
                         onClick={() => handleStatusChange(item, "SEND")}
                       >
                         Enviar pedido
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 ) : null}
-                {/* REJECTED CASE */}
+                {/* DECLINED CASE */}
                 {item.state === "REJECTED" ? (
                   <div className="w-1/2 text-right pr-10">
                     <h1 className="text-red-400 font-semibold text-2xl pb-10">
@@ -188,7 +205,7 @@ const HistoryAdmin = () => {
                   </div>
                 ) : null}
                 {/* SEND CASE */}
-                {item.state === "SEND" ? (
+                {/* {item.state === "SEND" ? (
                   <div className="w-1/2 text-right pr-10">
                     <h1 className="text-red-400 font-semibold text-2xl pb-10">
                       Estado: {item.state}
@@ -203,15 +220,15 @@ const HistoryAdmin = () => {
                       </button>
                     </div>
                   </div>
-                ) : null}
+                ) : null} */}
                 {/* DELIVERED CASE */}
-                {item.state === "DELIVERED" ? (
+                {/* {item.state === "DELIVERED" ? (
                   <div className="w-1/2 text-right pr-10">
                     <h1 className="text-red-400 font-semibold text-2xl pb-10">
                       Estado: {item.state}
                     </h1>
                   </div>
-                ) : null}
+                ) : null} */}
               </div>
               {/* --------------------------------------------------------------------------- */}
             </div>
