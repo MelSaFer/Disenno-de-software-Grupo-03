@@ -8,8 +8,9 @@ export class MakeupEvent extends Decorator{
         super(component);
     }
 
-    public schedule(): string {
-        return `Makeup Event(${super.schedule()})`;
+    public schedule(): any {
+        return this.component?.schedule() + " of makeup";        
+        //return `Makeup Event(${super.schedule()})`;
     }
 
     public verifyOverlap(): boolean {

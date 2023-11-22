@@ -8,6 +8,10 @@ import { DAOProduct } from "./DAOProduct";
 import { DAOUser } from "./DAOUser";
 import {ShippingDays} from "./ShippingDays";
 import { getDay } from "date-fns";
+import { Event } from "../Decorator/event";
+import { DeliveryEvent } from "../Decorator/deliveryEvent";
+import { DAOCalendar } from "./DAOCalendar";
+import { user } from "firebase-functions/v1/auth";
 
 /*-----------------------------------------------------------------------
 DAO PURCHASE
@@ -218,9 +222,9 @@ export class DAOPurchase implements DAO {
                 return { "name": "La compra no existe" };
             }
 
-            if(purchase.state != "PENDING" ){
+            /* if(purchase.state != "PENDING" ){
                 return { "name": "El estado no se puede modificar" };
-            }
+            } */
 
             //If state is REJECTED, return the stock of the products
             if (state_ == "REJECTED") {
@@ -239,6 +243,22 @@ export class DAOPurchase implements DAO {
                 //If state is ACCEPTED, set the aprox delivery date
                 purchase.aproxDeliveryDate = this.setAproxDeliveryDate();
                 console.log("aproxDeliveryDate: " + purchase.aproxDeliveryDate);
+
+                //CREATES THE EVENT
+                //const newEvent = Event()
+
+                const daoCalendar = new DAOCalendar();
+                
+                let newEvent = daoCalendar.createEvent();
+                newEvent.setUserId(userId_.toString());
+                newEvent.setDescription("Delivery of purchase " + purchaseId_);
+                newEvent.setDate(purchase.aproxDeliveryDate);
+                newEvent.setEventId(purchaseId_.toString());
+
+                //newEvent = new DeliveryEvent(newEvent);
+                let theEvent = new DeliveryEvent(newEvent);
+
+                console.log("theEvent: " + theEvent.schedule());
             }
             //Create the update object for updating the content
             const InfoToUpdate = {
@@ -312,14 +332,24 @@ export class DAOPurchase implements DAO {
         let ShippingDay2 = this.getDaysUntilShippingDate(ShippingDays.Day2, currentDate);
         let ShippingDay3 = this.getDaysUntilShippingDate(ShippingDays.Day3, currentDate);
         let bestShippingDay = 0;
-        //compares the days and sets the best shipping day  
-        if(ShippingDay1 < ShippingDay2 && ShippingDay1 < ShippingDay3){
+
+        //if the best shipping day is today, it sets the aprox delivery date to the next delivery day
+        if(ShippingDay1 == 0){  //special case 1 = Today is a shipping day
+            bestShippingDay =ShippingDay2;
+        }else if(ShippingDay2 == 0){ //special case 1 = Today is a shipping day
+            bestShippingDay = ShippingDay3;
+        } else if(ShippingDay3 == 0){ //special case 1 = Today is a shipping day
+            bestShippingDay = ShippingDay1;
+        //GENERAL CASES
+        } else if(ShippingDay1 < ShippingDay2 && ShippingDay1 < ShippingDay3 && currentDate){
             bestShippingDay = ShippingDay1;
         }else if(ShippingDay2<ShippingDay1 && ShippingDay2<ShippingDay3){
             bestShippingDay = ShippingDay2;
         } else{
             bestShippingDay = ShippingDay3;
         }
+
+        
         //sets the aprox delivery date
         currentDate.setDate(currentDate.getDate() + bestShippingDay);
 
@@ -331,18 +361,19 @@ export class DAOPurchase implements DAO {
     GET NEXT SHIPPING DATE METHOD
     params: 
         dayOfWeek=
-                0: Monday (Lunes) 
-                1: Tuesday (Martes) 
-                2: Wednesday (Miércoles) 
-                3: Thursday (Jueves) 
-                4: Friday (Viernes) 
-                5: Saturday (Sábado) 
-                6: Sunday (Domingo)
+                1: Monday (Lunes) 
+                2: Tuesday (Martes) 
+                3: Wednesday (Miércoles) 
+                4: Thursday (Jueves) 
+                5: Friday (Viernes) 
+                6: Saturday (Sábado) 
+                0: Sunday (Domingo)
         currentDate: Date
     returns: daysUntilShippingDate: number
      */
     getDaysUntilShippingDate(dayOfWeek: number, currentDate: Date) {
         let daysUntilShippingDate = (dayOfWeek - currentDate.getDay() + 7) % 7;
+        console.log("daysUntilShippingDate: " + dayOfWeek + " " + daysUntilShippingDate);
         return daysUntilShippingDate;
     }
 

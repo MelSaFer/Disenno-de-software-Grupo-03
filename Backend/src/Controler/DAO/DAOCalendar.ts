@@ -5,6 +5,8 @@ import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CALENDAR_COLLECTION} from "../config";
 import { parseISO, differenceInCalendarISOWeeks, differenceInCalendarMonths, differenceInCalendarYears, endOfWeek,  startOfISOWeek, getMonth, getYear} from 'date-fns';
 import { DAOUser } from "./DAOUser";
+import { Event } from "../Decorator/event";
+import { MakeupEvent } from "../Decorator/makeupEvent";
 
 // var parseISO = require('date-fns/parseISO')
 // var differenceInCalendarISOWeeks = require('date-fns/differenceInCalendarISOWeeks')
@@ -94,6 +96,14 @@ export class DAOCalendar implements DAO{
                 date: object.date,
                 eventType: object.eventType
             });
+
+            const daoCalendar = new DAOCalendar();
+                
+            let theNewEvent = daoCalendar.createEvent();
+
+            //newEvent = new DeliveryEvent(newEvent);
+            let theEvent = new MakeupEvent(theNewEvent);
+            console.log("theEvent: " + theEvent.schedule());
 
             //Verify if he userId is valid
             const daoUser = new DAOUser();
@@ -380,6 +390,11 @@ export class DAOCalendar implements DAO{
             console.log("Error al verificar la superposición de eventos: ", err)
         }
 
+    }
+
+    public createEvent(){
+        const event = new Event();
+        return event;
     }
         
 

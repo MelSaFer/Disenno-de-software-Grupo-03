@@ -9,17 +9,10 @@ export class Event implements Component{
     private date: Date = new Date();
 
 
-    constructor(eventId: String, userId: String, description: String, startTime: Date, endTime: Date, date: Date) {
-        this.eventId = eventId;
-        this.userId = userId;
-        this.description = description;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.date = date;
-    }
+    constructor() {}
 
-    schedule(): string {
-        return `Event ${this.eventId} scheduled for ${this.date} from ${this.startTime} to ${this.endTime} with description ${this.description}`;
+    public schedule():any {
+        return "This is an event"
     }
 
     getEventId(): String {
@@ -40,6 +33,34 @@ export class Event implements Component{
 
     getEndTime(): Date {
         return this.endTime;
+    }
+
+    getDate(): Date {
+        return this.date;
+    }
+
+    setEventId(eventId: String): void {
+        this.eventId = eventId;
+    }
+
+    setUserId(userId: String): void {
+        this.userId = userId;
+    }
+
+    setDescription(description: String): void {
+        this.description = description;
+    }
+
+    setStartTime(startTime: Date): void {
+        this.startTime = startTime;
+    }
+
+    setEndTime(endTime: Date): void {
+        this.endTime = endTime;
+    }
+
+    setDate(date: Date): void {
+        this.date = date;
     }
     
 }

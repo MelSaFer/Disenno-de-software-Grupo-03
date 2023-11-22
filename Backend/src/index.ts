@@ -26,9 +26,9 @@ async function main() {
   const endTime = new Date("2023-11-17T10:30:00");
   const date = new Date("2023-11-17");
   console.log("Probando Decorator")
-  const e = new Event(eventId, userId, description, startTime, endTime, date);
-  const m = new MakeupEvent(e);
-  const d = new DeliveryEvent(e);
+  //const e = new Event(eventId, userId, description, startTime, endTime, date);
+  //const m = new MakeupEvent(e);
+  //const d = new DeliveryEvent(e);
   //console.log(m.schedule());
   //console.log(d.schedule());
 

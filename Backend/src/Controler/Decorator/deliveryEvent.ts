@@ -8,7 +8,8 @@ export class DeliveryEvent extends Decorator{
         super(component);
     }
 
-    public schedule(): string{
-        return `Delivery Event(${super.schedule()})`;
+    public schedule(): any {
+        return this.component?.schedule() + " of delivery";        
+        //return `Makeup Event(${super.schedule()})`;
     }
 }
