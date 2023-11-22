@@ -33,4 +33,13 @@ export const getNotifications = `http://localhost:${port}/getNotifications`;
 export const updateNotificationState = `http://localhost:${port}/updateNotificationState`;
 export const isUnread = `http://localhost:${port}/isUnread`;
 
+// CALENDAR
+export const getCalendar = `http://localhost:${port}/getCalendar`;
+export const filterCalendar = `http://localhost:${port}/filterCalendar`;
+export const createEvent = `http://localhost:${port}/createEvent`;
+export const getEvent = `http://localhost:${port}/getEvent`;
+export const updateEvent = `http://localhost:${port}/updateEvent`;
+export const deleteEvent = `http://localhost:${port}/deleteEvent`;
+export const verifyOverlap = `http://localhost:${port}/verifyOverlap`;
+
 // USER ROUTES
