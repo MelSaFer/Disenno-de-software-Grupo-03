@@ -86,6 +86,8 @@ export class DAOCalendar implements DAO{
             const db = SingletonMongo.getInstance().getDatabase(DATABASE_NAME);
             const collection = db.collection(CALENDAR_COLLECTION);
             const Event = mongoose.model('Event', EventSchema);
+            
+            console.log("object create event: ", object);
 
             let newEvent = new Event({
                 purchaseId: object.purchaseId,
