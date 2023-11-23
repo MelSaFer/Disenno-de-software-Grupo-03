@@ -32,7 +32,7 @@ const ModifyEvent = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const requestData = { _id: "655810dbf35208845521633e" };
+      const requestData = { _id: "655ea73e74af25c025389881" };
       // const requestData = { _id: params.id };
       // console.log("Estos son los parametros:", params.id);
       try {
@@ -142,6 +142,7 @@ const ModifyEvent = () => {
     ) {
       // Crear el objeto de datos
       const datos = {
+        _id: "655ea73e74af25c025389881",
         userId: "60f9b2b9c8b2a40015f6b3a5",
         name: name,
         description: description,
@@ -149,8 +150,8 @@ const ModifyEvent = () => {
         startTime: startTime,
         endTime: endTime,
         date: date,
-        client: client,
-        eventType: "Makeup",
+        // client: client,
+        eventType: "MAKEUP EVENT",
       };
 
       console.log("Estos son los datos:", datos);

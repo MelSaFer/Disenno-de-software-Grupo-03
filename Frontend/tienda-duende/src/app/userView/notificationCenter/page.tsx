@@ -34,7 +34,7 @@ const NotificationCenter = () => {
             headers: { "Content-Type": "application/json" },
             data: requestData,
           });
-          setNotifications(result.data);
+          setNotifications(result.data.reverse());
           console.log(result.data);
         } catch (error) {
           console.error("Error al obtener datos:", error);
@@ -122,9 +122,9 @@ const NotificationCenter = () => {
               <p className="font-light text-red-600 justify-end items-center">
                 {formatearFechaHora(item.notificationTime)}
               </p>
-              {item.notificationType === "Delivery" ? (
+              {item.notificationType === "DELIVERY" ? (
                 <b>Tu pedido ha sido aprobado</b>
-              ) : item.notificationType === "Declined delivery" ? (
+              ) : item.notificationType === "DECLINED DELIVERY" ? (
                 <b>Tu pedido ha sido rechazado</b>
               ) : (
                 <b>Makeup agendado</b>
@@ -134,15 +134,15 @@ const NotificationCenter = () => {
                 Número de pedido: {item.purchaseId}
               </p>
 
-              {item.notificationType === "Delivery" ? (
+              {item.notificationType === "DELIVERY" ? (
                 <p className="text-gray-400">
                   Fecha de entrega aproximada:{" "}
                   {formatearFecha(item.deliveryDate)}
                 </p>
-              ) : item.notificationType === "Declined delivery" ? (
-                <b>
+              ) : item.notificationType === "DECLINED DELIVERY" ? (
+                <p className="text-gray-400">
                   Pronto nos pondremos en contacto para la devolución de dinero
-                </b>
+                </p>
               ) : (
                 <p className="text-gray-400">Info de makeup</p>
               )}

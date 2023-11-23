@@ -106,8 +106,8 @@ const AddEvent = () => {
         startTime: startTime,
         endTime: endTime,
         date: date,
-        client: client,
-        eventType: "Makeup",
+        // client: client,
+        eventType: "MAKEUP EVENT",
       };
 
       console.log("Estos son los datos:", datos);
