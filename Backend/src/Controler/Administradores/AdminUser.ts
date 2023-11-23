@@ -1,4 +1,4 @@
-import { API_URL } from "../config";
+import { ACCEPTED_STATE, API_URL, DECLINED_STATE } from "../config";
 import { DTOUser } from "../DTO/DTOUser";
 import { DAOUser } from "../DAO/DAOUser";
 import { DAOPurchase } from "../DAO/DAOPurchase";
@@ -106,8 +106,8 @@ export class AdminUser implements Subject{
       );
 
       // Notificar a los observadores
-      if (purchase == state && state == "ACCEPTED"){
-        this.notify({ userId: userId, purchaseId: purchaseId});
+      if (purchase.name == state && (state == ACCEPTED_STATE || state == DECLINED_STATE)){
+        this.notify({ userId: userId, purchaseId: purchaseId, state: state});
       }
       
       return purchase;

@@ -263,7 +263,8 @@ export class DAOUser implements DAO{
                 userId: object.userId,
                 email: object.email,
                 roleType: object.roleType,
-                cart: object.cart
+                cart: object.cart,
+                notifications: []
             });
             
             const newUserJson = JSON.stringify(newUser);

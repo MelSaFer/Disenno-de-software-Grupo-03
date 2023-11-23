@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { MainController } from "../../Controler/Administradores/MainController";
+import { ACCEPTED_STATE, DECLINED_STATE, PENDING_STATE } from "../../Controler/config";
 
 /*
 METHOD GET INFO USER
@@ -179,9 +180,9 @@ export const updatePurchaseState: RequestHandler = async (req, res) => {
         return;
     }
     //Verify state is valid
-    if (body.state != "PENDING" && body.state != "ACCEPTED" && body.state != "DECLINED"){
+    if (body.state != PENDING_STATE && body.state != ACCEPTED_STATE && body.state != DECLINED_STATE){
         console.log("El estado ingresado no es válido");
-        res.status(400).json({msg: "Bad Request: userId or purchaseId are not a valid string"});
+        res.status(400).json({msg: "Bad Request: El estado ingresado no es válido"});
         return false;
     }
 
@@ -226,7 +227,7 @@ export const makePurchase: RequestHandler = async (req, res) => {
         return;
     }
     //Verify state is valid
-    if (body.state != "PENDING" && body.state != "ACCEPTED" && body.state != "DELIVERED" && body.state != "SEND" && body.state != "REJECTED"){
+    if (body.state != PENDING_STATE && body.state != ACCEPTED_STATE && body.state != DECLINED_STATE){
         console.log("El estado ingresado no es válido");
         return false;
     }
