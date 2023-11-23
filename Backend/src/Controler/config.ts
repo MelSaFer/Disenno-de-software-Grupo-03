@@ -38,3 +38,12 @@ export const FIREBASE_CONFIG = {
 };
 
 export const SHIPPING_PRICE = 7.99;
+export const ACCEPTED_STATE = "ACCEPTED";
+export const DECLINED_STATE = "DECLINED";
+export const PENDING_STATE = "PENDING";
+
+export const DELIVERY_NOTIF = "DELIVERY";
+export const MAKEUP_NOTIF = "MAKEUP";
+export const DECLINEDDELIVERY_NOTIF = "DECLINED DELIVERY";
+
+export const ADMIN_ID = "PFNnWVVK3cOSxci6oGkmxDqrc1n1";

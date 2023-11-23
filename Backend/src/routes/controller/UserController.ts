@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { MainController } from "../../Controler/Administradores/MainController";
+import { ACCEPTED_STATE, DECLINED_STATE, PENDING_STATE } from "../../Controler/config";
 
 /*
 METHOD GET INFO USER
@@ -164,24 +165,24 @@ export const updatePurchaseState: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(!body.hasOwnProperty("userId") || !body.hasOwnProperty("purchaseId") || !body.hasOwnProperty("state")){
+    if(!body.hasOwnProperty("userId") || !body.hasOwnProperty("purchaseId") || !body.hasOwnProperty("state") || !body.hasOwnProperty("location")){
         res.status(400).json({msg: "Bad Request: Body is not correct"});
         return;
     }
     //Verify type of the content
-    if(typeof body.userId != "string" || typeof body.purchaseId != "string" || typeof body.state != "string"){
+    if(typeof body.userId != "string" || typeof body.purchaseId != "string" || typeof body.state != "string" || typeof body.location != "string"){
         res.status(400).json({msg: "Bad Request: userId, purchaseId or state are not a string"});
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId.length == 0 || body.purchaseId.length == 0){
+    if(body.userId.length == 0 || body.purchaseId.length == 0 || body.location.length == 0){
         res.status(400).json({msg: "Bad Request: userId or purchaseId are not a valid string"});
         return;
     }
     //Verify state is valid
-    if (body.state != "PENDING" && body.state != "ACCEPTED" && body.state != "REJECTED"){
+    if (body.state != PENDING_STATE && body.state != ACCEPTED_STATE && body.state != DECLINED_STATE){
         console.log("El estado ingresado no es válido");
-        res.status(400).json({msg: "Bad Request: userId or purchaseId are not a valid string"});
+        res.status(400).json({msg: "Bad Request: El estado ingresado no es válido"});
         return false;
     }
 
@@ -226,7 +227,7 @@ export const makePurchase: RequestHandler = async (req, res) => {
         return;
     }
     //Verify state is valid
-    if (body.state != "PENDING" && body.state != "ACCEPTED" && body.state != "DELIVERED" && body.state != "SEND" && body.state != "REJECTED"){
+    if (body.state != PENDING_STATE && body.state != ACCEPTED_STATE && body.state != DECLINED_STATE){
         console.log("El estado ingresado no es válido");
         return false;
     }
