@@ -3,7 +3,7 @@ import {CalendarSchema, EventSchema} from "./schemas/Schemas"
 import mongoose from "mongoose";
 import {SingletonMongo} from "../Singleton/SingletonMongo";
 import {DATABASE_NAME, CALENDAR_COLLECTION} from "../config";
-import { parseISO, differenceInCalendarISOWeeks, differenceInCalendarMonths, differenceInCalendarYears, endOfWeek,  startOfISOWeek, getMonth, getYear} from 'date-fns';
+import { parseISO, differenceInCalendarISOWeeks, differenceInCalendarMonths, differenceInCalendarYears, endOfWeek,  startOfISOWeek, getMonth, getYear, getTime} from 'date-fns';
 import { DAOUser } from "./DAOUser";
 import { Event } from "../Decorator/event";
 import { MakeupEvent } from "../Decorator/makeupEvent";
@@ -375,8 +375,8 @@ export class DAOCalendar implements DAO{
             const Event = mongoose.model('Event', EventSchema);
 
             let theEvent = new Event({
-                startTime: object.startTime,
-                endTime: object.endTime,
+                startTime: new Date(object.startTime),
+                endTime: new Date(object.endTime),
             });
 
             let events = await collection.find().toArray();
@@ -385,14 +385,20 @@ export class DAOCalendar implements DAO{
                     startTime: new Date(events[i].startTime),
                     endTime: new Date(events[i].endTime)
                 }
+                console.log("thisEventRange: ", thisEventRange)
                 //verifies if there is an overlap between events
-                if( thisEventRange.startTime <= theEvent.startTime && theEvent.startTime <= thisEventRange.endTime){
+                if( thisEventRange.startTime < theEvent.startTime && theEvent.startTime < thisEventRange.endTime){
                     console.log("Hay superposición de eventos")
                     return true;
-                } else if(theEvent.startTime <= thisEventRange.endTime && thisEventRange.endTime <= theEvent.endTime){
+                } else if(theEvent.startTime < thisEventRange.endTime && thisEventRange.endTime < theEvent.endTime){
+                    console.log("Hay superposición de eventos")
+                    return true;
+                } else if (theEvent.startTime.getTime() == thisEventRange.startTime.getTime() 
+                        && theEvent.endTime.getTime() == thisEventRange.endTime.getTime()){
                     console.log("Hay superposición de eventos")
                     return true;
                 }
+                console.log((theEvent.startTime == thisEventRange.startTime) + " " + (theEvent.endTime == thisEventRange.endTime))
 
             }
             return false;
