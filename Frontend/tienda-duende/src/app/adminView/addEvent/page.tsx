@@ -120,8 +120,8 @@ const AddEvent = () => {
             url: Routes.verifyOverlap,
             headers: { "Content-Type": "application/json" },
             data: {
-              startTime: "2023-11-20T07:00:00",
-              endTime: "2023-11-20T12:00:00",
+              startTime: startTime,
+              endTime: endTime,
             },
           });
 
