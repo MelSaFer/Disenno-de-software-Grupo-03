@@ -29,7 +29,8 @@ const NotificationCenterAdmin = () => {
         try {
           const result = await axios.request({
             method: "get",
-            url: "https://mocki.io/v1/f7d19e16-8309-4f36-b289-01fc5e56fe01",
+            // url: "https://mocki.io/v1/f7d19e16-8309-4f36-b289-01fc5e56fe01",
+            url: Routes.getNotifications,
             headers: { "Content-Type": "application/json" },
             // data: requestData,
           });

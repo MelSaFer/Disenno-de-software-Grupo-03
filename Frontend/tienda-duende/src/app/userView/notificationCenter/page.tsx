@@ -28,10 +28,11 @@ const NotificationCenter = () => {
         const requestData = { userId: authUser.uid };
         try {
           const result = await axios.request({
-            method: "get",
-            url: "https://mocki.io/v1/f7d19e16-8309-4f36-b289-01fc5e56fe01",
+            method: "post",
+            // url: "https://mocki.io/v1/f7d19e16-8309-4f36-b289-01fc5e56fe01",
+            url: Routes.getNotifications,
             headers: { "Content-Type": "application/json" },
-            // data: requestData,
+            data: requestData,
           });
           setNotifications(result.data);
           console.log(result.data);
@@ -121,24 +122,29 @@ const NotificationCenter = () => {
               <p className="font-light text-red-600 justify-end items-center">
                 {formatearFechaHora(item.notificationTime)}
               </p>
-              {item.notificationType === "ACCEPTED" ? (
+              {item.notificationType === "Delivery" ? (
                 <b>Tu pedido ha sido aprobado</b>
-              ) : (
+              ) : item.notificationType === "Declined delivery" ? (
                 <b>Tu pedido ha sido rechazado</b>
+              ) : (
+                <b>Makeup agendado</b>
               )}
 
               <p className="text-gray-400">
                 Número de pedido: {item.purchaseId}
               </p>
-              {item.notificationType === "ACCEPTED" ? (
+
+              {item.notificationType === "Delivery" ? (
                 <p className="text-gray-400">
                   Fecha de entrega aproximada:{" "}
                   {formatearFecha(item.deliveryDate)}
                 </p>
-              ) : (
-                <p className="text-gray-400">
+              ) : item.notificationType === "Declined delivery" ? (
+                <b>
                   Pronto nos pondremos en contacto para la devolución de dinero
-                </p>
+                </b>
+              ) : (
+                <p className="text-gray-400">Info de makeup</p>
               )}
             </div>
           ))}
