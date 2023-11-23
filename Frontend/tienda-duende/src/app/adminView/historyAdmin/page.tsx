@@ -172,7 +172,7 @@ const HistoryAdmin = () => {
                       </button>
                       <button
                         className="bg-red-500 text-white p-2 border rounded-full w-[200px] hover:bg-red-400"
-                        onClick={() => handleStatusChange(item, "REJECTED")}
+                        onClick={() => handleStatusChange(item, "DECLINED")}
                       >
                         Cancelar pedido
                       </button>
@@ -197,7 +197,7 @@ const HistoryAdmin = () => {
                   </div>
                 ) : null}
                 {/* DECLINED CASE */}
-                {item.state === "REJECTED" ? (
+                {item.state === "DECLINED" ? (
                   <div className="w-1/2 text-right pr-10">
                     <h1 className="text-red-400 font-semibold text-2xl pb-10">
                       Estado: {item.state}

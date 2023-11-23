@@ -156,7 +156,7 @@ export const updateEvent: RequestHandler = async (req, res) => {
     }
     
     //Verify event type
-    if(body.eventType !== "Makeup" && body.eventType != "Product"){
+    if(body.eventType !== EVENT_TYPE.MAKEUP && body.eventType != EVENT_TYPE.DELIVERY){
         res.status(400).json({ name: "2. Error en el body" });
         return;
     }

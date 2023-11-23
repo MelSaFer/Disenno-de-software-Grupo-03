@@ -19,7 +19,7 @@ const ConsultEvent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = { _id: "6556af7898ec379175b751b3" };
+      const requestData = { _id: "655ea73e74af25c025389881" };
       // console.log("Estos son los parametros:", params.id);
       try {
         const result = await axios.request({
@@ -40,6 +40,7 @@ const ConsultEvent = () => {
   // function that returns a formatted date in string format
   const formatearFecha = (cadenaTiempo) => {
     const fecha = new Date(cadenaTiempo);
+    fecha.setHours(fecha.getHours() + 6);
 
     const dia = fecha.getDate();
     const mes = fecha.getMonth() + 1; // Nota: los meses comienzan desde 0
@@ -76,7 +77,7 @@ const ConsultEvent = () => {
   const handleDelete = async () => {
     try {
       // const requestData = { _id: params.id };
-      const requestData = { _id: "655c052d139fff5a73a99f53" };
+      const requestData = { _id: "655ea73e74af25c025389881" };
       const result = await axios.request({
         method: "delete",
         url: Routes.deleteEvent,
@@ -111,28 +112,36 @@ const ConsultEvent = () => {
                   <BsThreeDotsVertical className="w-6 h-6 text-yellow-900 cursor-pointer" />
                 </a>
               </div>
-              <h1 className="font-bold text-2xl mb-4 underline">
-                {data.eventType}: {data.name}
-              </h1>
-              <p>
-                <strong>Fecha:</strong> {formatearFecha(data.date)}
-              </p>
-              <p>
-                <strong>Cliente:</strong> {data.userId}
-              </p>
-              <p>
-                <strong>Hora inicio:</strong>{" "}
-                {getHourFromUTCString(data.startTime)}
-              </p>
-              <p>
-                <strong>Hora fin:</strong> {getHourFromUTCString(data.endTime)}
-              </p>
-              <p>
-                <strong>Ubicacion:</strong> {data.location}
-              </p>
-              <p>
-                <strong>Descripción:</strong> {data.description}
-              </p>
+              <div>
+                <h1 className="font-bold text-2xl mb-4 underline">
+                  {data.eventType}: {data.name}
+                </h1>
+                <p>
+                  <strong>Fecha:</strong> {formatearFecha(data.date)}
+                </p>
+                <p>
+                  <strong>Cliente:</strong> {data.userId}
+                </p>
+                {data.eventType === "MAKEUP EVENT" ? (
+                  <div>
+                    <p>
+                      <strong>Hora inicio:</strong>{" "}
+                      {getHourFromUTCString(data.startTime)}
+                    </p>
+                    <p>
+                      <strong>Hora fin:</strong>{" "}
+                      {getHourFromUTCString(data.endTime)}
+                    </p>
+                  </div>
+                ) : null}
+
+                <p>
+                  <strong>Ubicacion:</strong> {data.location}
+                </p>
+                <p className="mb-5">
+                  <strong>Descripción:</strong> {data.description}
+                </p>
+              </div>
             </div>
           </div>
         </main>
