@@ -5,13 +5,17 @@ import React, { Fragment, useEffect, useState } from "react";
 import Footer from "@/src/components/footer";
 import axios from "axios";
 import NavbarAdmin from "@/src/components/navbarAdmin";
-import * as Routes from "../../routes";
-import Modal from "../../../components/modal"; // overlay
+import * as Routes from "../../../../routes";
+import Modal from "../../../../../components/modal"; // overlay
 import { BiMessageAdd } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 
-const ConsultEvent = () => {
+interface PageProps {
+  params: { id: string };
+}
+
+const ConsultEvent = ({ params }: PageProps) => {
   const [data, setData] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
@@ -19,8 +23,8 @@ const ConsultEvent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestData = { _id: "6556af7898ec379175b751b3" };
-      // console.log("Estos son los parametros:", params.id);
+      const requestData = { _id: params.id };
+      //console.log("Estos son los parametros:", params.id);
       try {
         const result = await axios.request({
           method: "post",
@@ -76,7 +80,7 @@ const ConsultEvent = () => {
   const handleDelete = async () => {
     try {
       // const requestData = { _id: params.id };
-      const requestData = { _id: "655c052d139fff5a73a99f53" };
+      const requestData = { _id: params.id };
       const result = await axios.request({
         method: "delete",
         url: Routes.deleteEvent,
@@ -142,7 +146,7 @@ const ConsultEvent = () => {
       </div>
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
         <div className="p-2 flex flex-col justify-center items-center">
-          <Link href={`/adminView/modifyContent/`}>
+          <Link href={`/adminView/modifyEvent/${params.id}`}>
             <button className="w-[100px] text-yellow-900 border rounded border-yellow-900 bg-green-100 p-2 font-semibold mb-3">
               Modificar
             </button>

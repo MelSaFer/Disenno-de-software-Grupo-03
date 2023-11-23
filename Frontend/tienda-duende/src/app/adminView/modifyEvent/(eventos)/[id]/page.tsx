@@ -6,14 +6,18 @@ import Footer from "@/src/components/footer";
 import { useEffect, useState, Fragment } from "react";
 import axios from "axios";
 import { set } from "firebase/database";
-import Modal from "../../../components/modal"; // overlay
+import Modal from "../../../../../components/modal"; // overlay
 import Link from "next/link";
-import * as Routes from "../../routes";
+import * as Routes from "../../../../routes";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/navigation";
 
-const ModifyEvent = () => {
+interface PageProps {
+  params: { id: string };
+}
+
+const ModifyEvent = ({ params }: PageProps) => {
   // datos utilizados para el formulario
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
@@ -32,7 +36,7 @@ const ModifyEvent = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const requestData = { _id: "655810dbf35208845521633e" };
+      const requestData = { _id: params.id };
       // const requestData = { _id: params.id };
       // console.log("Estos son los parametros:", params.id);
       try {
