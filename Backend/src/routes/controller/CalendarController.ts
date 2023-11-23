@@ -53,13 +53,13 @@ export const createEvent: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if (!body.hasOwnProperty("userId")  || !body.hasOwnProperty("name") || !body.hasOwnProperty("description") || !body.hasOwnProperty("location") || !body.hasOwnProperty("startTime") || !body.hasOwnProperty("endTime") || !body.hasOwnProperty("date") || !body.hasOwnProperty("eventType")) {
+    if (/*!body.hasOwnProperty("userId") ||*/ !body.hasOwnProperty("name") || !body.hasOwnProperty("description") || !body.hasOwnProperty("location") || !body.hasOwnProperty("startTime") || !body.hasOwnProperty("endTime") || !body.hasOwnProperty("date") || !body.hasOwnProperty("eventType")) {
         res.status(400).json({"name": "Error en el body"});
         return;
     }
     //Verify if the body has the correct data types
     if (
-        typeof body.userId !== "string" ||
+        /*typeof body.userId !== "string" ||*/
         typeof body.name !== "string" ||
         typeof body.description !== "string" ||
         typeof body.location !== "string" ||
@@ -77,10 +77,10 @@ export const createEvent: RequestHandler = async (req, res) => {
         return;
     }
     //Verify if the body has the correct structure
-    if(body.userId.length == 0){
-        res.status(400).json({msg: "Bad Request: userId is not a valid id"});
-        return;
-    }
+    // if(body.userId.length == 0){
+    //     res.status(400).json({msg: "Bad Request: userId is not a valid id"});
+    //     return;
+    // }
 
     const eventsPromise = mainController.createEvent(req.body);
     const events = await eventsPromise;
@@ -156,7 +156,7 @@ export const updateEvent: RequestHandler = async (req, res) => {
     }
     
     //Verify event type
-    if(body.eventType !== "Makeup" && body.eventType != "Product"){
+    if(body.eventType !== EVENT_TYPE.MAKEUP && body.eventType != EVENT_TYPE.DELIVERY){
         res.status(400).json({ name: "2. Error en el body" });
         return;
     }

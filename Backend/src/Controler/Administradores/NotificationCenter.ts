@@ -52,10 +52,10 @@ export class NotificationCenter implements Observer {
                 }
                 
             }
-            else{
-                Object.assign(notification, {notificationType:  MAKEUP_NOTIF});
-                Object.assign(notification, {deliveryDate: body.deliveryDate}); // Agregar fecha del makeup
-            }
+            // else{
+            //     Object.assign(notification, {notificationType:  MAKEUP_NOTIF});
+            //     Object.assign(notification, {deliveryDate: body.deliveryDate}); // Agregar fecha del makeup
+            // }
 
             // Agregar notificacion al usuario en la base de datos 
             const response = userDAO.addNotification(notification);
