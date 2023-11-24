@@ -169,7 +169,6 @@ const Page = () => {
         <div className="mt-10 grid grid-cols-9 gap-2 sm:gap-2 lg:mt-7">
           <h2 className="mx-10 col-span-5 text-3xl font-bold ">
             {/* {currentMonth} */}
-            {/* {formatDateRange(itemsToDisplay[0]?.period)} */}
 
             {activeButton === "button1" ? (
               itemsToDisplay &&
@@ -274,9 +273,9 @@ const Page = () => {
                     // Cambiar el estilo de borde según el tipo de evento
                     className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
                       item.eventType === "MAKEUP EVENT"
-                        ? "border-red-500"
+                        ? "border-[#99C354]"
                         : item.eventType === "DELIVERY EVENT"
-                        ? "border-blue-500"
+                        ? "border-yellow-900"
                         : "border-gray-500" // Color por defecto si no coincide con ningún tipo
                     }`}
                     key={item._id}
