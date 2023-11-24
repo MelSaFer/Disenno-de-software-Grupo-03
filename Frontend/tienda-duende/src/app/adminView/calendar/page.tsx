@@ -15,7 +15,7 @@ const Page = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
-  const itemsPerPage = 15;
+  const itemsPerPage = 1;
 
   // axios to get events
   useEffect(() => {
@@ -37,22 +37,31 @@ const Page = () => {
   const pageNumbers = Math.ceil(data.length / itemsPerPage);
 
   //to get the currentMonth (Later this gonna work to filter the calendar view)
-  
+
   const getCurrentMonth = () => {
     const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
     ];
-    
+
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
-    
+
     return months[currentMonth];
   };
 
   const currentMonth = getCurrentMonth();
-  
-  
+
   // handleClick for the different events
   const handleClick = (number) => {
     setCurrentPage(number);
@@ -69,12 +78,14 @@ const Page = () => {
           <div className="col-span-4 mt-10 grid grid-cols-2 gap-8 sm:gap-4 lg:mt-7">
             {itemsToDisplay.map((item) => (
               <Link
-              // to change border color based on the event type
-              className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
-                item.eventType === 'MAKEUP EVENT' ? 'border-red-500' :   // Cambiar 'tipo1' al valor correspondiente
-                item.eventType === 'DELIVERY EVENT' ? 'border-blue-500' :  // Cambiar 'tipo2' al valor correspondiente
-                'border-gray-500' // Color por defecto si no coincide con ningún tipo
-              }`}
+                // to change border color based on the event type
+                className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
+                  item.eventType === "MAKEUP EVENT"
+                    ? "border-red-500" // Cambiar 'tipo1' al valor correspondiente
+                    : item.eventType === "DELIVERY EVENT"
+                    ? "border-blue-500" // Cambiar 'tipo2' al valor correspondiente
+                    : "border-gray-500" // Color por defecto si no coincide con ningún tipo
+                }`}
                 key={item._id}
                 item={item}
                 href={`/adminView/consultEvent/${item._id}`}

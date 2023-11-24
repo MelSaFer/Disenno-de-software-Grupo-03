@@ -146,6 +146,7 @@ const ModifyEvent = ({ params }: PageProps) => {
     ) {
       // Crear el objeto de datos
       const datos = {
+        _id: params.id,
         userId: "60f9b2b9c8b2a40015f6b3a5",
         name: name,
         description: description,
@@ -154,7 +155,7 @@ const ModifyEvent = ({ params }: PageProps) => {
         endTime: endTime,
         date: date,
         client: client,
-        eventType: "Makeup",
+        eventType: "MAKEUP EVENT",
       };
 
       console.log("Estos son los datos:", datos);
