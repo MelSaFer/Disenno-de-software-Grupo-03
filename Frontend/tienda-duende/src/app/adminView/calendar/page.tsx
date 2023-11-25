@@ -201,7 +201,7 @@ const Page = () => {
               )
             ) : activeButton === "button2" ? (
               itemsToDisplay &&
-              itemsToDisplay[0] && <h1> hola </h1>
+              itemsToDisplay[0] && <h1> {itemsToDisplay[0]?.period} </h1>
             ) : activeButton === "button3" ? (
               itemsToDisplay &&
               itemsToDisplay[0] && <h1>Año {itemsToDisplay[0]?.period}</h1>
