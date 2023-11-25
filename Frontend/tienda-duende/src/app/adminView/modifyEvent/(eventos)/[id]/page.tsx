@@ -340,7 +340,7 @@ const ModifyEvent = ({ params }: PageProps) => {
                     type="button"
                     className="w-[150px] bg-red-400 text-white rounded-full px-3 py-2"
                   >
-                    <a href="/adminView/galleryAdmin" title="galeria">
+                    <a href="/adminView/calendar" title="calendar">
                       Cancelar
                     </a>
                   </button>
