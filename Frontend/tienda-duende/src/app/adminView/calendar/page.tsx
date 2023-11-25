@@ -243,9 +243,9 @@ const Page = () => {
                     // Cambiar el estilo de borde según el tipo de evento
                     className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
                       item.eventType === "MAKEUP EVENT"
-                        ? "border-red-500"
+                        ? "border-[#852fad]"
                         : item.eventType === "DELIVERY EVENT"
-                        ? "border-blue-500"
+                        ? "border-[#d4340d]"
                         : "border-gray-500" // Color por defecto si no coincide con ningún tipo
                     }`}
                     key={item._id}
@@ -311,9 +311,9 @@ const Page = () => {
                   <span
                     key={index}
                     onClick={() => handleClick(index + 1)}
-                    className={`${
-                      currentPage === index ? "active" : ""
-                    } border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center text-yellow-900 hover:bg-gray-200 cursor-pointer mx-1`}
+                    className={`border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center  hover:bg-gray-200 cursor-pointer mx-1 ${
+                      currentPage === index + 1 ? "bg-yellow-900 text-white" : ""
+                    }`}
                   >
                     {index + 1}
                   </span>
