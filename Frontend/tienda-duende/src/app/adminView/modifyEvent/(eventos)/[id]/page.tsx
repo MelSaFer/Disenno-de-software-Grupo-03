@@ -50,24 +50,29 @@ const ModifyEvent = ({ params }: PageProps) => {
         // console.log("El data es el siguiente:", data);
         console.log(result.data);
 
+        // set the data to the form fields to be modified by the user and send to the backend
         setName(result.data.name);
         setDate(result.data.date);
 
+        // set the date to the datepicker
         const utcDate = new Date(result.data.date);
         utcDate.setUTCHours(utcDate.getUTCHours() + 6);
         setSelectedDate(utcDate);
         setClient(result.data.userId);
 
+        // set the start time to the timepicker
         const utcDate2 = new Date(result.data.startTime);
         utcDate2.setUTCHours(utcDate2.getUTCHours() + 6);
         setSelectedStartTime(utcDate2);
         setStartTime(result.data.startTime);
 
+        // set the end time to the timepicker
         const utcDate3 = new Date(result.data.endTime);
         utcDate3.setUTCHours(utcDate3.getUTCHours() + 6);
         setSelectedEndTime(utcDate3);
         setEndTime(result.data.endTime);
 
+        // set the location and description to the form fields
         setLocation(result.data.location);
         setDescription(result.data.description);
       } catch (error) {
@@ -145,16 +150,31 @@ const ModifyEvent = ({ params }: PageProps) => {
       description
     ) {
       // Crear el objeto de datos
+      // format the date and time to UTC format to send to the backend and verify the overlap
+      const startTimeFormatted = new Date(startTime);
+      startTimeFormatted.setUTCHours(startTimeFormatted.getUTCHours());
+      const endTimeFormatted = new Date(endTime);
+      endTimeFormatted.setUTCHours(endTimeFormatted.getUTCHours());
+      const dateFormatted = new Date(date);
+      dateFormatted.setUTCHours(dateFormatted.getUTCHours());
+
+      startTimeFormatted.setFullYear(dateFormatted.getFullYear());
+      startTimeFormatted.setMonth(dateFormatted.getMonth());
+      startTimeFormatted.setDate(dateFormatted.getDate());
+      endTimeFormatted.setFullYear(dateFormatted.getFullYear());
+      endTimeFormatted.setMonth(dateFormatted.getMonth());
+      endTimeFormatted.setDate(dateFormatted.getDate());
+
       const datos = {
         userId: "60f9b2b9c8b2a40015f6b3a5",
         name: name,
         description: description,
         location: location,
-        startTime: startTime,
-        endTime: endTime,
+        startTime: startTimeFormatted.toISOString(),
+        endTime: endTimeFormatted.toISOString(),
         date: date,
-        client: client,
-        eventType: "Makeup",
+        // client: client,
+        eventType: "MAKEUP EVENT",
       };
 
       console.log("Estos son los datos:", datos);

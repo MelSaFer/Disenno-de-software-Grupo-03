@@ -98,13 +98,28 @@ const AddEvent = () => {
       description
     ) {
       // Crear el objeto de datos
+      // format the date and time to UTC format to send to the backend and verify the overlap
+      const startTimeFormatted = new Date(startTime);
+      startTimeFormatted.setUTCHours(startTimeFormatted.getUTCHours());
+      const endTimeFormatted = new Date(endTime);
+      endTimeFormatted.setUTCHours(endTimeFormatted.getUTCHours());
+      const dateFormatted = new Date(date);
+      dateFormatted.setUTCHours(dateFormatted.getUTCHours());
+
+      startTimeFormatted.setFullYear(dateFormatted.getFullYear());
+      startTimeFormatted.setMonth(dateFormatted.getMonth());
+      startTimeFormatted.setDate(dateFormatted.getDate());
+      endTimeFormatted.setFullYear(dateFormatted.getFullYear());
+      endTimeFormatted.setMonth(dateFormatted.getMonth());
+      endTimeFormatted.setDate(dateFormatted.getDate());
+
       const datos = {
         userId: "60f9b2b9c8b2a40015f6b3a5",
         name: name,
         description: description,
         location: location,
-        startTime: startTime,
-        endTime: endTime,
+        startTime: startTimeFormatted.toISOString(),
+        endTime: endTimeFormatted.toISOString(),
         date: date,
         // client: client,
         eventType: "MAKEUP EVENT",
@@ -116,7 +131,7 @@ const AddEvent = () => {
       const fetchData = async () => {
         try {
           const result = await axios.request({
-            method: "post",
+            method: "put",
             url: Routes.verifyOverlap,
             headers: { "Content-Type": "application/json" },
             data: {
@@ -133,7 +148,7 @@ const AddEvent = () => {
           } else {
             try {
               const result = await axios.request({
-                method: "post",
+                method: "put",
                 url: Routes.createEvent,
                 headers: { "Content-Type": "application/json" },
                 data: datos,

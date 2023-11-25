@@ -1,12 +1,11 @@
 // @ts-nocheck
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Footer from "@/src/components/footer";
-import Navbar2 from "@/src/components/navbar2";
 import axios from "axios";
 import { auth } from "../../../firebase/config";
-import Link from "next/link";
+// components
+import Footer from "@/src/components/footer";
+import NavbarAdmin from "@/src/components/navbarAdmin";
 import * as Routes from "../../routes";
 
 const NotificationCenter = () => {
@@ -23,13 +22,12 @@ const NotificationCenter = () => {
         console.log("No hay usuario iniciado sesión");
       }
 
+      // request to get the notifications of the user
       const fetchData = async () => {
-        // const requestData = { userId: user.uid };
         const requestData = { userId: authUser.uid };
         try {
           const result = await axios.request({
             method: "post",
-            // url: "https://mocki.io/v1/f7d19e16-8309-4f36-b289-01fc5e56fe01",
             url: Routes.getNotifications,
             headers: { "Content-Type": "application/json" },
             data: requestData,
@@ -39,6 +37,7 @@ const NotificationCenter = () => {
         } catch (error) {
           console.error("Error al obtener datos:", error);
         }
+        // request to update the state of the notifications of the user
         try {
           const result = await axios.request({
             method: "put",

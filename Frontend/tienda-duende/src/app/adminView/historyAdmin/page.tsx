@@ -74,7 +74,6 @@ const HistoryAdmin = () => {
         data: requestData,
       });
       console.log(result);
-      console.log("Pedido aprobado");
       setModified(!modified);
     } catch (error) {
       console.error("Error al obtener datos:", error);

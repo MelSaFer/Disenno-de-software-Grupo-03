@@ -134,13 +134,59 @@ const Page = () => {
     organizeDataByPage(); // Llamar a la función al actualizar data
   }, [data]);
 
+  // functions to format the date and display the week range
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    const options = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+
+    return date.toLocaleDateString("es-ES", options);
+  };
+
+  const formatDateRange = (dateRangeString) => {
+    try {
+      const [startString, endString] = dateRangeString
+        .split("to")
+        .map((str) => str.trim());
+
+      const formattedStartDate = formatDate(startString);
+      const formattedEndDate = formatDate(endString);
+
+      return `${formattedStartDate} - ${formattedEndDate}`;
+    } catch (error) {
+      console.error("Error formatting date range:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <header>
         <Navbar2 />
         <div className="mt-10 grid grid-cols-9 gap-2 sm:gap-2 lg:mt-7">
-          <h2 className="mx-10 col-span-5 text-6xl font-bold ">
-            {currentMonth}
+          <h2 className="mx-10 col-span-5 text-3xl font-bold ">
+            {/* {currentMonth} */}
+
+            {activeButton === "button1" ? (
+              itemsToDisplay &&
+              itemsToDisplay[0] && (
+                <h1>{formatDateRange(itemsToDisplay[0]?.period)}</h1>
+              )
+            ) : activeButton === "button2" ? (
+              itemsToDisplay &&
+              itemsToDisplay[0] && <h1>{itemsToDisplay[0]?.period}</h1>
+            ) : activeButton === "button3" ? (
+              itemsToDisplay &&
+              itemsToDisplay[0] && <h1>Año {itemsToDisplay[0]?.period}</h1>
+            ) : activeButton === "button4" ? (
+              <h1>Todos los eventos</h1>
+            ) : (
+              <h1>Contenido predeterminado</h1>
+            )}
           </h2>
           <button
             className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
@@ -241,9 +287,9 @@ const Page = () => {
                     // Cambiar el estilo de borde según el tipo de evento
                     className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
                       item.eventType === "MAKEUP EVENT"
-                        ? "border-red-500"
+                        ? "border-[#99C354]"
                         : item.eventType === "DELIVERY EVENT"
-                        ? "border-blue-500"
+                        ? "border-yellow-900"
                         : "border-gray-500" // Color por defecto si no coincide con ningún tipo
                     }`}
                     key={item._id}
