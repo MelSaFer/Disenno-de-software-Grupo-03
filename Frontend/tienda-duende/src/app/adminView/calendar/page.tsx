@@ -18,6 +18,8 @@ const Page = () => {
   const [activeButton, setActiveButton] = useState("button4"); // Inicializamos el estado con el primer botón activo
   const itemsPerPage = 1;
   const [pagedData, setPagedData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
   //const [itemsToDisplay, setItemsToDisplay] = useState([]);
 
   // No afecta
@@ -36,6 +38,17 @@ const Page = () => {
     try {
       const response = await axios.post(Routes.getCalendar);
       setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+   // Función para obtener todos los eventos al cargar la página
+   const getAllEventsOnLoad = async () => {
+    try {
+      const response = await axios.post(Routes.getCalendar);
+      setData(response.data);
+      setLoaded(true); // Marcar como cargado después de obtener los datos
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -85,6 +98,7 @@ const Page = () => {
   const handleButtonClick = async (button) => {
     setActiveButton(button);
     setCurrentPage(1);
+    setLoading(true); // Activar el estado de carga
 
     // Crear una función asíncrona dentro de handleButtonClick para poder usar await
     const fetchData = async () => {
@@ -107,16 +121,26 @@ const Page = () => {
           default:
             break;
         }
-        // setData(updatedData); // Actualizar la data
-        // // Actualizar itemsToDisplay después de obtener los datos actualizados
-        // itemsToDisplay = data.slice(indexOfFirstItem, indexOfLastItem);
+        setDataLoaded(true); // Marcar los datos como cargados después de recibir la respuesta
       } catch (error) {
         console.error("Error fetching data:", error);
+        setDataLoaded(false); // En caso de error, marcar los datos como no cargados
+      }
+      finally {
+        setLoading(false); // Desactivar el estado de carga después de recibir la respuesta
       }
     };
 
     fetchData(); // Llamar a la función asíncrona para ejecutar la lógica con await
   };
+
+  // To load page
+  useEffect(() => {
+    // Ejecutar la función solo si no se ha cargado previamente
+    if (!dataLoaded) {
+      getAllEventsOnLoad();
+    }
+  }, [dataLoaded]); // Dependencia: solo se vuelve a ejecutar si "loaded" cambia
 
   useEffect(() => {
     // Si recibimos nuevos datos, reorganizamos la estructura paginada
@@ -170,7 +194,6 @@ const Page = () => {
         <div className="mt-10 grid grid-cols-9 gap-2 sm:gap-2 lg:mt-7">
           <h2 className="mx-10 col-span-5 text-3xl font-bold ">
             {/* {currentMonth} */}
-
             {activeButton === "button1" ? (
               itemsToDisplay &&
               itemsToDisplay[0] && (
@@ -178,7 +201,7 @@ const Page = () => {
               )
             ) : activeButton === "button2" ? (
               itemsToDisplay &&
-              itemsToDisplay[0] && <h1>{itemsToDisplay[0]?.period}</h1>
+              itemsToDisplay[0] && <h1> hola </h1>
             ) : activeButton === "button3" ? (
               itemsToDisplay &&
               itemsToDisplay[0] && <h1>Año {itemsToDisplay[0]?.period}</h1>
@@ -232,7 +255,10 @@ const Page = () => {
       </header>
       <section className="bg-white flex-grow">
         <div className="mx-auto max-w-screen-1xl px-4 sm:px-6 lg:px-8">
-          {activeButton === "button4" ? (
+        {loading ? (
+            <p>Cargando...</p>
+          ) :
+          activeButton === "button4" ? (
             <>
               {itemsToDisplayAll.map((item) => (
                 <div
@@ -267,9 +293,9 @@ const Page = () => {
                   <span
                     key={index}
                     onClick={() => handleClick(index + 1)}
-                    className={`${
-                      currentPage === index ? "active" : ""
-                    } border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center text-yellow-900 hover:bg-gray-200 cursor-pointer mx-1`}
+                    className={`border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center  hover:bg-gray-200 cursor-pointer mx-1 ${
+                      currentPage === index + 1 ? "bg-yellow-900 text-white" : ""
+                    }`}
                   >
                     {index + 1}
                   </span>
@@ -287,9 +313,9 @@ const Page = () => {
                     // Cambiar el estilo de borde según el tipo de evento
                     className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
                       item.eventType === "MAKEUP EVENT"
-                        ? "border-[#99C354]"
+                        ? "border-[#852fad]"
                         : item.eventType === "DELIVERY EVENT"
-                        ? "border-yellow-900"
+                        ? "border-[#d4340d]"
                         : "border-gray-500" // Color por defecto si no coincide con ningún tipo
                     }`}
                     key={item._id}
