@@ -46,6 +46,7 @@ const Page = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const itemsToDisplay = data.slice(indexOfFirstItem, indexOfLastItem);
   const itemsToDisplayAll = data.slice();
+  console.log(itemsToDisplayAll);
   const eventsByPage = data[currentPage - 1]?.events || []; // Obtener eventos por página
 
   const pageNumbers = Math.ceil(data.length / itemsPerPage);
@@ -312,7 +313,9 @@ const Page = () => {
                     key={index}
                     onClick={() => handleClick(index + 1)}
                     className={`border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center  hover:bg-gray-200 cursor-pointer mx-1 ${
-                      currentPage === index + 1 ? "bg-yellow-900 text-white" : ""
+                      currentPage === index + 1
+                        ? "bg-yellow-900 text-white"
+                        : ""
                     }`}
                   >
                     {index + 1}
