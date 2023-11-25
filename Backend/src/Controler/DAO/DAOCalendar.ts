@@ -124,8 +124,7 @@ export class DAOCalendar implements DAO {
 			const collection = db.collection(CALENDAR_COLLECTION);
 			const Event = mongoose.model("Event", EventSchema);
 
-			console.log("object create event: ", object);
-
+			//console.log("object create event: ", object);
 			let newEvent = new Event({
 				purchaseId: object.purchaseId,
 				userId: object.userId,
@@ -141,12 +140,11 @@ export class DAOCalendar implements DAO {
 			const daoCalendar = new DAOCalendar();
 
 			// set the new event with the decorator
-			//console.log("object.eventType: ", object.component.eventType)
 			if (object.eventType == EVENT_TYPE.MAKEUP) {
 				let theNewEvent = daoCalendar.createEvent();
 				theNewEvent.setEventType(object.eventType);
-				let theEvent = new MakeupEvent(theNewEvent);
-				newEvent.eventType = theNewEvent.getEventType();
+				let theEvent = new MakeupEvent(theNewEvent); //Decorates the event
+				newEvent.eventType = theNewEvent.getEventType(); //Sets the event type to the schema
 			}
 
 			//Insert the product in the database, convert it to JSON and parse it
@@ -163,6 +161,16 @@ export class DAOCalendar implements DAO {
 		}
 	}
 
+	/*
+	  -----------------------------------------------------------------------
+	  UPDATE METHOD
+	  Updates an event in the database
+	  PARAMS:
+		  - object: object that contains the information of the event to update
+	  RETURNS:
+		  - Success message if the event was updated
+		  - error message if there was an error
+	  */
 	async update(object: any) {
 		try {
 			//Get the database instance from the singleton and connect to it
@@ -227,6 +235,16 @@ export class DAOCalendar implements DAO {
 		}
 	}
 
+	/*
+	  -----------------------------------------------------------------------
+	  DELETE METHOD
+	  Deletes an event from the database
+	  PARAMS:
+		  - code: code of the event to delete
+	  RETURNS:
+		  - Success message if the event was deleted
+		  - error message if there was an error
+	  */
 	async delete(code: any) {
 		try {
 			//Get the database instance from the singleton and connect to it
@@ -252,6 +270,16 @@ export class DAOCalendar implements DAO {
 		}
 	}
 
+	/*
+	  -----------------------------------------------------------------------
+	  FILTER EVENTS
+	  Filters the events by week, month or year
+	  PARAMS:
+		  - filter: string that contains the filter (week, month or year)
+		  - events: array that contains all the events
+	  RETURNS:
+		  - filteredEvents: array that contains the filtered events
+	  */
 	filterEvents(filter: string, events: any) {
 		let subarray = [];
 		let filteredEvents = [];
@@ -315,24 +343,44 @@ export class DAOCalendar implements DAO {
 	}
 
 	/*
-	  DIFFERENCE IN CALENDAR WEEKS
-	  */
+	DIFFERENCE IN CALENDAR WEEKS
+	Gets the difference in calendar weeks between two dates
+	PARAMS:
+		- date1: first date
+		- date2: second date
+	RETURNS:
+		- diff: difference in calendar weeks
+	*/
 	differenceInCalendarMonths(date1: any, date2: any) {
 		let diff = Math.abs(getMonth(date1) - getMonth(date2));
 		return diff;
 	}
 
 	/*
-	  DIFFERENCE IN CALENDAR YEARS
-	  */
+	DIFFERENCE IN CALENDAR YEARS
+	Gets the difference in calendar years between two dates
+	PARAMS:
+		- date1: first date
+		- date2: second date
+	RETURNS:
+		- diff: difference in calendar years
+	*/
 	differenceInCalendarYears(date1: any, date2: any) {
 		let diff = Math.abs(getYear(date1) - getYear(date2));
 		return diff;
 	}
 
 	/*
-	  FILTERS
-	  */
+	FILTERS ------------------------------------------------------------------
+	*/
+	/*
+	WEEK FILTER
+	Gets the week of the date
+	PARAMS:
+		- date: date to get the week
+	RETURNS:
+		- week: week of the date
+	*/
 	weekFilter(date_: any) {
 		//const date_ = parseISO(date);
 		return (
@@ -340,6 +388,14 @@ export class DAOCalendar implements DAO {
 		);
 	}
 
+	/*
+	MONTH FILTER
+	Gets the month of the date
+	PARAMS:
+		- date: date to get the month	
+	RETURNS:
+		- month: month of the date
+	*/
 	monthFilter(date_: any) {
 		//const date_ = parseISO(date);
 		let mes = "";
@@ -385,13 +441,26 @@ export class DAOCalendar implements DAO {
 		return mes + " de " + getYear(date_);
 	}
 
+	/*
+	YEAR FILTER
+	Gets the year of the date
+	PARAMS:
+		- date: date to get the year
+	RETURNS:
+		- year: year of the date
+	*/
 	yearFilter(date_: any) {
 		//const date_ = parseISO(date);
 		return getYear(date_);
 	}
 
 	/*
-	  SORT EVENTS
+	SORT EVENTS
+	Sorts the events by index
+	PARAMS:
+		- events: array that contains all the events
+	RETURNS:
+		- sortedEvents: array that contains the sorted events
 	*/
 	sortEvents(events: any) {
 		// merge sort based on the index attribute of the events
@@ -399,8 +468,13 @@ export class DAOCalendar implements DAO {
 	}
 
 	/*
-	  MERGE SORT: divide
-	  */
+	MERGE SORT: divide
+	Divides the array in two
+	PARAMS:
+		- items: array that contains all the events
+	RETURNS:
+		- combined: array that contains the sorted events
+	*/
 	divide(items: any[]): any[] {
 		var halfLength = Math.ceil(items.length / 2);
 		var low = items.slice(0, halfLength);
@@ -413,8 +487,14 @@ export class DAOCalendar implements DAO {
 	}
 
 	/*
-	  MERGE SORT: combine
-	  */
+	MERGE SORT: combine
+	Combines the two arrays
+	PARAMS:
+		- low: first array
+		- high: second array
+	RETURNS:
+		- combined: array that contains the sorted events
+	*/
 	combine(low: any[], high: any[]): any[] {
 		var indexLow = 0;
 		var indexHigh = 0;
@@ -448,8 +528,12 @@ export class DAOCalendar implements DAO {
 	}
 
 	/*
-	  MAIN FILTER FUNCTION
-	  params: object which is the request body that contains the filter
+	MAIN FILTER FUNCTION
+	Filters the calendar by week, day or month
+	PARAMS: 
+	  	-object: is the request body that contains the filter
+	RETURNS:
+		- sortedFilteredEvents: array that contains the sorted and filtered events
 	*/
 	async filterCalendar(object: any) {
 		try {
@@ -473,7 +557,15 @@ export class DAOCalendar implements DAO {
 		}
 	}
 
-
+	/*
+	VERRIFY OVERLAP
+	Verifies if there is an overlap between events
+	PARAMS: 
+	  	-object: is the request body that contains the event to verify
+	RETURNS:
+		- true if there is an overlap
+		- false if there is not an overlap
+	*/
 	async verifyOverlap(object: any) {
 		//logica
 		try {
@@ -487,8 +579,6 @@ export class DAOCalendar implements DAO {
 				startTime: new Date(object.startTime),
 				endTime: new Date(object.endTime),
 			});
-
-
 
 			let events = await collection.find().toArray();
 			for (let i = 0; i < events.length; i++) {
@@ -520,6 +610,14 @@ export class DAOCalendar implements DAO {
 
 	}
 
+	/* 
+	CREATE EVENT
+	Creates an event with the decorator
+	PARAMS:
+		- None
+	RETURNS:
+		- event: event created
+	*/
 	public createEvent() {
 		const event = new Event();
 		return event;
