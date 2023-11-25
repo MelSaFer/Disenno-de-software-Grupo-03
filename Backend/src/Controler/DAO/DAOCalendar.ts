@@ -161,6 +161,8 @@ export class DAOCalendar implements DAO {
         eventType: object.eventType,
       });
 
+      console.log("updatedEvent: ", updatedEvent);
+
       //Verify if the event exists
       const daoCalendar = new DAOCalendar();
       const event = await daoCalendar.getObject({ _id: object._id });
@@ -174,9 +176,9 @@ export class DAOCalendar implements DAO {
           name: updatedEvent.name,
           description: updatedEvent.description,
           location: updatedEvent.location,
-          startTime: updatedEvent.startTime.toISOString,
-          endTime: updatedEvent.endTime.toISOString,
-          date: updatedEvent.date.toISOString,
+          startTime: updatedEvent.startTime.toISOString(),
+          endTime: updatedEvent.endTime.toISOString(),
+          date: updatedEvent.date.toISOString(),
           eventType: updatedEvent.eventType,
         },
       };
