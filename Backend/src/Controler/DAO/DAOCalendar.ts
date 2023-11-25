@@ -38,6 +38,7 @@ METHODS:
         * delete(code: any): Deletes an event from the database
         * filterCalendar(object: any): Filters the calendar by week, day or month
         * verifyOverlap(): Verifies if there is an overlap between events
+        * createEvent(): Creates an event with the decorator
 */
 export class DAOCalendar implements DAO {
   constructor() {}
@@ -172,9 +173,9 @@ export class DAOCalendar implements DAO {
           name: updatedEvent.name,
           description: updatedEvent.description,
           location: updatedEvent.location,
-          startTime: updatedEvent.startTime,
-          endTime: updatedEvent.endTime,
-          date: updatedEvent.date,
+          startTime: new Date(updatedEvent.startTime),
+          endTime: new Date(updatedEvent.endTime),
+          date: new Date(updatedEvent.date),
           eventType: updatedEvent.eventType,
         },
       };
