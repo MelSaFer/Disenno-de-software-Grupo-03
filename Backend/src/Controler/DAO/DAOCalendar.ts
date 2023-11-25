@@ -51,6 +51,7 @@ export class DAOCalendar implements DAO {
       const collection = db.collection(CALENDAR_COLLECTION);
 
       const result = await collection.find().toArray();
+      console.log(result);
 
       if (result.length > 0) {
         return result;
@@ -173,9 +174,9 @@ export class DAOCalendar implements DAO {
           name: updatedEvent.name,
           description: updatedEvent.description,
           location: updatedEvent.location,
-          startTime: new Date(updatedEvent.startTime),
-          endTime: new Date(updatedEvent.endTime),
-          date: new Date(updatedEvent.date),
+          startTime: updatedEvent.startTime.toISOString,
+          endTime: updatedEvent.endTime.toISOString,
+          date: updatedEvent.date.toISOString,
           eventType: updatedEvent.eventType,
         },
       };
