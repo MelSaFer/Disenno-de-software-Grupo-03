@@ -114,7 +114,8 @@ const AddEvent = () => {
       endTimeFormatted.setDate(dateFormatted.getDate());
 
       const datos = {
-        userId: "60f9b2b9c8b2a40015f6b3a5",
+        // userId: "60f9b2b9c8b2a40015f6b3a5",
+        userId: client,
         name: name,
         description: description,
         location: location,
@@ -131,7 +132,7 @@ const AddEvent = () => {
       const fetchData = async () => {
         try {
           const result = await axios.request({
-            method: "put",
+            method: "post",
             url: Routes.verifyOverlap,
             headers: { "Content-Type": "application/json" },
             data: {
@@ -148,7 +149,7 @@ const AddEvent = () => {
           } else {
             try {
               const result = await axios.request({
-                method: "put",
+                method: "post",
                 url: Routes.createEvent,
                 headers: { "Content-Type": "application/json" },
                 data: datos,
