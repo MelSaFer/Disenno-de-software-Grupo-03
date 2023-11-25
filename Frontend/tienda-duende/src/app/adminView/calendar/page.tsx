@@ -43,8 +43,8 @@ const Page = () => {
     }
   };
 
-   // Función para obtener todos los eventos al cargar la página
-   const getAllEventsOnLoad = async () => {
+  // Función para obtener todos los eventos al cargar la página
+  const getAllEventsOnLoad = async () => {
     try {
       const response = await axios.post(Routes.getCalendar);
       setData(response.data);
@@ -125,8 +125,7 @@ const Page = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         setDataLoaded(false); // En caso de error, marcar los datos como no cargados
-      }
-      finally {
+      } finally {
         setLoading(false); // Desactivar el estado de carga después de recibir la respuesta
       }
     };
@@ -255,10 +254,9 @@ const Page = () => {
       </header>
       <section className="bg-white flex-grow">
         <div className="mx-auto max-w-screen-1xl px-4 sm:px-6 lg:px-8">
-        {loading ? (
+          {loading ? (
             <p>Cargando...</p>
-          ) :
-          activeButton === "button4" ? (
+          ) : activeButton === "button4" ? (
             <>
               {itemsToDisplayAll.map((item) => (
                 <div
@@ -294,7 +292,9 @@ const Page = () => {
                     key={index}
                     onClick={() => handleClick(index + 1)}
                     className={`border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center  hover:bg-gray-200 cursor-pointer mx-1 ${
-                      currentPage === index + 1 ? "bg-yellow-900 text-white" : ""
+                      currentPage === index + 1
+                        ? "bg-yellow-900 text-white"
+                        : ""
                     }`}
                   >
                     {index + 1}
@@ -338,7 +338,9 @@ const Page = () => {
                     key={index}
                     onClick={() => handleClick(index + 1)}
                     className={`border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center  hover:bg-gray-200 cursor-pointer mx-1 ${
-                      currentPage === index + 1 ? "bg-yellow-900 text-white" : ""
+                      currentPage === index + 1
+                        ? "bg-yellow-900 text-white"
+                        : ""
                     }`}
                   >
                     {index + 1}
