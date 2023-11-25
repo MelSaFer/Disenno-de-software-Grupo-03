@@ -15,21 +15,24 @@ const Page = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [activeButton, setActiveButton] = useState('button4'); // Inicializamos el estado con el primer botón activo
-  const itemsPerPage = 15;
+  const [activeButton, setActiveButton] = useState("button4"); // Inicializamos el estado con el primer botón activo
+  const itemsPerPage = 1;
   const [pagedData, setPagedData] = useState([]);
   //const [itemsToDisplay, setItemsToDisplay] = useState([]);
 
+  // No afecta
   const getEventsByPeriod = async (period) => {
     try {
-      const response = await axios.post(Routes.filterCalendar, { filter: period});
+      const response = await axios.post(Routes.filterCalendar, {
+        filter: period,
+      });
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  const getAllEvents = async ( ) => {
+  const getAllEvents = async () => {
     try {
       const response = await axios.post(Routes.getCalendar);
       setData(response.data);
@@ -38,33 +41,42 @@ const Page = () => {
     }
   };
 
+  // Si afecta
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const itemsToDisplay = data.slice(indexOfFirstItem, indexOfLastItem);
+  const itemsToDisplayAll = data.slice();
   const eventsByPage = data[currentPage - 1]?.events || []; // Obtener eventos por página
 
-
-  //setItemsToDisplay(data.slice(indexOfFirstItem, indexOfLastItem));
-
   const pageNumbers = Math.ceil(data.length / itemsPerPage);
+  const pageNumbersForAll = Math.ceil(data.length / 15);
 
   //to get the currentMonth (Later this gonna work to filter the calendar view)
-  
+
   const getCurrentMonth = () => {
     const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
     ];
-    
+
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
-    
+
     return months[currentMonth];
   };
 
   const currentMonth = getCurrentMonth();
-  
-  
+
   // handleClick for the different events
   const handleClick = (number) => {
     setCurrentPage(number);
@@ -72,24 +84,25 @@ const Page = () => {
 
   const handleButtonClick = async (button) => {
     setActiveButton(button);
-  
+    setCurrentPage(1);
+
     // Crear una función asíncrona dentro de handleButtonClick para poder usar await
     const fetchData = async () => {
       try {
         //let updatedData;
         switch (button) {
-          case 'button1': // Semanal
+          case "button1": // Semanal
             //updatedData = await getEventsByPeriod('Week');
-            await getEventsByPeriod('Week');
+            await getEventsByPeriod("Week");
             break;
-          case 'button2': // Mensual
-            getEventsByPeriod('Month');
+          case "button2": // Mensual
+            getEventsByPeriod("Month");
             break;
-          case 'button3': // Anual
-            await getEventsByPeriod('Year');
+          case "button3": // Anual
+            await getEventsByPeriod("Year");
             break;
-          case 'button4': // Ver todo
-            await getAllEvents(); 
+          case "button4": // Ver todo
+            await getAllEvents();
             break;
           default:
             break;
@@ -97,29 +110,27 @@ const Page = () => {
         // setData(updatedData); // Actualizar la data
         // // Actualizar itemsToDisplay después de obtener los datos actualizados
         // itemsToDisplay = data.slice(indexOfFirstItem, indexOfLastItem);
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData(); // Llamar a la función asíncrona para ejecutar la lógica con await
   };
-  
+
   useEffect(() => {
     // Si recibimos nuevos datos, reorganizamos la estructura paginada
     const organizeDataByPage = () => {
       const organizedData = [];
-  
+
       // Dividir los eventos por objeto dentro del array data
       for (let i = 0; i < data.length; i++) {
         const eventsPerPage = data[i]?.events || []; // Obtener eventos por página
         organizedData.push(eventsPerPage);
       }
-  
+
       setPagedData(organizedData);
     };
-  
     organizeDataByPage(); // Llamar a la función al actualizar data
   }, [data]);
 
@@ -128,54 +139,68 @@ const Page = () => {
       <header>
         <Navbar2 />
         <div className="mt-10 grid grid-cols-9 gap-2 sm:gap-2 lg:mt-7">
-          <h2 className="mx-10 col-span-5 text-6xl font-bold ">{currentMonth}</h2>
-            <button
-                className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
-                  activeButton === 'button1' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'
-                }`}
-                onClick={() => handleButtonClick('button1')}
-              >
-                Semanal
-              </button>
-              <button
-                className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
-                  activeButton === 'button2' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'
-                }`}
-                onClick={() => handleButtonClick('button2')}
-              >
-                Mensual
-              </button>
-              <button
-                className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
-                  activeButton === 'button3' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'
-                }`}
-                onClick={() => handleButtonClick('button3')}
-              >
-                Anual
-              </button>
-              <button
-                className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
-                  activeButton === 'button4' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'
-                }`}
-                onClick={() => handleButtonClick('button4')}
-              >
-                Ver todo
-              </button>
-          </div>
+          <h2 className="mx-10 col-span-5 text-6xl font-bold ">
+            {currentMonth}
+          </h2>
+          <button
+            className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
+              activeButton === "button1"
+                ? "bg-red-500 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+            onClick={() => handleButtonClick("button1")}
+          >
+            Semanal
+          </button>
+          <button
+            className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
+              activeButton === "button2"
+                ? "bg-red-500 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+            onClick={() => handleButtonClick("button2")}
+          >
+            Mensual
+          </button>
+          <button
+            className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
+              activeButton === "button3"
+                ? "bg-red-500 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+            onClick={() => handleButtonClick("button3")}
+          >
+            Anual
+          </button>
+          <button
+            className={`mx-2 p-2 mt-2 text-lg font-semibold rounded-lg focus:outline-none ${
+              activeButton === "button4"
+                ? "bg-red-500 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+            onClick={() => handleButtonClick("button4")}
+          >
+            Ver todo
+          </button>
+        </div>
       </header>
       <section className="bg-white flex-grow">
         <div className="mx-auto max-w-screen-1xl px-4 sm:px-6 lg:px-8">
-          {/* <div className="col-span-4 mt-10 grid grid-cols-2 gap-8 sm:gap-4 lg:mt-7"> */}
-            
-          {activeButton === 'button4' ? (
-              itemsToDisplay.map((item) => (
-                <div className="col-span-4 mt-10 grid grid-cols-1 gap-8 sm:gap-4 lg:mt-7">
+          {activeButton === "button4" ? (
+            <>
+              {itemsToDisplayAll.map((item) => (
+                <div
+                  key={item}
+                  className="col-span-4 mt-10 grid grid-cols-1 gap-8 sm:gap-4 lg:mt-7"
+                >
                   <Link
                     // Cambiar el estilo de borde según el tipo de evento
                     className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
-                      item.eventType === 'MAKEUP EVENT' ? 'border-red-500' :
-                      item.eventType === 'DELIVERY EVENT' ? 'border-blue-500' :
-                      'border-gray-500' // Color por defecto si no coincide con ningún tipo
+                      item.eventType === "MAKEUP EVENT"
+                        ? "border-red-500"
+                        : item.eventType === "DELIVERY EVENT"
+                        ? "border-blue-500"
+                        : "border-gray-500" // Color por defecto si no coincide con ningún tipo
                     }`}
                     key={item._id}
                     item={item}
@@ -190,16 +215,36 @@ const Page = () => {
                     </div>
                   </Link>
                 </div>
-              ))
-            ) : (
-              pagedData[currentPage - 1]?.map((item) => (
-                <div className="col-span-4 mt-10 grid grid-cols-1 gap-8 sm:gap-4 lg:mt-7">
+              ))}
+              <div className="pagination flex justify-center items-center mt-10 text-1xl ">
+                {Array.from({ length: pageNumbersForAll }, (_, index) => (
+                  <span
+                    key={index}
+                    onClick={() => handleClick(index + 1)}
+                    className={`${
+                      currentPage === index ? "active" : ""
+                    } border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center text-yellow-900 hover:bg-gray-200 cursor-pointer mx-1`}
+                  >
+                    {index + 1}
+                  </span>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              {pagedData[currentPage - 1]?.map((item) => (
+                <div
+                  key={item}
+                  className="col-span-4 mt-10 grid grid-cols-1 gap-8 sm:gap-4 lg:mt-7"
+                >
                   <Link
                     // Cambiar el estilo de borde según el tipo de evento
                     className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
-                      item.eventType === 'MAKEUP EVENT' ? 'border-red-500' :
-                      item.eventType === 'DELIVERY EVENT' ? 'border-blue-500' :
-                      'border-gray-500' // Color por defecto si no coincide con ningún tipo
+                      item.eventType === "MAKEUP EVENT"
+                        ? "border-red-500"
+                        : item.eventType === "DELIVERY EVENT"
+                        ? "border-blue-500"
+                        : "border-gray-500" // Color por defecto si no coincide con ningún tipo
                     }`}
                     key={item._id}
                     item={item}
@@ -214,24 +259,22 @@ const Page = () => {
                     </div>
                   </Link>
                 </div>
-              ))
-            )}
-
-        {/* </div> */}
-
-          <div className="pagination flex justify-center items-center mt-10 text-1xl ">
-            {Array.from({ length: pageNumbers }, (_, index) => (
-              <span
-                key={index}
-                onClick={() => handleClick(index + 1)}
-                className={`${
-                  currentPage === index ? "active" : ""
-                } border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center text-yellow-900 hover:bg-gray-200 cursor-pointer mx-1`}
-              >
-                {index + 1}
-              </span>
-            ))}
-          </div>
+              ))}
+              <div className="pagination flex justify-center items-center mt-10 text-1xl ">
+                {Array.from({ length: pageNumbers }, (_, index) => (
+                  <span
+                    key={index}
+                    onClick={() => handleClick(index + 1)}
+                    className={`${
+                      currentPage === index ? "active" : ""
+                    } border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center text-yellow-900 hover:bg-gray-200 cursor-pointer mx-1`}
+                  >
+                    {index + 1}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
       <footer>
