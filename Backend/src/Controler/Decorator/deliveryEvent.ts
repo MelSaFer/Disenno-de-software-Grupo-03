@@ -9,6 +9,12 @@ export class DeliveryEvent extends Decorator{
         super(component);
     }
 
+    /*
+    SCHEDULE
+    Assing the type of the event
+    PARAMS: 
+        - eventType: Always is going to set the type of the event as Delivey becase is a DeliveryEvent decorator
+    */
     public schedule(eventType: EVENT_TYPE): any {
         return this.component?.schedule(EVENT_TYPE.DELIVERY) + " of delivery";        
         //return `Makeup Event(${super.schedule()})`;
