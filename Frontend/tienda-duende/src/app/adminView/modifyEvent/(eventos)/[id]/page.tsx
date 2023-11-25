@@ -166,6 +166,7 @@ const ModifyEvent = ({ params }: PageProps) => {
       endTimeFormatted.setDate(dateFormatted.getDate());
 
       const datos = {
+        _id: params.id,
         userId: "60f9b2b9c8b2a40015f6b3a5",
         name: name,
         description: description,
