@@ -274,7 +274,7 @@ export class DAOCalendar implements DAO {
           : this.yearFilter(eventDate); //se obtiene el periodo del subarreglo
       const index =
         filter == "Week"
-          ? getISOWeek(eventDate)
+          ? getISOWeek(eventDate) + (getYear(eventDate) - getYear(new Date())) * 52
           : filter == "Month"
           ? getMonth(eventDate)
           : getYear(eventDate) //se obtiene el índice para ordenar el arreglo de eventos filtrados
