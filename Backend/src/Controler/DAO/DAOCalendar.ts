@@ -12,6 +12,7 @@ import {
   startOfISOWeek,
   getMonth,
   getYear,
+  getISOWeek
 } from "date-fns";
 import { DAOUser } from "./DAOUser";
 import { Event } from "../Decorator/event";
@@ -38,6 +39,7 @@ METHODS:
         * delete(code: any): Deletes an event from the database
         * filterCalendar(object: any): Filters the calendar by week, day or month
         * verifyOverlap(): Verifies if there is an overlap between events
+        * createEvent(): Creates an event with the decorator
 */
 export class DAOCalendar implements DAO {
   constructor() {}
@@ -50,6 +52,7 @@ export class DAOCalendar implements DAO {
       const collection = db.collection(CALENDAR_COLLECTION);
 
       const result = await collection.find().toArray();
+      console.log(result);
 
       if (result.length > 0) {
         return result;
@@ -159,6 +162,8 @@ export class DAOCalendar implements DAO {
         eventType: object.eventType,
       });
 
+      console.log("updatedEvent: ", updatedEvent);
+
       //Verify if the event exists
       const daoCalendar = new DAOCalendar();
       const event = await daoCalendar.getObject({ _id: object._id });
@@ -172,9 +177,9 @@ export class DAOCalendar implements DAO {
           name: updatedEvent.name,
           description: updatedEvent.description,
           location: updatedEvent.location,
-          startTime: updatedEvent.startTime,
-          endTime: updatedEvent.endTime,
-          date: updatedEvent.date,
+          startTime: updatedEvent.startTime.toISOString(),
+          endTime: updatedEvent.endTime.toISOString(),
+          date: updatedEvent.date.toISOString(),
           eventType: updatedEvent.eventType,
         },
       };
@@ -234,14 +239,13 @@ export class DAOCalendar implements DAO {
       events.splice(0, 1);
       events2 = events; //copia del arreglo de eventos para no perder los datos originales
 
+      //console.log("events: ", events);
+
       for (let j = 0; j < events2.length; j++) {
         //recorre la copia del arreglo de eventos
-        //console.log(j)
-        //console.log(events2.length)
 
         // extraer el primer evento de la copia del arreglo para compararlo con el evento de la vuelta anterior
         let eventDate2 = parseISO(events2[j].date);
-        //let diffWeeks = differenceInCalendarISOWeeks(eventDate, eventDate2)
 
         // calcular la diferencia entre las fechas de los eventos según el filtro (semana, mes, año)
         let diff =
@@ -260,7 +264,6 @@ export class DAOCalendar implements DAO {
           j--;
         }
       }
-      //console.log("subarray: ", subarray)
 
       // una vez que se recorrió el arreglo de eventos, se agrega el subarreglo al arreglo de eventos filtrados
       const period =
@@ -269,7 +272,13 @@ export class DAOCalendar implements DAO {
           : filter == "Month"
           ? this.monthFilter(eventDate)
           : this.yearFilter(eventDate); //se obtiene el periodo del subarreglo
-      filteredEvents.push({ period: period, events: subarray });
+      const index =
+        filter == "Week"
+          ? getISOWeek(eventDate) + (getYear(eventDate) - getYear(new Date())) * 52
+          : filter == "Month"
+          ? getMonth(eventDate) + (getYear(eventDate) - getYear(new Date())) * 12
+          : getYear(eventDate) //se obtiene el índice para ordenar el arreglo de eventos filtrados
+      filteredEvents.push({ period: period, events: subarray, index: index });
       subarray = []; //se vacía el subarreglo para la siguiente vuelta
     }
 
@@ -353,9 +362,66 @@ export class DAOCalendar implements DAO {
   }
 
   /*
+    SORT EVENTS
+  */
+  sortEvents(events: any) {
+    // merge sort based on the index attribute of the events
+    return this.divide(events);
+  }
+
+  /*
+    MERGE SORT: divide
+    */
+  divide(items: any[]): any[] {
+      var halfLength = Math.ceil(items.length / 2);
+      var low = items.slice(0, halfLength);
+      var high = items.slice(halfLength);
+      if (halfLength > 1) {
+          low = this.divide(low);
+          high = this.divide(high);
+      }
+      return this.combine(low, high);
+  }
+
+  /*
+    MERGE SORT: combine
+    */
+  combine(low: any[], high: any[]): any[] {
+      var indexLow = 0;
+      var indexHigh = 0;
+      var lengthLow = low.length;
+      var lengthHigh = high.length;
+      var combined = [];
+      while (indexLow < lengthLow || indexHigh < lengthHigh) {
+          var lowItem = low[indexLow];
+          var highItem = high[indexHigh];
+          if (lowItem !== undefined) {
+              if (highItem === undefined) {
+                  combined.push(lowItem);
+                  indexLow++;
+              } else {
+                  if (lowItem.index <= highItem.index) {
+                      combined.push(lowItem);
+                      indexLow++;
+                  } else {
+                      combined.push(highItem);
+                      indexHigh++;
+                  }
+              }
+          } else {
+              if (highItem !== undefined) {
+                  combined.push(highItem);
+                  indexHigh++;
+              }
+          }
+      }
+      return combined;
+  }
+
+  /*
     MAIN FILTER FUNCTION
     params: object which is the request body that contains the filter
-    */
+  */
   async filterCalendar(object: any) {
     try {
       //Get the database instance from the singleton and connect to it
@@ -369,9 +435,10 @@ export class DAOCalendar implements DAO {
 
       let filter = object.filter;
       let filteredEvents = this.filterEvents(filter, events);
+      let sortedFilteredEvents = this.sortEvents(filteredEvents);
 
-      console.log("filteredEvents: ", filteredEvents);
-      return filteredEvents;
+      console.log("sortedFilteredEvents: ", sortedFilteredEvents);
+      return sortedFilteredEvents;
     } catch (err) {
       console.log("Error al filtrar el calendario: ", err);
     }
