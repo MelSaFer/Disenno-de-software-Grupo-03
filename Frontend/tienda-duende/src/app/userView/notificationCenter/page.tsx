@@ -5,7 +5,7 @@ import axios from "axios";
 import { auth } from "../../../firebase/config";
 // components
 import Footer from "@/src/components/footer";
-import NavbarAdmin from "@/src/components/navbarAdmin";
+import Navbar2 from "@/src/components/navbar2";
 import * as Routes from "../../routes";
 
 const NotificationCenter = () => {

@@ -47,6 +47,22 @@ const History = () => {
     return () => unsubscribe();
   }, [authUser.uid]);
 
+  // function that returns a formatted date in string format
+  const formatearFecha = (cadenaTiempo) => {
+    const fecha = new Date(cadenaTiempo);
+
+    const dia = fecha.getDate();
+    const mes = fecha.getMonth() + 1; // Nota: los meses comienzan desde 0
+    const año = fecha.getFullYear();
+
+    // Agrega ceros a la izquierda si es necesario
+    const diaFormateado = dia < 10 ? `0${dia}` : dia;
+    const mesFormateado = mes < 10 ? `0${mes}` : mes;
+    const añoFormateado = año;
+
+    return `${diaFormateado}/${mesFormateado}/${añoFormateado}`;
+  };
+
   console.log(history);
   return (
     <Fragment>
@@ -75,7 +91,7 @@ const History = () => {
                   <b>Direccion:</b> {item.shippingAddress}
                 </h2>
                 <h2 className="mb-3">
-                  <b>Fecha:</b> {item.aproxDeliveryDate}
+                  <b>Fecha:</b> {formatearFecha(item.aproxDeliveryDate)}
                 </h2>
                 <h2 className="mb-3">
                   <b>Estado:</b> {item.state}
