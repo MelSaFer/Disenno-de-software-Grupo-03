@@ -20,6 +20,7 @@ const Page = () => {
   const [pagedData, setPagedData] = useState([]);
   //const [itemsToDisplay, setItemsToDisplay] = useState([]);
 
+  // No afecta
   const getEventsByPeriod = async (period) => {
     try {
       const response = await axios.post(Routes.filterCalendar, {
@@ -40,15 +41,15 @@ const Page = () => {
     }
   };
 
+  // Si afecta
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const itemsToDisplay = data.slice(indexOfFirstItem, indexOfLastItem);
-  console.log(itemsToDisplay);
+  const itemsToDisplayAll = data.slice();
   const eventsByPage = data[currentPage - 1]?.events || []; // Obtener eventos por página
 
-  //setItemsToDisplay(data.slice(indexOfFirstItem, indexOfLastItem));
-
   const pageNumbers = Math.ceil(data.length / itemsPerPage);
+  const pageNumbersForAll = Math.ceil(data.length / 15);
 
   //to get the currentMonth (Later this gonna work to filter the calendar view)
 
@@ -83,6 +84,7 @@ const Page = () => {
 
   const handleButtonClick = async (button) => {
     setActiveButton(button);
+    setCurrentPage(1);
 
     // Crear una función asíncrona dentro de handleButtonClick para poder usar await
     const fetchData = async () => {
@@ -129,7 +131,6 @@ const Page = () => {
 
       setPagedData(organizedData);
     };
-
     organizeDataByPage(); // Llamar a la función al actualizar data
   }, [data]);
 
@@ -231,22 +232,20 @@ const Page = () => {
       </header>
       <section className="bg-white flex-grow">
         <div className="mx-auto max-w-screen-1xl px-4 sm:px-6 lg:px-8">
-          {/* <div className="col-span-4 mt-10 grid grid-cols-2 gap-8 sm:gap-4 lg:mt-7"> */}
-          {/* <h1>{formatDateRange(itemsToDisplay[0])}</h1> */}
-
-          {activeButton === "button4"
-            ? itemsToDisplay.map((item) => (
+          {activeButton === "button4" ? (
+            <>
+              {itemsToDisplayAll.map((item) => (
                 <div
-                  key={item._id}
+                  key={item}
                   className="col-span-4 mt-10 grid grid-cols-1 gap-8 sm:gap-4 lg:mt-7"
                 >
                   <Link
                     // Cambiar el estilo de borde según el tipo de evento
                     className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
                       item.eventType === "MAKEUP EVENT"
-                        ? "border-red-500"
+                        ? "border-[#852fad]"
                         : item.eventType === "DELIVERY EVENT"
-                        ? "border-blue-500"
+                        ? "border-[#d4340d]"
                         : "border-gray-500" // Color por defecto si no coincide con ningún tipo
                     }`}
                     key={item._id}
@@ -262,13 +261,28 @@ const Page = () => {
                     </div>
                   </Link>
                 </div>
-              ))
-            : pagedData[currentPage - 1]?.map((item) => (
+              ))}
+              <div className="pagination flex justify-center items-center mt-10 text-1xl ">
+                {Array.from({ length: pageNumbersForAll }, (_, index) => (
+                  <span
+                    key={index}
+                    onClick={() => handleClick(index + 1)}
+                    className={`${
+                      currentPage === index ? "active" : ""
+                    } border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center text-yellow-900 hover:bg-gray-200 cursor-pointer mx-1`}
+                  >
+                    {index + 1}
+                  </span>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              {pagedData[currentPage - 1]?.map((item) => (
                 <div
-                  key={item._id}
+                  key={item}
                   className="col-span-4 mt-10 grid grid-cols-1 gap-8 sm:gap-4 lg:mt-7"
                 >
-                  <h1 className="text-red-500">{item.period}</h1>
                   <Link
                     // Cambiar el estilo de borde según el tipo de evento
                     className={`relative flex flex-col overflow-hidden border-2 rounded-2xl cursor-pointer ${
@@ -292,22 +306,21 @@ const Page = () => {
                   </Link>
                 </div>
               ))}
-
-          {/* </div> */}
-
-          <div className="pagination flex justify-center items-center mt-10 text-1xl">
-            {Array.from({ length: pageNumbers }, (_, index) => (
-              <span
-                key={index}
-                onClick={() => handleClick(index + 1)}
-                className={`border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center  hover:bg-gray-200 cursor-pointer mx-1 ${
-                  currentPage === index + 1 ? "bg-yellow-900 text-white" : ""
-                }`}
-              >
-                {index + 1}
-              </span>
-            ))}
-          </div>
+              <div className="pagination flex justify-center items-center mt-10 text-1xl ">
+                {Array.from({ length: pageNumbers }, (_, index) => (
+                  <span
+                    key={index}
+                    onClick={() => handleClick(index + 1)}
+                    className={`border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center  hover:bg-gray-200 cursor-pointer mx-1 ${
+                      currentPage === index + 1 ? "bg-yellow-900 text-white" : ""
+                    }`}
+                  >
+                    {index + 1}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
       <footer>
