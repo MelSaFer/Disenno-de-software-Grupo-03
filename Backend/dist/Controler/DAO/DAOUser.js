@@ -263,7 +263,8 @@ RETURNS:
                     userId: object.userId,
                     email: object.email,
                     roleType: object.roleType,
-                    cart: object.cart
+                    cart: object.cart,
+                    notifications: []
                 });
                 const newUserJson = JSON.stringify(newUser);
                 const newUserparsed = JSON.parse(newUserJson);
@@ -446,6 +447,200 @@ RETURNS:
             catch (err) {
                 //console.log(err);
                 return { "name": "No se pudo actualizar el carrito" };
+            }
+            //return ok message;
+        });
+    }
+    ;
+    /*
+    -----------------------------------------------------------------------
+    GET NOTIFICATIONS METHOD
+    Gets the notifications of a user
+    PARAMS:
+        - userId: number, the id of the user to get the notifications
+    RETURNS:
+        - notifications: array of notifications
+    */
+    getNotifications(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //Get the database instance from the singleton and connect to it
+                SingletonMongo_1.SingletonMongo.getInstance().connect();
+                const db = SingletonMongo_1.SingletonMongo.getInstance().getDatabase(config_1.DATABASE_NAME);
+                const user_collection = db.collection(config_1.USER_COLLECTION);
+                //Get the user from the database, using the code
+                const user = yield user_collection.findOne({ userId: userId });
+                SingletonMongo_1.SingletonMongo.getInstance().disconnect_(); //Disconnect from the database
+                // If the user was found, return it, else return error
+                if (user) {
+                    //console.log("Se encontró: " + JSON.stringify(user, null, 2));
+                    //If the roletype is admin get all the purchase history
+                    let notifications = user.notifications;
+                    return notifications;
+                }
+                else {
+                    //console.log("No se encontró el user con el código: " + userId);
+                    return { "name": "No se encontró el usuario" };
+                }
+            }
+            catch (err) {
+                //console.log(err);
+                return { "name": "Error al obtener las notificaciones" };
+            }
+        });
+    }
+    ;
+    /*
+    -----------------------------------------------------------------------
+    UPDATE NOTIFICATIONS METHOD
+    Updates the notifications of a user to read
+    PARAMS:
+        - userId: number, the id of the user to update the notifications
+    RETURNS:
+        - ok message if the notifications were updated
+        - error if the notifications were not updated
+    */
+    updateNotificationState(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                SingletonMongo_1.SingletonMongo.getInstance().connect();
+                const db = SingletonMongo_1.SingletonMongo.getInstance().getDatabase(config_1.DATABASE_NAME);
+                const user_collection = db.collection(config_1.USER_COLLECTION);
+                const User = mongoose_1.default.model('User', Schemas_1.UserSchema);
+                const user = yield user_collection.findOne({ userId: userId });
+                if (!user) {
+                    //console.log("El usuario " +  userId + " no existe");
+                    return { "name": "El usuario no existe" };
+                }
+                //Get notifications from user
+                const notifications = user.notifications;
+                //Update notifications to read
+                for (let i = 0; i < notifications.length; i++) {
+                    // if (notifications[i].read == true){
+                    //     break;
+                    // }
+                    notifications[i].state = true;
+                }
+                //Update notifications in the database
+                const result = yield user_collection.updateOne({ userId: user.userId }, { $set: { notifications: notifications } });
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+                return { "name": "Se actualizaron las notificaciones" };
+            }
+            catch (err) {
+                //console.log(err);
+                return { "name": "No se pudieron actualizar las notificaciones" };
+            }
+            //return ok message;
+        });
+    }
+    ;
+    /*
+    -----------------------------------------------------------------------
+    IS UNREAD METHOD
+    Checks if there are unread notifications
+    PARAMS:
+        - userId: number, the id of the user to check the notifications
+    RETURNS:
+        - true if there are unread notifications
+        - false if there are no unread notifications
+    */
+    isUnread(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                SingletonMongo_1.SingletonMongo.getInstance().connect();
+                const db = SingletonMongo_1.SingletonMongo.getInstance().getDatabase(config_1.DATABASE_NAME);
+                const user_collection = db.collection(config_1.USER_COLLECTION);
+                const User = mongoose_1.default.model('User', Schemas_1.UserSchema);
+                const user = yield user_collection.findOne({ userId: userId });
+                if (!user) {
+                    //console.log("El usuario " +  userId + " no existe");
+                    return { "name": "El usuario no existe" };
+                }
+                //Get notifications from user
+                const notifications = user.notifications;
+                //Check if there are unread notifications
+                for (let i = 0; i < notifications.length; i++) {
+                    if (notifications[i].state == false) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (err) {
+                //console.log(err);
+                return { "name": "No se pudo verificar si hay notificaciones sin leer" };
+            }
+            //return ok message;
+        });
+    }
+    ;
+    /*
+    -----------------------------------------------------------------------
+    ADD NOTIFICATION
+    Adds a notification to a user
+    PARAMS:
+        - userId: number, the id of the user to add the notification
+        - notification: string, the notification to add
+    RETURNS:
+        - ok message if the notification was added
+        - error if the notification was not added
+    */
+    addNotification(notification) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                SingletonMongo_1.SingletonMongo.getInstance().connect();
+                const db = SingletonMongo_1.SingletonMongo.getInstance().getDatabase(config_1.DATABASE_NAME);
+                const user_collection = db.collection(config_1.USER_COLLECTION);
+                const User = mongoose_1.default.model('User', Schemas_1.UserSchema);
+                // Verify userId is in the notification json
+                if (!notification.hasOwnProperty("userId") || typeof notification.userId != "string") {
+                    //console.log("La notificación no tiene la estructura correcta");
+                    return { "name": "El body no tiene la estructura correcta" };
+                }
+                const user = yield user_collection.findOne({ userId: notification.userId });
+                if (!user) {
+                    //console.log("El usuario " +  userId + " no existe");
+                    return { "name": "El usuario no existe" };
+                }
+                //Get notifications from user
+                const notifications = user.notifications;
+                // //Validate notification JSON structure
+                // if (notification.length == 0){
+                //     //console.log("No se encontraron notificaciones");
+                //     return {"name": "No se encontraron notificaciones"};
+                // }
+                // if(!notification.hasOwnProperty("purchaseId") || !notification.hasOwnProperty("deliveryDate") || !notification.hasOwnProperty("notificationTime") || !notification.hasOwnProperty("state") || !notification.hasOwnProperty("notificationType")){
+                //     //console.log("La notificación no tiene la estructura correcta");
+                //     return {"name": "1. La notificación no tiene la estructura correcta"};
+                // }
+                // if(typeof notification.purchaseId != "string" || typeof notification.deliveryDate != "string" || typeof notification.notificationTime != "string" || typeof notification.state != "boolean" || typeof notification.notificationType != "string"){
+                //     //console.log("La notificación no tiene la estructura correcta");
+                //     return {"name": "La notificación no tiene la estructura correcta"};
+                // }
+                // delete userId from notifications JSON
+                console.log(notification);
+                delete notification.userId;
+                const id = notifications.length + 1;
+                // const newNotification = {
+                //                         notificationId: id.toString(),
+                //                         purchaseId: notification.purchaseId,
+                //                         notificationTime: notification.notificationTime,
+                //                         deliveryDate: notification.deliveryDate,
+                //                         notificationType: notification.notificationType,
+                //                         state: notification.state
+                //                         }
+                Object.assign(notification, { notificationId: id.toString() });
+                console.log(notification);
+                //Add notification
+                notifications.push(notification);
+                //Update notifications in the database
+                const result = yield user_collection.updateOne({ userId: user.userId }, { $set: { notifications: notifications } });
+                //SingletonMongo.getInstance().disconnect_();    //Disconnect from the database
+                return { "name": "Se agregó la notificación" };
+            }
+            catch (err) {
+                //console.log(err);
+                return { "name": "No se pudo agregar la notificación" };
             }
             //return ok message;
         });

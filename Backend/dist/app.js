@@ -16,6 +16,7 @@ const GaleryRoutes_1 = __importDefault(require("./routes/GaleryRoutes"));
 const CategoryRoutes_1 = __importDefault(require("./routes/CategoryRoutes"));
 //import cartRoutes from "./routes/CartRoutes"
 const StoreRoutes_1 = __importDefault(require("./routes/StoreRoutes"));
+const CalendarRoutes_1 = __importDefault(require("./routes/CalendarRoutes"));
 const app = express();
 const bp = require("body-parser");
 app.use(morgan("dev"));
@@ -28,6 +29,7 @@ app.use(GaleryRoutes_1.default);
 app.use(CategoryRoutes_1.default);
 //app.use(cartRoutes)
 app.use(StoreRoutes_1.default);
+app.use(CalendarRoutes_1.default);
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 exports.jsonParser = bp.json();

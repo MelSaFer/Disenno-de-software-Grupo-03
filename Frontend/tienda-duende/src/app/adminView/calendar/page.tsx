@@ -94,6 +94,10 @@ const Page = () => {
   // handleClick for the different events
   const handleClick = (number) => {
     setCurrentPage(number);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const handleButtonClick = async (button) => {
@@ -122,6 +126,7 @@ const Page = () => {
           default:
             break;
         }
+
         setDataLoaded(true); // Marcar los datos como cargados después de recibir la respuesta
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -39,6 +39,10 @@ const Page = () => {
 
   const handleClick = (number) => {
     setCurrentPage(number);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (

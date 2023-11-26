@@ -19,6 +19,11 @@ const SingletonMongo_1 = require("../Singleton/SingletonMongo");
 const config_1 = require("../config");
 const DAOProduct_1 = require("./DAOProduct");
 const DAOUser_1 = require("./DAOUser");
+const ShippingDays_1 = require("./ShippingDays");
+const deliveryEvent_1 = require("../Decorator/deliveryEvent");
+const DAOCalendar_1 = require("./DAOCalendar");
+const config_2 = require("../config");
+const EVENT_TYPE_1 = require("../Decorator/EVENT_TYPE");
 /*-----------------------------------------------------------------------
 DAO PURCHASE
  Class for managing the connection to the database and the queries related
@@ -98,7 +103,8 @@ class DAOPurchase {
                 const db = SingletonMongo_1.SingletonMongo.getInstance().getDatabase(config_1.DATABASE_NAME);
                 const collection = db.collection(config_1.PURCHASE_COLLECTION);
                 //Get the Purchase from the database, using the code
-                const purchase = yield collection.findOne({ purchaseId: purchaseId_ });
+                // @ts-expect-error
+                const purchase = yield collection.findOne({ _id: purchaseId_ });
                 SingletonMongo_1.SingletonMongo.getInstance().disconnect_(); //Disconnect from the database
                 // If the product history was found, return it, else return error message
                 if (purchase) {
@@ -141,7 +147,7 @@ class DAOPurchase {
                     products: object.products,
                     voucherId: object.voucherId,
                     aproxDeliveryDate: object.aproxDeliveryDate,
-                    shippingAddress: object.shippingAddress,
+                    shippingAddress: this.calculateShippingPrice( /*object.products*/),
                     shippingPrice: object.shippingPrice,
                     userId: object.userId,
                     state: object.state
@@ -185,6 +191,22 @@ class DAOPurchase {
     ;
     /*
     -----------------------------------------------------------------------
+    CALCULATE SHIPPING PRICE
+    Calculate the shipping price of a purchase
+    PARAMS:
+        - products : array
+    RETURNS:
+        - shippingPrice: number
+    */
+    calculateShippingPrice( /*products: any*/) {
+        let shippingPrice = config_2.SHIPPING_PRICE;
+        // for (let i = 0; i < products.length; i++) {
+        //     shippingPrice = shippingPrice + products[i].quantity * products[i].price;
+        // }
+        return shippingPrice;
+    }
+    /*
+    -----------------------------------------------------------------------
     UPDATE METHOD
     Update a purchase in the database
     PARAMS:
@@ -218,7 +240,7 @@ class DAOPurchase {
         - ok message if the purchase was updated
         - error message if the purchase was not updated
     */
-    updatePurchaseState(userId_, purchaseId_, state_) {
+    updatePurchaseState(userId_, purchaseId_, state_, location_) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 SingletonMongo_1.SingletonMongo.getInstance().connect();
@@ -229,8 +251,11 @@ class DAOPurchase {
                 if (!purchase) {
                     return { "name": "La compra no existe" };
                 }
+                /* if(purchase.state != PENDING_STATE ){
+                    return { "name": "El estado no se puede modificar" };
+                } */
                 //If state is REJECTED, return the stock of the products
-                if (state_ == "REJECTED") {
+                if (state_ == config_1.DECLINED_STATE) {
                     const arrayProducts = purchase.products;
                     const daoProduct = new DAOProduct_1.DAOProduct();
                     for (let i = 0; i < arrayProducts.length; i++) {
@@ -243,13 +268,45 @@ class DAOPurchase {
                         yield daoProduct.update(product);
                     }
                 }
+                else if (state_ == config_1.ACCEPTED_STATE) {
+                    //If state is ACCEPTED, set the aprox delivery date
+                    purchase.aproxDeliveryDate = this.setAproxDeliveryDate();
+                    console.log("aproxDeliveryDate: " + purchase.aproxDeliveryDate);
+                    //CREATES THE EVENT
+                    //const newEvent = Event()
+                    const daoCalendar = new DAOCalendar_1.DAOCalendar();
+                    let newEvent = daoCalendar.createEvent();
+                    newEvent.setUserId(userId_.toString());
+                    newEvent.setDescription("Delivery of purchase " + purchaseId_);
+                    newEvent.setDate(purchase.aproxDeliveryDate);
+                    newEvent.setEventId(purchaseId_.toString());
+                    newEvent.setLocation(location_);
+                    //newEvent = new DeliveryEvent(newEvent);
+                    let theEvent = new deliveryEvent_1.DeliveryEvent(newEvent);
+                    console.log("theEvent: " + theEvent.schedule(EVENT_TYPE_1.EVENT_TYPE.DELIVERY));
+                    console.log("the NEW Event: " + JSON.stringify(newEvent, null, 2));
+                    //Insert the purchase in the database, convert it to JSON and parse it
+                    const newEventJson = JSON.stringify(newEvent);
+                    const newEventParsed = JSON.parse(newEventJson);
+                    daoCalendar.create(newEventParsed);
+                }
+                //Create the update object for updating the content
+                const InfoToUpdate = {
+                    $set: {
+                        state: state_,
+                        aproxDeliveryDate: purchase.aproxDeliveryDate
+                    }
+                };
                 //Update the product in the database
-                const result = yield collection.updateOne({ _id: purchaseId_ }, { $set: { state: state_ } });
+                const result = yield collection.updateOne({ _id: purchaseId_ }, InfoToUpdate);
                 SingletonMongo_1.SingletonMongo.getInstance().disconnect_(); //Disconnect from the database
                 //Check if the product was updated
                 if (result.modifiedCount > 0) {
                     //console.log("La compra se actualizó con éxito");
-                    return { "name": "La compra se actualizó con éxito" };
+                    //return {"name": "La compra se actualizó con éxito"};
+                    //return theEvent
+                    return { "name": state_ };
+                    //return state_;
                 }
                 else {
                     return { "name": "No se encontró la compra a actualizar" };
@@ -301,5 +358,56 @@ class DAOPurchase {
         });
     }
     ;
+    setAproxDeliveryDate() {
+        let currentDate = new Date();
+        //Obtains the days until the next shipping date of every option
+        let ShippingDay1 = this.getDaysUntilShippingDate(ShippingDays_1.ShippingDays.Day1, currentDate);
+        let ShippingDay2 = this.getDaysUntilShippingDate(ShippingDays_1.ShippingDays.Day2, currentDate);
+        let ShippingDay3 = this.getDaysUntilShippingDate(ShippingDays_1.ShippingDays.Day3, currentDate);
+        let bestShippingDay = 0;
+        //if the best shipping day is today, it sets the aprox delivery date to the next delivery day
+        if (ShippingDay1 == 0) { //special case 1 = Today is a shipping day
+            bestShippingDay = ShippingDay2;
+        }
+        else if (ShippingDay2 == 0) { //special case 1 = Today is a shipping day
+            bestShippingDay = ShippingDay3;
+        }
+        else if (ShippingDay3 == 0) { //special case 1 = Today is a shipping day
+            bestShippingDay = ShippingDay1;
+            //GENERAL CASES
+        }
+        else if (ShippingDay1 < ShippingDay2 && ShippingDay1 < ShippingDay3 && currentDate) {
+            bestShippingDay = ShippingDay1;
+        }
+        else if (ShippingDay2 < ShippingDay1 && ShippingDay2 < ShippingDay3) {
+            bestShippingDay = ShippingDay2;
+        }
+        else {
+            bestShippingDay = ShippingDay3;
+        }
+        //sets the aprox delivery date
+        currentDate.setDate(currentDate.getDate() + bestShippingDay);
+        return currentDate;
+    }
+    /*
+    -----------------------------------------------------------------------
+    GET NEXT SHIPPING DATE METHOD
+    params:
+        dayOfWeek=
+                1: Monday (Lunes)
+                2: Tuesday (Martes)
+                3: Wednesday (Miércoles)
+                4: Thursday (Jueves)
+                5: Friday (Viernes)
+                6: Saturday (Sábado)
+                0: Sunday (Domingo)
+        currentDate: Date
+    returns: daysUntilShippingDate: number
+     */
+    getDaysUntilShippingDate(dayOfWeek, currentDate) {
+        let daysUntilShippingDate = (dayOfWeek - currentDate.getDay() + 7) % 7;
+        console.log("daysUntilShippingDate: " + dayOfWeek + " " + daysUntilShippingDate);
+        return daysUntilShippingDate;
+    }
 }
 exports.DAOPurchase = DAOPurchase;

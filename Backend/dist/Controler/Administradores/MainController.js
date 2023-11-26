@@ -17,6 +17,7 @@ const AdminUser_1 = require("./AdminUser");
 const AdminProduct_1 = require("./AdminProduct");
 const AdminCategory_1 = require("./AdminCategory");
 const AdminContent_1 = require("./AdminContent");
+const AdminCalendar_1 = require("./AdminCalendar");
 class MainController {
     constructor() { }
     addUser(object) {
@@ -68,6 +69,42 @@ class MainController {
         });
     }
     ;
+    getAllUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminUser = new AdminUser_1.AdminUser();
+                const result = yield adminUser.getAllUsers();
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar la info del usuario", err);
+            }
+        });
+    }
+    updateNotificationState(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminUser = new AdminUser_1.AdminUser();
+                const result = yield adminUser.updateNotificationState(userId);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar las notificaciones del usuario", err);
+            }
+        });
+    }
+    isUnread(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminUser = new AdminUser_1.AdminUser();
+                const result = yield adminUser.isUnread(userId);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar las notificaciones del usuario", err);
+            }
+        });
+    }
     // -----------------------------
     /*
     METHOD GET CART
@@ -107,11 +144,11 @@ class MainController {
     METHOD PUT PURCHASE STATE
     PARAMS: userId, purchaseId, state
     */
-    updatePurchaseState(userId, purchaseId, state) {
+    updatePurchaseState(userId, purchaseId, state, location) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const adminUser = new AdminUser_1.AdminUser();
-                const result = adminUser.updatePurchaseState(userId, purchaseId, state);
+                const result = adminUser.updatePurchaseState(userId, purchaseId, state, location);
                 return result;
             }
             catch (err) {
@@ -129,6 +166,40 @@ class MainController {
             try {
                 const adminUser = new AdminUser_1.AdminUser();
                 const result = adminUser.makePurchase(object);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar la info del usuario", err);
+            }
+        });
+    }
+    ;
+    /*
+    METHOD GET NOTIFICATIONS
+    PARAMS: userId
+    */
+    getNotifications(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminUser = new AdminUser_1.AdminUser();
+                const result = adminUser.getNotifications(userId);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar la info del usuario", err);
+            }
+        });
+    }
+    ;
+    /*
+    METHOD ADD NOTIFICATION
+    PARAMS: userId, notification
+    */
+    addNotification(notification) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminUser = new AdminUser_1.AdminUser();
+                const result = adminUser.addNotification(notification);
                 return result;
             }
             catch (err) {
@@ -424,6 +495,91 @@ class MainController {
             }
             catch (err) {
                 console.log("Error al cargar las categorias", err);
+            }
+        });
+    }
+    //CALENDAR------------------------------------------------------
+    getCalendar() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminCalendar = new AdminCalendar_1.AdminCalendar();
+                const result = yield adminCalendar.getCalendar();
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar el calendario", err);
+            }
+        });
+    }
+    filterCalendar(object) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminCalendar = new AdminCalendar_1.AdminCalendar();
+                const result = yield adminCalendar.filterCalendar(object);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar el calendario", err);
+            }
+        });
+    }
+    createEvent(object) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminCalendar = new AdminCalendar_1.AdminCalendar();
+                const result = yield adminCalendar.createEvent(object);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar el calendario", err);
+            }
+        });
+    }
+    getEvent(object) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminCalendar = new AdminCalendar_1.AdminCalendar();
+                const result = yield adminCalendar.getEvent(object);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar el calendario", err);
+            }
+        });
+    }
+    updateEvent(object) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminCalendar = new AdminCalendar_1.AdminCalendar();
+                const result = yield adminCalendar.updateEvent(object);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar el calendario", err);
+            }
+        });
+    }
+    deleteEvent(object) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminCalendar = new AdminCalendar_1.AdminCalendar();
+                const result = yield adminCalendar.deleteEvent(object);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar el calendario", err);
+            }
+        });
+    }
+    verifyOverlap(object) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const adminCalendar = new AdminCalendar_1.AdminCalendar();
+                const result = yield adminCalendar.verifyOverlap(object);
+                return result;
+            }
+            catch (err) {
+                console.log("Error al cargar el calendario", err);
             }
         });
     }

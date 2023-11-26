@@ -452,7 +452,7 @@ const ShippingInfo = () => {
               >
                 Realizar pedido
               </button>
-              <button onClick={deleteImageFromStorage}>eliminar</button>
+              {/* <button onClick={deleteImageFromStorage}>eliminar</button> */}
             </div>
           </div>
         </div>

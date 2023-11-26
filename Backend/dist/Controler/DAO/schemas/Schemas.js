@@ -3,8 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SubcategorySchema = exports.CategorySchema = exports.ContentSchema = exports.PurchaseSchema = exports.ProductSchema = exports.CartItemSchema = exports.UserSchema = void 0;
-// Importa el paquete mongodb
+exports.EventSchema = exports.CalendarSchema = exports.SubcategorySchema = exports.CategorySchema = exports.ContentSchema = exports.PurchaseSchema = exports.ProductSchema = exports.CartItemSchema = exports.UserSchema = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 //USER SCHEMA------------------------------------------------------------------------------------------------------------------------------
 exports.UserSchema = new mongoose_1.default.Schema({
@@ -59,4 +58,21 @@ exports.CategorySchema = new mongoose_1.default.Schema({
 exports.SubcategorySchema = new mongoose_1.default.Schema({
     //subcategoryId: { type: Number, required: true },
     subcategoryName: { type: String, required: true },
+});
+//CALENDAR SCHEMA------------------------------------------------------------------------------------------------------------------------------
+exports.CalendarSchema = new mongoose_1.default.Schema({
+    events: { type: Array, required: true }
+});
+//EVENT SCHEMA------------------------------------------------------------------------------------------------------------------------------
+exports.EventSchema = new mongoose_1.default.Schema({
+    //eventId: { type: String, required: true },
+    purchaseId: { type: String, required: true },
+    userId: { type: String, required: true },
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    location: { type: String, required: false },
+    startTime: { type: Date, required: true },
+    endTime: { type: Date, required: true },
+    date: { type: Date, required: true },
+    eventType: { type: String, required: true }
 });

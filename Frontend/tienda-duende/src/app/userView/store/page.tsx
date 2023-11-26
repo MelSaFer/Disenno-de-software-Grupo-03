@@ -46,6 +46,10 @@ const Page = () => {
 
   const handleClick = (number) => {
     setCurrentPage(number);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -98,7 +102,7 @@ const Page = () => {
                 onClick={() => handleClick(index + 1)}
                 className={`${
                   currentPage === index ? "active" : ""
-                } border border-black w-8 h-8 flex justify-center items-center`}
+                } border border-yellow-900 rounded-lg w-8 h-8 flex justify-center items-center  hover:bg-gray-200 cursor-pointer mx-1`}
               >
                 {index + 1}
               </span>
