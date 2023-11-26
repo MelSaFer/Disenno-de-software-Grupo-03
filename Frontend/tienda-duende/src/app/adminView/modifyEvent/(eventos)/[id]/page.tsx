@@ -161,20 +161,23 @@ const ModifyEvent = ({ params }: PageProps) => {
       startTimeFormatted.setFullYear(dateFormatted.getFullYear());
       startTimeFormatted.setMonth(dateFormatted.getMonth());
       startTimeFormatted.setDate(dateFormatted.getDate());
+      startTimeFormatted.setSeconds(0);
+      startTimeFormatted.setMilliseconds(0);
       endTimeFormatted.setFullYear(dateFormatted.getFullYear());
       endTimeFormatted.setMonth(dateFormatted.getMonth());
       endTimeFormatted.setDate(dateFormatted.getDate());
+      endTimeFormatted.setSeconds(0);
+      endTimeFormatted.setMilliseconds(0);
 
       const datos = {
         _id: params.id,
-        userId: "60f9b2b9c8b2a40015f6b3a5",
+        userId: client,
         name: name,
         description: description,
         location: location,
         startTime: startTimeFormatted.toISOString(),
         endTime: endTimeFormatted.toISOString(),
         date: date,
-        // client: client,
         eventType: "MAKEUP EVENT",
       };
 
@@ -184,34 +187,16 @@ const ModifyEvent = ({ params }: PageProps) => {
       const fetchData = async () => {
         try {
           const result = await axios.request({
-            method: "post",
-            url: Routes.verifyOverlap,
+            method: "put",
+            url: Routes.updateEvent,
             headers: { "Content-Type": "application/json" },
-            data: {
-              startTime: "2023-11-20T07:00:00",
-              endTime: "2023-11-20T12:00:00",
-            },
+            data: datos,
           });
-
-          console.log(result.data);
-          //   router.push("/adminView/calendar");
-          if (result.data === true) {
+          if (result.data.name === "Hay superposición con otro evento") {
             setOverlap(true);
             return;
-          } else {
-            try {
-              const result = await axios.request({
-                method: "put",
-                url: Routes.updateEvent,
-                headers: { "Content-Type": "application/json" },
-                data: datos,
-              });
-              console.log(result);
-              router.push("/adminView/calendar");
-            } catch (error) {
-              console.error("Error al obtener datos:", error);
-            }
           }
+          router.push("/adminView/calendar");
         } catch (error) {
           console.error("Error al obtener datos:", error);
         }

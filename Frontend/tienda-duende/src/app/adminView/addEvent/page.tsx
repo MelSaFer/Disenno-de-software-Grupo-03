@@ -12,6 +12,7 @@ import * as Routes from "../../routes";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/navigation";
+import { start } from "repl";
 
 const AddEvent = () => {
   // datos utilizados para el formulario
@@ -109,9 +110,13 @@ const AddEvent = () => {
       startTimeFormatted.setFullYear(dateFormatted.getFullYear());
       startTimeFormatted.setMonth(dateFormatted.getMonth());
       startTimeFormatted.setDate(dateFormatted.getDate());
+      startTimeFormatted.setSeconds(0);
+      startTimeFormatted.setMilliseconds(0);
       endTimeFormatted.setFullYear(dateFormatted.getFullYear());
       endTimeFormatted.setMonth(dateFormatted.getMonth());
       endTimeFormatted.setDate(dateFormatted.getDate());
+      endTimeFormatted.setSeconds(0);
+      endTimeFormatted.setMilliseconds(0);
 
       const datos = {
         // userId: "60f9b2b9c8b2a40015f6b3a5",
@@ -122,7 +127,6 @@ const AddEvent = () => {
         startTime: startTimeFormatted.toISOString(),
         endTime: endTimeFormatted.toISOString(),
         date: date,
-        // client: client,
         eventType: "MAKEUP EVENT",
       };
 
@@ -136,8 +140,8 @@ const AddEvent = () => {
             url: Routes.verifyOverlap,
             headers: { "Content-Type": "application/json" },
             data: {
-              startTime: startTime,
-              endTime: endTime,
+              startTime: datos.startTime,
+              endTime: datos.endTime,
             },
           });
 
@@ -155,6 +159,7 @@ const AddEvent = () => {
                 data: datos,
               });
               console.log(result);
+              setOverlap(false);
               router.push("/adminView/calendar");
             } catch (error) {
               console.error("Error al obtener datos:", error);

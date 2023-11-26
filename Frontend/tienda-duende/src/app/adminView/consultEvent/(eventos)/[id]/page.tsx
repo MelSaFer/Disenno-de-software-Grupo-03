@@ -106,7 +106,7 @@ const ConsultEvent = ({ params }: PageProps) => {
         </header>
         <main className="flex-grow mt-16">
           <div className="flex h-full justify-center items-top text-yellow-900">
-            <div className="border border-red-400 rounded-lg w-[40%] p-4">
+            <div className="border border-red-400 rounded-lg w-[40%] p-6 pl-9">
               <div className="flex justify-end items-end">
                 <a
                   className=" text-neutral-800 dark:text-neutral-200"
@@ -119,23 +119,28 @@ const ConsultEvent = ({ params }: PageProps) => {
                 {data.eventType}: {data.name}
               </h1>
               <p>
-                <strong>Fecha:</strong> {formatearFecha(data.date)}
+                <strong className="text-xl italic">Fecha:</strong>{" "}
+                {formatearFecha(data.date)}
               </p>
               <p>
-                <strong>Cliente:</strong> {data.userId}
+                <strong className="text-xl italic">Cliente:</strong>{" "}
+                {data.userId}
               </p>
               <p>
-                <strong>Hora inicio:</strong>{" "}
+                <strong className="text-xl italic">Hora inicio:</strong>{" "}
                 {getHourFromUTCString(data.startTime)}
               </p>
               <p>
-                <strong>Hora fin:</strong> {getHourFromUTCString(data.endTime)}
+                <strong className="text-xl italic">Hora fin:</strong>{" "}
+                {getHourFromUTCString(data.endTime)}
               </p>
               <p>
-                <strong>Ubicacion:</strong> {data.location}
+                <strong className="text-xl italic">Ubicación:</strong>{" "}
+                {data.location}
               </p>
               <p>
-                <strong>Descripción:</strong> {data.description}
+                <strong className="text-xl italic">Descripción:</strong>{" "}
+                {data.description}
               </p>
             </div>
           </div>
